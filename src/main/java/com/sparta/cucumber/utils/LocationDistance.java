@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class LocationDistance {
 
-    private static double distance(Float lat1, Float lon1, Float lat2, Float lon2, String unit) {
+    public double distance(Float lat1, Float lon1, Float lat2, Float lon2, String unit) {
 
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
@@ -19,11 +19,13 @@ public class LocationDistance {
         return dist;
     }
     // This function converts decimal degrees to radians
-    private static double deg2rad(double deg) {
+    public double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
     // This function converts radians to decimal degrees
-    private static double rad2deg(double rad) {
+    public double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
     }
 }
+
+// Referenced by https://www.geodatasource.com/resources/tutorials/how-to-calculate-the-distance-between-2-locations-using-java/
