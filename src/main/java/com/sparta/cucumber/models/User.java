@@ -30,7 +30,4 @@ public class User extends Timestamped {
     private Float longitude;
     @Column
     private Float star;
-    @OneToMany
-    @JoinColumn(name="bookmarks")
-    private ArrayList<Article> bookmarks;
 }
