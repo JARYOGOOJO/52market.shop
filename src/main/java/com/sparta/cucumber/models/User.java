@@ -3,9 +3,9 @@ package com.sparta.cucumber.models;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.geo.GeoResult;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Getter
 @Setter
