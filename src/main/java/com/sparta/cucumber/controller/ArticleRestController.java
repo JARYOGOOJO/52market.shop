@@ -2,7 +2,6 @@ package com.sparta.cucumber.controller;
 
 import com.sparta.cucumber.models.Article;
 import com.sparta.cucumber.repository.ArticleRepository;
-import com.sparta.cucumber.repository.ReviewRepository;
 import com.sparta.cucumber.utils.LocationDistance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
