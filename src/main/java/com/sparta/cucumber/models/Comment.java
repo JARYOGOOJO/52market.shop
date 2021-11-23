@@ -1,13 +1,12 @@
 package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.dto.CommentRequestDto;
+import com.sparta.cucumber.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Columns;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter

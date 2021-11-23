@@ -1,6 +1,7 @@
 package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.dto.ReviewRequestDto;
+import com.sparta.cucumber.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

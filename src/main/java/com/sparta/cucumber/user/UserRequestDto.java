@@ -1,4 +1,4 @@
-package com.sparta.cucumber.dto;
+package com.sparta.cucumber.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ public class UserRequestDto {
     private String username;
     private String nickname;
     private String phoneNumber;
-    private String Email;
+    private String email;
     private Float latitude;
     private Float longitude;
     private Float star;

@@ -1,12 +1,12 @@
 package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.dto.MeetRequestDto;
+import com.sparta.cucumber.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Getter
 @Setter

@@ -1,10 +1,9 @@
 package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.dto.ArticleRequestDto;
-import com.sparta.cucumber.repository.UserRepository;
+import com.sparta.cucumber.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
