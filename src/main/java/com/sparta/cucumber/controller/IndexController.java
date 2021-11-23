@@ -13,13 +13,4 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexController {
 
     private final ArticleService articleService;
-
-    @GetMapping("/")
-    public String index(Model model, @LoginUser SessionUser user) {
-        model.addAttribute("articles", articleService.findAllDesc());
-        if (user != null) {
-            model.addAttribute("userName", user.getName());
-        }
-        return "index";
-    }
 }

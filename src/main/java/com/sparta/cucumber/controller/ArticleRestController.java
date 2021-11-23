@@ -40,7 +40,7 @@ public class ArticleRestController {
     }
 
     @GetMapping("/api/article/{id}")
-    public Article getAArticle(@PathVariable("id") Long articleId) {
+    public Article seeDetailOfArticle(@PathVariable("id") Long articleId) {
         return articleRepository
                 .findById(articleId)
                 .orElseThrow(NullPointerException::new);

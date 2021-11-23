@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Review extends Timestamped {
     @Id
-    @Column(name="reviewId")
+    @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
@@ -27,11 +27,4 @@ public class Review extends Timestamped {
     private Integer score;
     @Column
     private String content;
-
-    public Review (ReviewRequestDto requestDto) {
-        this.reviewUser.setId(requestDto.getReviewUserid());
-        this.reviewTargetUser.setId(requestDto.getReviewTargetUserId());
-        this.score = requestDto.getScore();
-        this.content = requestDto.getContent();
-    }
 }

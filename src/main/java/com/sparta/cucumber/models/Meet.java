@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Meet extends Timestamped {
     @Id
-    @Column(name="meetId")
+    @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
@@ -23,9 +23,4 @@ public class Meet extends Timestamped {
     @ManyToOne
     @JoinColumn
     private Article article;
-
-    public Meet (MeetRequestDto requestDto) {
-        this.commenter.setId(requestDto.getCommenterId());
-        this.article.setId(requestDto.getArticleId());
-    }
 }

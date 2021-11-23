@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class Article extends Timestamped {
 
     @Id
-    @Column(name="articleId")
+    @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
@@ -33,15 +33,4 @@ public class Article extends Timestamped {
     private Float longitude;
     @Column
     private String address;
-
-    public Article(ArticleRequestDto requestDto) {
-
-        this.user.setId(requestDto.getUserId());
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
-        this.image = requestDto.getImage();
-        this.address = requestDto.getAddress();
-        this.latitude = requestDto.getLatitude();
-        this.longitude = requestDto.getLongitude();
-    }
 }
