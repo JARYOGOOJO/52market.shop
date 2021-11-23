@@ -1,5 +1,6 @@
 package com.sparta.cucumber.models;
 
+import com.sparta.cucumber.dto.MeetRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,4 +23,9 @@ public class Meet extends Timestamped {
     @ManyToOne
     @JoinColumn
     private Article article;
+
+    public Meet (MeetRequestDto requestDto) {
+        this.commenter.setId(requestDto.getCommenterId());
+        this.article.setId(requestDto.getArticleId());
+    }
 }

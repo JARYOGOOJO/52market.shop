@@ -1,5 +1,6 @@
 package com.sparta.cucumber.models;
 
+import com.sparta.cucumber.dto.UserRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,11 +24,21 @@ public class User extends Timestamped {
     @Column
     private String phoneNumber;
     @Column
-    private String Email;
+    private String email;
     @Column
     private Float latitude;
     @Column
     private Float longitude;
     @Column
     private Float star;
+
+    public User(UserRequestDto requestDto) {
+        this.username = requestDto.getUsername();
+        this.nickname = requestDto.getNickname();
+        this.phoneNumber = requestDto.getPhoneNumber();
+        this.email = requestDto.getEmail();
+        this.latitude = requestDto.getLatitude();
+        this.longitude = requestDto.getLongitude();
+        this.star = null;
+    }
 }
