@@ -23,7 +23,8 @@ public class CommentRestController {
     }
 
     @PostMapping("/api/comment/{id}")
-    public Comment writeComment(@PathVariable("id") Long id, @RequestBody CommentRequestDto requestDto) {
+    public Comment writeComment(@PathVariable("id") Long id,
+                                @RequestBody CommentRequestDto requestDto) {
         Comment comment = new Comment(requestDto);
         Article article = articleRepository
                 .findById(id)
@@ -31,4 +32,6 @@ public class CommentRestController {
         comment.setArticle(article);
         return commentRepository.save(comment);
     }
+
+    @PutMapping("/api/")
 }

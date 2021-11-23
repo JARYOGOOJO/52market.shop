@@ -3,6 +3,7 @@ package com.sparta.cucumber.controller;
 import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.models.Article;
 import com.sparta.cucumber.repository.ArticleRepository;
+import com.sparta.cucumber.service.ArticleService;
 import com.sparta.cucumber.user.User;
 import com.sparta.cucumber.user.UserRepository;
 import com.sparta.cucumber.utils.LocationDistance;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ArticleRestController {
     public final ArticleRepository articleRepository;
+    public final ArticleService articleService;
     public final UserRepository userRepository;
     public final LocationDistance location;
 
@@ -30,12 +32,16 @@ public class ArticleRestController {
     }
 
     @GetMapping("/api/articles/{lat}/{lng}")
-    public List<Article> getAroundArticle(@PathVariable("lat") Float lat, @PathVariable("lng") Float lon) {
+    public List<Article> getAroundArticle(@PathVariable("lat") Float lat,
+                                          @PathVariable("lng") Float lon) {
         return articleRepository
                 .findAll()
                 .stream()
                 .filter(article-> {
-                    double dist = location.distance(lat, lon, article.getLatitude(), article.getLongitude(), "meter");
+                    double dist = location.distance(
+                            lat, lon,
+                            article.getLatitude(), article.getLongitude(),
+                            "meter");
                     return dist < 1000;
                 }).collect(Collectors.toList());
     }
@@ -55,15 +61,18 @@ public class ArticleRestController {
 
     @PostMapping("/api/articles")
     public Article writeArticle(@RequestBody ArticleRequestDto requestDto) {
-        Long userId = requestDto.getUserId();
-        Article article = new Article();
-        User user = userRepository.findById(userId).orElseThrow(NullPointerException::new);
-        article.setUser(user);
-        article.setTitle(requestDto.getTitle());
-        article.setContent(requestDto.getContent());
-        article.setImage(requestDto.getImage());
-        article.setLatitude(user.getLatitude());
-        article.setLongitude(user.getLongitude());
-        return articleRepository.save(article);
+        return articleService.upload(requestDto);
+    }
+
+    @PutMapping("/api/article/{id}")
+    public Article editArticle(@PathVariable("id") Long articleId,
+                               @RequestBody ArticleRequestDto requestDto) {
+        return articleService.update(articleId, requestDto);
+    }
+
+    @DeleteMapping("/api/article/{id}")
+    public Long removeArticle(@PathVariable("id") Long articleId) {
+        articleRepository.deleteById(articleId);
+        return articleId;
     }
 }

@@ -2,6 +2,7 @@ package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.dto.CommentRequestDto;
 import com.sparta.cucumber.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,4 +25,10 @@ public class Comment extends Timestamped {
     @ManyToOne
     @JoinColumn
     private Article article;
+
+    public Comment (User user, Article article, String content) {
+        this.user = user;
+        this.article = article;
+        this.content = content;
+    }
 }
