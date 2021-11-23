@@ -11,7 +11,4 @@ public class ArticleRequestDto {
     private String title;
     private String content;
     private String image;
-    private String address;
-    private Float latitude;
-    private Float longitude;
 }

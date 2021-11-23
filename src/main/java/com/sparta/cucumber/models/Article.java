@@ -31,6 +31,4 @@ public class Article extends Timestamped {
     private Float latitude;
     @Column
     private Float longitude;
-    @Column
-    private String address;
 }
