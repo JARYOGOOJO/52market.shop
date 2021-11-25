@@ -11,7 +11,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Getter
-@Builder
 @NoArgsConstructor
 @Entity(name = "article")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
@@ -23,11 +22,25 @@ public class Article extends Timestamped {
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "userId")
     private User user;
+    @Column(length = 500, nullable = false)
     private String title;
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
     private String image;
     private Float latitude;
     private Float longitude;
     @OneToMany(mappedBy = "article")
     private List<Comment> comments;
+
+    @Builder
+    public Article(User user, String title,
+                   String content, String image,
+                   Float latitude, Float longitude) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.image = image;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

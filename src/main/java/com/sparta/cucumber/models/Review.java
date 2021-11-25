@@ -11,7 +11,6 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Builder
 @Entity(name = "review")
 public class Review extends Timestamped {
     @Id

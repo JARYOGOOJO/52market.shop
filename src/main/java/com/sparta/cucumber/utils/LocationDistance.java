@@ -1,7 +1,10 @@
 package com.sparta.cucumber.utils;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Objects;
 
+@Component
 public class LocationDistance {
 
     public double distance(Float lat1, Float lon1, Float lat2, Float lon2, String unit) {

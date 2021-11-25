@@ -11,7 +11,6 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
-@Builder
 @Entity(name = "meet")
 public class Meet extends Timestamped {
     @Id

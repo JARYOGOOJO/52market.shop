@@ -9,7 +9,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @Getter
-@Builder
 @Entity(name = "comment")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,4 +25,11 @@ public class Comment extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "article")
     private Article article;
+
+    @Builder
+    public Comment (User user, Article article, String content) {
+         this.user = user;
+         this.article = article;
+         this.content = content;
+    }
 }
