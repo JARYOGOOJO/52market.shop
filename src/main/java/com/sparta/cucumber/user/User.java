@@ -1,11 +1,14 @@
 package com.sparta.cucumber.user;
 
+import com.sparta.cucumber.models.Article;
+import com.sparta.cucumber.models.Comment;
 import com.sparta.cucumber.models.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Builder
@@ -27,6 +30,10 @@ public class User extends Timestamped {
     private Float latitude;
     private Float longitude;
     private Float star;
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles;
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
     @Enumerated(EnumType.STRING)
     private Role role;
 }
