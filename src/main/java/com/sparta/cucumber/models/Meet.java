@@ -2,6 +2,7 @@ package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.dto.MeetRequestDto;
 import com.sparta.cucumber.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,18 +10,18 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
-@Setter
+@Builder
 @Entity(name="meet")
 @NoArgsConstructor
 public class Meet extends Timestamped {
     @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="meetId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name="commentUser")
     private User commenter;
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name="targetArticle")
     private Article article;
 }

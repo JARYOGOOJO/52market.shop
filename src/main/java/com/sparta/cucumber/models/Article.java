@@ -1,34 +1,33 @@
 package com.sparta.cucumber.models;
 
-import com.sparta.cucumber.dto.ArticleRequestDto;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sparta.cucumber.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
-@Setter
-@Entity(name="article")
+@Builder
 @NoArgsConstructor
+@Entity(name="article")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class,property = "id")
 public class Article extends Timestamped {
 
     @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
-    @JoinColumn
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name="userId")
     private User user;
-    @Column
     private String title;
-    @Column
     private String content;
-    @Column
     private String image;
-    @Column
     private Float latitude;
-    @Column
     private Float longitude;
+    @OneToMany(mappedBy = "article")
+    private List<Comment> comments;
 }

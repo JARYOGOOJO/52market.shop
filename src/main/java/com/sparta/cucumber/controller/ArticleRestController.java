@@ -35,15 +35,15 @@ public class ArticleRestController {
     public List<Article> getAroundArticle(@PathVariable("lat") Float lat,
                                           @PathVariable("lng") Float lon) {
         return articleRepository
-                .findAll()
-                .stream()
-                .filter(article-> {
-                    double dist = location.distance(
-                            lat, lon,
-                            article.getLatitude(), article.getLongitude(),
-                            "meter");
-                    return dist < 1000;
-                }).collect(Collectors.toList());
+            .findAll()
+            .stream()
+            .filter(article-> {
+                double dist  = location.distance(
+                    lat, lon,
+                    article.getLatitude(), article.getLongitude(),
+                    "meter");
+                return dist < 1000;
+            }).collect(Collectors.toList());
     }
 
     @GetMapping("/api/article/{id}")

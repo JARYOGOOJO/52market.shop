@@ -2,6 +2,7 @@ package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.dto.ReviewRequestDto;
 import com.sparta.cucumber.user.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,22 +10,20 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
-@Setter
+@Builder
 @Entity(name="review")
 @NoArgsConstructor
 public class Review extends Timestamped {
     @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="reviewId")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name="reviewUser")
     private User reviewUser;
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name="reviewTarget")
     private User reviewTargetUser;
-    @Column
     private Integer score;
-    @Column
     private String content;
 }
