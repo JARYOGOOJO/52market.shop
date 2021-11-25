@@ -34,7 +34,7 @@ public class Article extends Timestamped {
     private Float latitude;
     private Float longitude;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     @Builder

@@ -18,18 +18,11 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User upload (Long userId) {
-        List<Article> articles = articleRepository.findAllByUser_Id(userId);
-        List<Comment> comments = commentRepository.findAllByUser_Id(userId);
-        User user = new User().actLog(articles, comments);
-        return userRepository.save(user);
-    }
-
-    @Transactional
     public User signup(UserRequestDto userDTO){
         User user = User
                 .builder()
                 .name(userDTO.getName())
+                .email(userDTO.getEmail())
                 .build();
         userRepository.save(user);
         return user;

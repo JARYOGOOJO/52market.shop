@@ -19,6 +19,7 @@ public class User extends Timestamped {
     private Long id;
     @Column(nullable = false)
     private String name;
+    private String password;
     @Column(nullable = false)
     private String phoneNumber;
     @Column(nullable = false)
@@ -40,12 +41,6 @@ public class User extends Timestamped {
         this.email = email;
         this.picture = picture;
         this.role = role;
-    }
-
-    public User actLog (List<Article> articles, List<Comment> comments) {
-        this.articles = articles;
-        this.comments = comments;
-        return this;
     }
 
     public User update(String name, String picture) {

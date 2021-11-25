@@ -23,6 +23,8 @@ public class CommentService {
     public Comment uploadOrUpdate (CommentRequestDto requestDto) {
         Article article = articleRepository.findById(requestDto.getArticleId()).orElse(null);
         User user = userRepository.findById(requestDto.getUserId()).orElse(null);
+        assert article != null;
+        assert user != null;
         Comment comment = Comment
             .builder()
             .content(requestDto.getContent())

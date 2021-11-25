@@ -25,8 +25,8 @@ public class Meet extends Timestamped {
     private Article article;
 
     @Builder
-    public Meet(User user, Article article) {
-        this.commenter = user;
+    public Meet(User commenter, Article article) {
+        this.commenter = commenter;
         this.article = article;
     }
 }

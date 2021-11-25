@@ -1,17 +1,15 @@
 package com.sparta.cucumber.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDto {
 
     private String name;
-    private String nickname;
+    private String password;
     private String phoneNumber;
     private String email;
     private Float latitude;
