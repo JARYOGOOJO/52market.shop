@@ -41,8 +41,8 @@ public class ArticleRestController {
     }
 
     @GetMapping("/api/articles/{lat}/{lng}")
-    public ResponseEntity<List<Article>> getAroundArticle (@PathVariable("lat") Float lat,
-                                                          @PathVariable("lng") Float lon) {
+    public ResponseEntity<List<Article>> getAroundArticle (@PathVariable("lat") Double lat,
+                                                          @PathVariable("lng") Double lon) {
         List<Article> articles = articleRepository
             .findAll()
             .stream()

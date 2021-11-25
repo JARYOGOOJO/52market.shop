@@ -19,15 +19,14 @@ public class User extends Timestamped {
     private Long id;
     @Column(nullable = false)
     private String name;
-    private String password;
-    @Column(nullable = false)
-    private String phoneNumber;
     @Column(nullable = false)
     private String email;
     private String picture;
-    private Float latitude;
-    private Float longitude;
-    private Float star;
+    private String password;
+    private String phoneNumber;
+    private Double latitude;
+    private Double longitude;
+    private Double star;
     @OneToMany(mappedBy = "user")
     private List<Article> articles;
     @OneToMany(mappedBy = "user")

@@ -6,11 +6,13 @@ import com.sparta.cucumber.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Getter
+@ToString
 @NoArgsConstructor
 @Entity(name = "article")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
@@ -31,16 +33,21 @@ public class Article extends Timestamped {
     private String content;
 
     private String image;
-    private Float latitude;
-    private Float longitude;
+    private Double latitude;
+    private Double longitude;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<Comment> comments;
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     @Builder
     public Article(User user, String title,
                    String content, String image,
-                   Float latitude, Float longitude) {
+                   Double latitude, Double longitude) {
         this.user = user;
         this.title = title;
         this.content = content;

@@ -2,6 +2,7 @@ package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.user.Role;
+import com.sparta.cucumber.user.UserRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,10 +22,13 @@ class ArticleTest {
 
     @Autowired
     ArticleRepository articleRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @AfterEach
     void tearDown() {
         articleRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
@@ -32,19 +36,27 @@ class ArticleTest {
     public void getArticle() {
         String title = "타이틀";
         String content = "컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠컨텐츠";
+        String image = "https://img1.daumcdn.net/thumb/C428x428/?scode=mtistory2&fname=https%3A%2F%2Ftistory4.daumcdn.net%2Ftistory%2F3962924%2Fattach%2F3a33fb3fbfb04050bd15efddb834038f";
         User user = User
                 .builder()
                 .name("유동민")
+                .email("ydm2790@naver.com")
+                .picture(image)
                 .build();
+        userRepository.save(user);
         Article article = Article
                 .builder()
                 .title(title)
                 .content(content)
+                .image(image)
                 .user(user)
+                .latitude(37.592252158153975)
+                .longitude(127.08723572001708)
                 .build();
         articleRepository.save(article);
 
         List<Article> articleList = articleRepository.findAll();
-        assertEquals(articleList.get(0), article);
+        System.out.println(articleList.get(0).toString());
+        System.out.println(article);
     }
 }

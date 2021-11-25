@@ -12,7 +12,7 @@ public class UserRequestDto {
     private String password;
     private String phoneNumber;
     private String email;
-    private Float latitude;
-    private Float longitude;
-    private Float star;
+    private Double latitude;
+    private Double longitude;
+    private Double star;
 }

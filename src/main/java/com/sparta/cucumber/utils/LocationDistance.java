@@ -7,7 +7,7 @@ import java.util.Objects;
 @Component
 public class LocationDistance {
 
-    public double distance(Float lat1, Float lon1, Float lat2, Float lon2, String unit) {
+    public double distance(Double lat1, Double lon1, Double lat2, Double lon2, String unit) {
 
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
