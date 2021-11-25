@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 public class CommentRestController {
     public final CommentRepository commentRepository;
     public final CommentService commentService;

@@ -16,8 +16,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class ArticleService {
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;

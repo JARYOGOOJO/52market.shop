@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
 @RequiredArgsConstructor
+@RestController
 public class ReviewRestController {
 
     public final ReviewRepository reviewRepository;

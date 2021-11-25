@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class CommentService {
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;

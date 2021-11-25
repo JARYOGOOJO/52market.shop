@@ -10,9 +10,9 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
+@NoArgsConstructor
 @Builder
 @Entity(name = "review")
-@NoArgsConstructor
 public class Review extends Timestamped {
     @Id
     @Column(name = "reviewId")

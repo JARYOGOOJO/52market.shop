@@ -14,15 +14,15 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class UserService {
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public User uploadOrUpdate (Long userId) {
+    public User upload (Long userId) {
         List<Article> articles = articleRepository.findAllByUser_Id(userId);
         List<Comment> comments = commentRepository.findAllByUser_Id(userId);
         User user = User
@@ -31,5 +31,16 @@ public class UserService {
                 .comments(comments)
                 .build();
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public User signup(UserRequestDto userDTO){
+        User user = User
+                .builder()
+                .username(userDTO.getUsername())
+                .nickname(userDTO.getNickname())
+                .phoneNumber(userDTO.getPhoneNumber()).build();
+        userRepository.save(user);
+        return user;
     }
 }
