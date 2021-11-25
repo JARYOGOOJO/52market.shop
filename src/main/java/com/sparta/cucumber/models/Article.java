@@ -19,17 +19,22 @@ public class Article extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(targetEntity = User.class)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     private User user;
+
     @Column(length = 500, nullable = false)
     private String title;
+
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
+
     private String image;
     private Float latitude;
     private Float longitude;
-    @OneToMany(mappedBy = "article")
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Comment> comments;
 
     @Builder

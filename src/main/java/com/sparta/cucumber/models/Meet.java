@@ -21,6 +21,12 @@ public class Meet extends Timestamped {
     @JoinColumn(name = "commentUser")
     private User commenter;
     @ManyToOne
-    @JoinColumn(name = "targetArticle")
+    @JoinColumn(name = "article")
     private Article article;
+
+    @Builder
+    public Meet(User user, Article article) {
+        this.commenter = user;
+        this.article = article;
+    }
 }

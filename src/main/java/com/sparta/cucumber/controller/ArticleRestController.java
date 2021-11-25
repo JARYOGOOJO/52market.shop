@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RestController
 public class ArticleRestController {
+
     public final ArticleRepository articleRepository;
     public final ArticleService articleService;
     public final UserRepository userRepository;

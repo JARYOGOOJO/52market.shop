@@ -25,4 +25,12 @@ public class Review extends Timestamped {
     private User reviewTargetUser;
     private Integer score;
     private String content;
+
+    @Builder
+    public Review(User from, User to, Integer star, String content) {
+        this.reviewUser = from;
+        this.reviewTargetUser = to;
+        this.score = star;
+        this.content = content;
+    }
 }
