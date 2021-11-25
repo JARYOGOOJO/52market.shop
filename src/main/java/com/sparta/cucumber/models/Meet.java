@@ -11,17 +11,17 @@ import javax.persistence.*;
 
 @Getter
 @Builder
-@Entity(name="meet")
+@Entity(name = "meet")
 @NoArgsConstructor
 public class Meet extends Timestamped {
     @Id
-    @Column(name="meetId")
+    @Column(name = "meetId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name="commentUser")
+    @JoinColumn(name = "commentUser")
     private User commenter;
     @ManyToOne
-    @JoinColumn(name="targetArticle")
+    @JoinColumn(name = "targetArticle")
     private Article article;
 }

@@ -10,20 +10,20 @@ import javax.persistence.*;
 
 @Getter
 @Builder
-@Entity(name="comment")
+@Entity(name = "comment")
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class,property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Comment extends Timestamped {
     @Id
-    @Column(name="commentId")
+    @Column(name = "commentId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name="user")
+    @JoinColumn(name = "user")
     private User user;
     private String content;
     @ManyToOne
-    @JoinColumn(name="article")
+    @JoinColumn(name = "article")
     private Article article;
 }

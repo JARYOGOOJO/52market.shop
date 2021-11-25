@@ -9,7 +9,7 @@ import javax.persistence.*;
 
 @Getter
 @Builder
-@Entity(name="user")
+@Entity(name = "user")
 @NoArgsConstructor
 public class User extends Timestamped {
     @Id

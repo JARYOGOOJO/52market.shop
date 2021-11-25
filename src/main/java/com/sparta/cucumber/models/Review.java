@@ -11,18 +11,18 @@ import javax.persistence.*;
 
 @Getter
 @Builder
-@Entity(name="review")
+@Entity(name = "review")
 @NoArgsConstructor
 public class Review extends Timestamped {
     @Id
-    @Column(name="reviewId")
+    @Column(name = "reviewId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name="reviewUser")
+    @JoinColumn(name = "reviewUser")
     private User reviewUser;
     @ManyToOne
-    @JoinColumn(name="reviewTarget")
+    @JoinColumn(name = "reviewTarget")
     private User reviewTargetUser;
     private Integer score;
     private String content;

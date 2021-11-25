@@ -13,19 +13,19 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
+    private final CommentRepository commentRepository;
+    private final ArticleRepository articleRepository;
+    private final UserRepository userRepository;
 
-    private CommentRepository commentRepository;
-    private ArticleRepository articleRepository;
-    private UserRepository userRepository;
-
-    public Comment upload (CommentRequestDto requestDto) {
+    public Comment uploadOrUpdate (CommentRequestDto requestDto) {
         Article article = articleRepository.findById(requestDto.getArticleId()).orElse(null);
         User user = userRepository.findById(requestDto.getUserId()).orElse(null);
-        Comment comment = new Comment(user, article, requestDto.getContent());
+        Comment comment = Comment
+            .builder()
+            .content(requestDto.getContent())
+            .user(user)
+            .article(article)
+            .build();
         return commentRepository.save(comment);
-    }
-
-    public Comment update (Long commentId, CommentRequestDto requestDto) {
-
     }
 }

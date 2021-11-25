@@ -61,13 +61,13 @@ public class ArticleRestController {
 
     @PostMapping("/api/articles")
     public Article writeArticle(@RequestBody ArticleRequestDto requestDto) {
-        return articleService.upload(requestDto);
+        return articleService.uploadOrUpdate(requestDto);
     }
 
     @PutMapping("/api/article/{id}")
     public Article editArticle(@PathVariable("id") Long articleId,
                                @RequestBody ArticleRequestDto requestDto) {
-        return articleService.update(articleId, requestDto);
+        return articleService.uploadOrUpdate(requestDto);
     }
 
     @DeleteMapping("/api/article/{id}")

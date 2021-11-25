@@ -6,6 +6,7 @@ import com.sparta.cucumber.models.Comment;
 import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.repository.CommentRepository;
 import com.sparta.cucumber.repository.ReviewRepository;
+import com.sparta.cucumber.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentRestController {
     public final CommentRepository commentRepository;
+    public final CommentService commentService;
     public final ArticleRepository articleRepository;
 
     @GetMapping("/api/comments/{id}")
@@ -22,16 +24,13 @@ public class CommentRestController {
         return commentRepository.findAllByArticle_Id(articleId);
     }
 
-    @PostMapping("/api/comment/{id}")
-    public Comment writeComment(@PathVariable("id") Long id,
-                                @RequestBody CommentRequestDto requestDto) {
-        Comment comment = new Comment(requestDto);
-        Article article = articleRepository
-                .findById(id)
-                .orElseThrow(NullPointerException::new);
-        comment.setArticle(article);
-        return commentRepository.save(comment);
+    @PostMapping("/api/comment")
+    public Comment writeComment(@RequestBody CommentRequestDto requestDto) {
+        return commentService.uploadOrUpdate(requestDto);
     }
 
-    @PutMapping("/api/")
+    @PutMapping("/api/comment")
+    public Comment editComment(@RequestBody CommentRequestDto requestDto) {
+        return commentService.uploadOrUpdate(requestDto);
+    }
 }

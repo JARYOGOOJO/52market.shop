@@ -2,8 +2,7 @@ package com.sparta.cucumber.dto;
 
 import lombok.*;
 
-@Getter
-@NoArgsConstructor
+@Data
 public class ArticleRequestDto {
     private Long userId;
     private String title;

@@ -13,15 +13,15 @@ import java.util.List;
 @Getter
 @Builder
 @NoArgsConstructor
-@Entity(name="article")
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class,property = "id")
+@Entity(name = "article")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Article extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name="userId")
+    @JoinColumn(name = "userId")
     private User user;
     private String title;
     private String content;
