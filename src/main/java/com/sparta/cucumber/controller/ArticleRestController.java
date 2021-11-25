@@ -4,10 +4,9 @@ import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.models.Article;
 import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.service.ArticleService;
-import com.sparta.cucumber.user.User;
-import com.sparta.cucumber.user.UserRepository;
 import com.sparta.cucumber.utils.LocationDistance;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,60 +19,65 @@ public class ArticleRestController {
 
     public final ArticleRepository articleRepository;
     public final ArticleService articleService;
-    public final UserRepository userRepository;
     public final LocationDistance location;
 
     @GetMapping("/api/articles")
-    public List<Article> getArticles(@RequestParam(value="query") String query) {
+    public ResponseEntity<List<Article>> getArticles (@RequestParam(value="query") String query) {
+        List<Article> articles;
         if (query != null) {
-            return articleRepository.findAllByTitleContains(query);
+            articles = articleRepository.findAllByTitleContains(query);
         } else {
-            return articleRepository.findAll();
+            articles = articleRepository.findAll();
         }
+        return ResponseEntity.ok().body(articles);
+    }
+
+    @GetMapping("/api/article/{id}")
+    public ResponseEntity<Article> seeDetailOfArticle (@PathVariable("id") Long articleId) {
+        Article article = articleRepository
+            .findById(articleId)
+            .orElseThrow(NullPointerException::new);
+        return ResponseEntity.ok().body(article);
     }
 
     @GetMapping("/api/articles/{lat}/{lng}")
-    public List<Article> getAroundArticle(@PathVariable("lat") Float lat,
-                                          @PathVariable("lng") Float lon) {
-        return articleRepository
+    public ResponseEntity<List<Article>> getAroundArticle (@PathVariable("lat") Float lat,
+                                                          @PathVariable("lng") Float lon) {
+        List<Article> articles = articleRepository
             .findAll()
             .stream()
             .filter(article-> {
-                double dist  = location.distance(
+                double  dist  = location.distance(
                     lat, lon,
                     article.getLatitude(), article.getLongitude(),
                     "meter");
                 return dist < 1000;
             }).collect(Collectors.toList());
-    }
-
-    @GetMapping("/api/article/{id}")
-    public Article seeDetailOfArticle(@PathVariable("id") Long articleId) {
-        return articleRepository
-                .findById(articleId)
-                .orElseThrow(NullPointerException::new);
+        return ResponseEntity.ok().body(articles);
     }
 
     @GetMapping("/api/article/user/{id}")
-    public List<Article> getUsersArticles(@PathVariable("id") Long userId) {
-        return articleRepository
-                .findAllByUser_Id(userId);
+    public ResponseEntity<List<Article>> getUsersArticles (@PathVariable("id") Long userId) {
+        List<Article> articles = articleRepository.findAllByUser_Id(userId);
+        return ResponseEntity.ok().body(articles);
     }
 
-    @PostMapping("/api/articles")
-    public Article writeArticle(@RequestBody ArticleRequestDto requestDto) {
-        return articleService.uploadOrUpdate(requestDto);
+    @PostMapping("/api/article/write")
+    public ResponseEntity<Article> writeArticle (@RequestBody ArticleRequestDto requestDto) {
+        Article article = articleService.uploadOrUpdate(requestDto);
+        return ResponseEntity.ok().body(article);
     }
 
-    @PutMapping("/api/article/{id}")
-    public Article editArticle(@PathVariable("id") Long articleId,
-                               @RequestBody ArticleRequestDto requestDto) {
-        return articleService.uploadOrUpdate(requestDto);
+    @PutMapping("/api/article/update")
+    public ResponseEntity<Article> editArticle (@RequestBody ArticleRequestDto requestDto) {
+        Article article = articleService.uploadOrUpdate(requestDto);
+        return ResponseEntity.ok().body(article);
     }
 
-    @DeleteMapping("/api/article/{id}")
-    public Long removeArticle(@PathVariable("id") Long articleId) {
+    @DeleteMapping("/api/article/{id}/{userId}")
+    public ResponseEntity<Long> removeArticle(@PathVariable("userId") Long userId,
+                                              @PathVariable("id") Long articleId) {
         articleRepository.deleteById(articleId);
-        return articleId;
+        return ResponseEntity.ok().body(articleId);
     }
 }
