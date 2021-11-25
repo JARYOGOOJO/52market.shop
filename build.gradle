@@ -20,16 +20,15 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.6'
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.6'
-    implementation 'junit:junit:4.13.1'
-    implementation 'junit:junit:4.13.1'
-    compileOnly 'org.projectlombok:lombok:1.18.22'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.5.6'
-    runtimeOnly 'com.h2database:h2:1.4.200'
-    runtimeOnly 'mysql:mysql-connector-java:8.0.25'
-    annotationProcessor 'org.projectlombok:lombok:1.18.22'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'junit:junit'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'mysql:mysql-connector-java'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
