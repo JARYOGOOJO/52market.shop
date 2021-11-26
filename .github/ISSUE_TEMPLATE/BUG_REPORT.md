@@ -12,10 +12,10 @@ A clear and concise description of what the bug is.
 
 **스텝 바이 스텝**  
 Steps to reproduce the behavior:
-1. 
-2. 
-3. 
-4. 
+1.
+2.
+3.
+4.
 
 **원하는 결과물 상태**  
 A clear and concise description of what you expected to happen.
