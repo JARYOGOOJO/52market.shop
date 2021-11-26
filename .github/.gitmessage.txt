@@ -10,6 +10,6 @@ chore: about build or deploy(not changes code)
 
 
 detailed description
-
+type: feat
 Resolves: #이슈넘버
 See also: #이슈넘버
