@@ -1,7 +1,7 @@
 feat: Summarized
 
 feat: new feature
-fix: bufix
+fix: bugfix
 docs: document changes
 style: changes except codes(like indent, import..)
 refactor: refactoring
