@@ -8,7 +8,7 @@
 **버그에 대해 간략하게 설명해주세요.**  
 A clear and concise description of what the bug is.
 
-**스텝 바이 스텝**
+**스텝 바이 스텝**  
 Steps to reproduce the behavior:
 1. 
 2. 
