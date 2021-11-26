@@ -23,7 +23,7 @@ public class Article extends Timestamped {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "user")
     private User user;
 
     @Column(length = 500, nullable = false)
@@ -39,10 +39,6 @@ public class Article extends Timestamped {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private List<Comment> comments;
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
 
     @Builder
     public Article(User user, String title,

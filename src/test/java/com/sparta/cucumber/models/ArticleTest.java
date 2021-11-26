@@ -1,15 +1,15 @@
 package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.repository.ArticleRepository;
+import com.sparta.cucumber.user.User;
 import com.sparta.cucumber.user.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.sparta.cucumber.user.User;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -21,11 +21,11 @@ class ArticleTest {
     @Autowired
     UserRepository userRepository;
 
-    @AfterEach
-    void tearDown() {
-        articleRepository.deleteAll();
-        userRepository.deleteAll();
-    }
+//    @AfterEach
+//    void tearDown() {
+//        articleRepository.deleteAll();
+//        userRepository.deleteAll();
+//    }
 
     @Test
     @DisplayName("글 작성 후 조회하기")
@@ -52,7 +52,7 @@ class ArticleTest {
         articleRepository.save(article);
 
         List<Article> articleList = articleRepository.findAll();
-        System.out.println(articleList.get(0).toString());
+        System.out.println(articleList.get(0));
         System.out.println(article);
     }
 }

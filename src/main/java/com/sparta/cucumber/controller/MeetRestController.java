@@ -6,11 +6,13 @@ import com.sparta.cucumber.repository.MeetRepository;
 import com.sparta.cucumber.service.MeetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 public class MeetRestController {
 

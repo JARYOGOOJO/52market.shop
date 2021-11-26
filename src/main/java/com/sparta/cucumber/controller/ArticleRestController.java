@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 public class ArticleRestController {
 

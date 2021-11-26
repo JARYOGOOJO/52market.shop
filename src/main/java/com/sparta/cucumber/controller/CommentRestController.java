@@ -1,11 +1,8 @@
 package com.sparta.cucumber.controller;
 
 import com.sparta.cucumber.dto.CommentRequestDto;
-import com.sparta.cucumber.models.Article;
 import com.sparta.cucumber.models.Comment;
-import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.repository.CommentRepository;
-import com.sparta.cucumber.repository.ReviewRepository;
 import com.sparta.cucumber.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 public class CommentRestController {
 
