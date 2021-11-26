@@ -1,23 +1,15 @@
-<!--
-title must use prefix like this
+feat: Summarized
+
 feat: new feature
-fix: bugfix
+fix: bufix
 docs: document changes
 style: changes except codes(like indent, import..)
 refactor: refactoring
 test: test code
 chore: about build or deploy(not changes code)
--->
-
-## Changes
-
-## Reason for change
-
-## Detailed Description
 
 
-## mention
-@always0ne
+detailed description
 
-Resolves: #IssueNum.  
-See also: #IssueNum.  
+Resolves: #이슈넘버
+See also: #이슈넘버
