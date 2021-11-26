@@ -1,7 +1,6 @@
 package com.sparta.cucumber.config.auth.dto;
 
-import com.sparta.cucumber.user.Role;
-import com.sparta.cucumber.user.User;
+import com.sparta.cucumber.models.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,11 +9,11 @@ import java.util.Map;
 @Getter
 public class OAuthAttributes {
 
-    private Map<String, Object> attributes;
-    private String nameAttributeKey;
-    private String name;
-    private String email;
-    private String picture;
+    private final Map<String, Object> attributes;
+    private final String nameAttributeKey;
+    private final String name;
+    private final String email;
+    private final String picture;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes,
@@ -51,7 +50,6 @@ public class OAuthAttributes {
                 .name(name)
                 .email(email)
                 .picture(picture)
-                .role(Role.GUEST)
                 .build();
     }
 }

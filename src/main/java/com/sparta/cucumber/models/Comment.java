@@ -2,7 +2,6 @@ package com.sparta.cucumber.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.sparta.cucumber.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,10 +19,10 @@ public class Comment extends Timestamped {
     @Column(name = "comment_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String content;
     @ManyToOne
     @JoinColumn(name = "user")
     private User user;
-    private String content;
     @ManyToOne
     @JoinColumn(name = "article")
     private Article article;

@@ -1,8 +1,7 @@
 package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.repository.ArticleRepository;
-import com.sparta.cucumber.user.User;
-import com.sparta.cucumber.user.UserRepository;
+import com.sparta.cucumber.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

@@ -5,13 +5,14 @@ import com.sparta.cucumber.models.Comment;
 import com.sparta.cucumber.repository.CommentRepository;
 import com.sparta.cucumber.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 public class CommentRestController {
 

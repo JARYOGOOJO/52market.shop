@@ -1,6 +1,6 @@
 package com.sparta.cucumber.config.auth.dto;
 
-import com.sparta.cucumber.user.User;
+import com.sparta.cucumber.models.User;
 import lombok.Getter;
 
 import java.io.Serializable;

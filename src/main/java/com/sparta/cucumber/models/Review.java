@@ -1,6 +1,5 @@
 package com.sparta.cucumber.models;
 
-import com.sparta.cucumber.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

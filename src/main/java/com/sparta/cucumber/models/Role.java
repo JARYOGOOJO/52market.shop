@@ -1,4 +1,4 @@
-package com.sparta.cucumber.user;
+package com.sparta.cucumber.models;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

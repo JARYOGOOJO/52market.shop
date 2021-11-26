@@ -3,10 +3,10 @@ package com.sparta.cucumber.service;
 import com.sparta.cucumber.dto.CommentRequestDto;
 import com.sparta.cucumber.models.Article;
 import com.sparta.cucumber.models.Comment;
+import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.repository.CommentRepository;
-import com.sparta.cucumber.user.User;
-import com.sparta.cucumber.user.UserRepository;
+import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

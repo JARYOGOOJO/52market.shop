@@ -1,6 +1,6 @@
 package com.sparta.cucumber.config.auth;
 
-import com.sparta.cucumber.user.Role;
+import com.sparta.cucumber.models.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;

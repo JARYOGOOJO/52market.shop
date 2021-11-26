@@ -1,6 +1,6 @@
-package com.sparta.cucumber.user;
+package com.sparta.cucumber.repository;
 
-import com.sparta.cucumber.user.User;
+import com.sparta.cucumber.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

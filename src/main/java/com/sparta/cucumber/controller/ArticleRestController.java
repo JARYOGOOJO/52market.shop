@@ -6,15 +6,15 @@ import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.service.ArticleService;
 import com.sparta.cucumber.utils.LocationDistance;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Slf4j
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://127.0.0.1:5500")
 @RestController
 public class ArticleRestController {
 

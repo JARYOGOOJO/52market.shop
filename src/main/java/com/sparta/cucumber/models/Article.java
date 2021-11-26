@@ -2,7 +2,6 @@ package com.sparta.cucumber.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.sparta.cucumber.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,20 +24,18 @@ public class Article extends Timestamped {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user")
     private User user;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Comment> comments;
 
     @Column(length = 500, nullable = false)
     private String title;
-
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
-
     private String image;
     private Double latitude;
     private Double longitude;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Comment> comments;
 
     @Builder
     public Article(User user, String title,

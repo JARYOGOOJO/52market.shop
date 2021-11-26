@@ -2,8 +2,8 @@ package com.sparta.cucumber.config.auth;
 
 import com.sparta.cucumber.config.auth.dto.OAuthAttributes;
 import com.sparta.cucumber.config.auth.dto.SessionUser;
-import com.sparta.cucumber.user.User;
-import com.sparta.cucumber.user.UserRepository;
+import com.sparta.cucumber.models.User;
+import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

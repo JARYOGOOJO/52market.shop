@@ -1,8 +1,5 @@
-package com.sparta.cucumber.user;
+package com.sparta.cucumber.models;
 
-import com.sparta.cucumber.models.Article;
-import com.sparta.cucumber.models.Comment;
-import com.sparta.cucumber.models.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,11 +32,16 @@ public class User extends Timestamped {
     private Role role;
 
     @Builder
-    public User(String name, String email, String picture, Role role) {
+    public User(String name, String email,
+                String picture, String password,
+                String phoneNumber, Double latitude, Double longitude) {
         this.name = name;
         this.email = email;
         this.picture = picture;
-        this.role = role;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public User update(String name, String picture) {
