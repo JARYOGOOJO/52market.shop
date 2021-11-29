@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>오이마켓</title>
+    <meta content="" name="description">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <meta content="" property="og:title">
+    <meta content="" property="og:type">
+    <meta content="" property="og:url">
+    <meta content="" property="og:image">
+
+    <link href="icon.png" rel="apple-touch-icon">
+    <!-- Place favicon.ico in the root directory -->
+
+    <script crossorigin="anonymous"
+            integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <link href="css/normalize.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <meta content="#fafafa" name="theme-color">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler collapsed"
+                data-bs-target="#navbarColor01" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarColor01" style="">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">Home
+                        <span class="visually-hidden">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+                       data-bs-toggle="dropdown" href="#"
+                       role="button">Dropdown</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <input class="form-control me-sm-2" placeholder="Search" type="text">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <form action="">
+        <div class="form-group">
+            <label class="form-label-sm mt-4" for="exampleInputEmail1">Email address</label>
+            <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1" placeholder="Enter email"
+                   type="email">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label-sm mt-2" for="exampleInputPassword1">Password</label>
+            <input class="form-control" id="exampleInputPassword1" placeholder="Password" type="password">
+        </div>
+
+        <button class="btn mt-3 btn-lg btn-primary" onclick="login()" type="button">Login</button>
+    </form>
+    <a class="text-success" href="/register.html">let me signup</a>
+</div>
+</body>
+
+</html>
