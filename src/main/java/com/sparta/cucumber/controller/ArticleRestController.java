@@ -22,19 +22,21 @@ public class ArticleRestController {
     public final ArticleService articleService;
     public final LocationDistance location;
 
+    @GetMapping("/api/articles/{query}")
+    public ResponseEntity<List<Article>> getArticles(@PathVariable("query") String query) {
+        List<Article> articles = articleRepository.findAllByTitleContains(query);
+        return ResponseEntity.ok().body(articles);
+    }
+
     @GetMapping("/api/articles")
-    public ResponseEntity<List<Article>> getArticles (@RequestParam(value="query") String query) {
+    public ResponseEntity<List<Article>> getAllArticles() {
         List<Article> articles;
-        if (query != null) {
-            articles = articleRepository.findAllByTitleContains(query);
-        } else {
-            articles = articleRepository.findAll();
-        }
+        articles = articleRepository.findAll();
         return ResponseEntity.ok().body(articles);
     }
 
     @GetMapping("/api/article/{id}")
-    public ResponseEntity<Article> seeDetailOfArticle (@PathVariable("id") Long articleId) {
+    public ResponseEntity<Article> seeDetailOfArticle(@PathVariable("id") Long articleId) {
         Article article = articleRepository
             .findById(articleId)
             .orElseThrow(NullPointerException::new);
