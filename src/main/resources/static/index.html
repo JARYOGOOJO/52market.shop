@@ -15,15 +15,20 @@
     <link href="icon.png" rel="apple-touch-icon">
     <!-- Place favicon.ico in the root directory -->
 
-    <script crossorigin="anonymous"
-            integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+    <script crossorigin="anonymous" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
             src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script crossorigin="anonymous"
-            integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+    <script crossorigin="anonymous" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
             src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
     <link href="css/normalize.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha512-HNbo1d4BaJjXh+/e6q4enTyezg5wiXvY3p/9Vzb20NIvkJghZxhzaXeffbdJuuZSxFhJP87ORPadwmU9aN3wSA=="
+            referrerpolicy="no-referrer"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js"></script>
+    <script src="js/index.js"></script>
     <meta content="#fafafa" name="theme-color">
 </head>
 
@@ -55,8 +60,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
-                       data-bs-toggle="dropdown"
-                       href="#" role="button">Dropdown</a>
+                       data-bs-toggle="dropdown" href="#" role="button">Dropdown</a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="#">Action</a>
                         <a class="dropdown-item" href="#">Another action</a>
@@ -77,8 +81,8 @@
     <form action="">
         <div class="form-group">
             <label class="form-label mt-4" for="exampleInputEmail1">Email address</label>
-            <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1" placeholder="Enter email"
-                   type="email">
+            <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1"
+                   placeholder="Enter email" type="email">
             <small class="form-text text-muted" id="emailHelp">We'll never share your email with anyone
                 else.</small>
         </div>
@@ -89,6 +93,20 @@
         <button class="btn mt-2 btn-lg btn-primary" type="button">Block button</button>
     </form>
 </div>
+
+<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+<script>
+    window.ga = function () {
+        ga.q.push(arguments)
+    };
+    ga.q = [];
+    ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto');
+    ga('set', 'anonymizeIp', true);
+    ga('set', 'transport', 'beacon');
+    ga('send', 'pageview')
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
 </body>
 
 </html>
