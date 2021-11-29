@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -25,12 +26,15 @@ public class CommentService {
         User user = userRepository.findById(requestDto.getUserId()).orElse(null);
         assert article != null;
         assert user != null;
+
         Comment comment = Comment
             .builder()
             .content(requestDto.getContent())
             .user(user)
             .article(article)
             .build();
+        List<Comment> articleComments = article.getComments();
+        articleComments.add(comment);
         return commentRepository.save(comment);
     }
 }

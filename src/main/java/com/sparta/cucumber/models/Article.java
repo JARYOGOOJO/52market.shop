@@ -36,6 +36,10 @@ public class Article extends Timestamped {
     private Double latitude;
     private Double longitude;
 
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
 
     @Builder
     public Article(User user, String title,

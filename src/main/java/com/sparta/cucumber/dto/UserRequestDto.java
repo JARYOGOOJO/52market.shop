@@ -1,14 +1,8 @@
 package com.sparta.cucumber.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 public class UserRequestDto {
 
     private String name;

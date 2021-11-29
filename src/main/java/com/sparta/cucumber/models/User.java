@@ -50,7 +50,7 @@ public class User extends Timestamped {
         return this;
     }
 
-    public String getRoleKey() {
-        return this.role.getKey();
-    }
+//    public String getRoleKey() {
+//        return this.role.getKey();
+//    }
 }
