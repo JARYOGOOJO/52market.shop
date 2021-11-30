@@ -40,7 +40,6 @@ public class Article extends Timestamped {
         this.comments = comments;
     }
 
-
     @Builder
     public Article(User user, String title,
                    String content, String image,
