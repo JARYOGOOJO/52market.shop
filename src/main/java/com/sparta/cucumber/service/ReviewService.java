@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -16,6 +17,11 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+
+    public List<Review> getReviews(Long reviewTargetId) {
+        return reviewRepository.findAllByReviewTargetUser_Id(reviewTargetId);
+    }
+
 
     @Transactional
     public Review uploadOrUpdate(ReviewRequestDto requestDto) {
@@ -34,5 +40,14 @@ public class ReviewService {
                 .build();
 
         return reviewRepository.save(review);
+    }
+
+    @Transactional
+    public Long deleteReview(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                () -> new NullPointerException("해당 게시글이 존재하지 않습니다.")
+        );
+        reviewRepository.deleteById(review.getId());
+        return review.getId();
     }
 }
