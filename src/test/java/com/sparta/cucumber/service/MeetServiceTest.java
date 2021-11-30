@@ -1,6 +1,10 @@
 package com.sparta.cucumber.service;
 
+import com.sparta.cucumber.models.Article;
+import com.sparta.cucumber.models.Meet;
 import com.sparta.cucumber.models.User;
+import com.sparta.cucumber.repository.ArticleRepository;
+import com.sparta.cucumber.repository.MeetRepository;
 import com.sparta.cucumber.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,20 +14,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class UserServiceTest {
-
+class MeetServiceTest {
+    @Autowired
+    private MeetRepository meetRepository;
+    @Autowired
+    private ArticleRepository articleRepository;
     @Autowired
     private UserRepository userRepository;
 
+
     @Test
     @Transactional
-    void signup() {
+    void create() {
         User user = User
                 .builder()
                 .name("test")
@@ -33,47 +43,40 @@ class UserServiceTest {
                 .latitude(0.0)
                 .longitude(0.0)
                 .build();
-        User saveUser = userRepository.save(user);
-        System.out.println("saveUser!");
-        System.out.println(user.getName());
-        System.out.println(user.getPassword());
-        System.out.println(user.getPhoneNumber());
-        System.out.println(user.getEmail());
-        System.out.println(user.getLatitude());
-        System.out.println(user.getLongitude());
 
-        assertThat(user).isEqualTo(saveUser);
+        User commenter = userRepository.save(user);
 
-        // 중복체크
         User user2 = User
                 .builder()
-                .name("test1")
+                .name("test2")
                 .password("111")
                 .phoneNumber("010-1111-2222")
-                .email("test@naver.com")
+                .email("test2@naver.com")
                 .latitude(0.0)
                 .longitude(0.0)
                 .build();
 
-        assertThat(saveUser.getName()).isNotEqualTo(user2.getName());
+        User newCommenter = userRepository.save(user2);
 
-        User saveUser2 = userRepository.save(user2);
-    }
+        Article article = Article.builder()
+                .user(commenter)
+                .title("testTitle")
+                .content("testContent")
+                .image("testImage")
+                .latitude(0.0)
+                .longitude(0.0)
+                .build();
 
-    @Transactional
-    void signin() {
-        User user = User
+        Article saveArticle = articleRepository.save(article);
+
+        assertThat(newCommenter).isNotEqualTo(article.getUser());
+        Meet meet = Meet
                 .builder()
-                .name("test")
-                .password("111")
-                .phoneNumber("010-1111-2222")
-                .email("test@naver.com")
-                .latitude(0.0)
-                .longitude(0.0)
+                .article(article)
+                .commenter(commenter)
                 .build();
-        User saveUser = userRepository.save(user);
-
-        User findUser = userRepository.findByNameAndPassword(saveUser.getName(),saveUser.getPassword());
-        assertThat(saveUser).isEqualTo(findUser);
+        Meet saveMeet = meetRepository.save(meet);
+        Optional<Meet> findMeet = meetRepository.findById(saveMeet.getId());
+        assertThat(saveMeet).isEqualTo(findMeet.get());
     }
 }

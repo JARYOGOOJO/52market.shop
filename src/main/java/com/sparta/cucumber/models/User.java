@@ -8,10 +8,14 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
+@TableGenerator(
+        name = "USER_GENERATOR",
+        table = "MY_SEQUENCES",
+        pkColumnValue = "USER_SEQ", allocationSize = 50)
 @Entity(name = "user")
 public class User extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE,generator = "USER_GENERATOR")
     private Long id;
     @Column(nullable = false)
     private String name;
