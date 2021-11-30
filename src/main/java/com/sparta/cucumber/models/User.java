@@ -5,14 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@TableGenerator(
+        name = "USER_GENERATOR",
+        table = "MY_SEQUENCES",
+        pkColumnValue = "USER_SEQ", allocationSize = 50)
 @Entity(name = "user")
 public class User extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE,generator = "USER_GENERATOR")
     private Long id;
     @Column(nullable = false)
     private String name;
@@ -24,10 +27,6 @@ public class User extends Timestamped {
     private Double latitude;
     private Double longitude;
     private Double star;
-    @OneToMany(mappedBy = "user")
-    private List<Article> articles;
-    @OneToMany(mappedBy = "user")
-    private List<Comment> comments;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -43,14 +42,4 @@ public class User extends Timestamped {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-
-    public User update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
-        return this;
-    }
-
-//    public String getRoleKey() {
-//        return this.role.getKey();
-//    }
 }

@@ -22,19 +22,26 @@ public class CommentService {
 
     @Transactional
     public Comment uploadOrUpdate (CommentRequestDto requestDto) {
-        Article article = articleRepository.findById(requestDto.getArticleId()).orElse(null);
-        User user = userRepository.findById(requestDto.getUserId()).orElse(null);
-        assert article != null;
-        assert user != null;
-
+        Article article = articleRepository
+                .findById(requestDto.getArticleId())
+                .orElseThrow(
+                        () -> new NullPointerException("게시물이 존재하지 않습니다."));
+        User user = userRepository
+                .findById(requestDto.getUserId())
+                .orElseThrow(
+                        () -> new NullPointerException("게시물 작성자가 올바르지 않습니다."));
         Comment comment = Comment
-            .builder()
-            .content(requestDto.getContent())
-            .user(user)
-            .article(article)
-            .build();
+                .builder()
+                .content(requestDto.getContent())
+                .user(user)
+                .article(article)
+                .build();
         List<Comment> articleComments = article.getComments();
         articleComments.add(comment);
         return commentRepository.save(comment);
+    }
+
+    public List<Comment> getComments(Long articleId) {
+        return commentRepository.findAllByArticle_Id(articleId);
     }
 }

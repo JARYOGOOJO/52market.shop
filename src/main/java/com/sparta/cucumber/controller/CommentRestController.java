@@ -21,7 +21,7 @@ public class CommentRestController {
 
     @GetMapping("/api/comments/{id}")
     public ResponseEntity<List<Comment>> getComments(@PathVariable("id") Long articleId) {
-        List<Comment> comments = commentRepository.findAllByArticle_Id(articleId);
+        List<Comment> comments = commentService.getComments(articleId);
         return ResponseEntity.ok().body(comments);
     }
 

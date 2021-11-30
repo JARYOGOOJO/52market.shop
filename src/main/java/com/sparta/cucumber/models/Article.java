@@ -8,26 +8,25 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @ToString
 @NoArgsConstructor
 @Entity(name = "article")
+@TableGenerator(
+        name = "ARTICLE_GENERATOR",
+        table = "MY_SEQUENCES",
+        pkColumnValue = "ARTICLE_SEQ", allocationSize = 50)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Article extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE,generator = "ARTICLE_GENERATOR")
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user")
     private User user;
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Comment> comments;
-
     @Column(length = 500, nullable = false)
     private String title;
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -35,11 +34,6 @@ public class Article extends Timestamped {
     private String image;
     private Double latitude;
     private Double longitude;
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
 
     @Builder
     public Article(User user, String title,

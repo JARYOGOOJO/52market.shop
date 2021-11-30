@@ -14,21 +14,27 @@ public class UserService {
 
     @Transactional
     public User signup(UserRequestDto userDTO){
-        User user = User
-                .builder()
-                .name(userDTO.getName())
-                .email(userDTO.getEmail())
-                .password(userDTO.getPassword())
-                .latitude(userDTO.getLatitude())
-                .longitude(userDTO.getLongitude())
-                .phoneNumber(userDTO.getPhoneNumber())
-                .build();
-        userRepository.save(user);
-        return user;
+        User exists = userRepository
+                .findByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
+        if (exists != null) {
+            return signin(userDTO);
+        } else {
+            User user = User
+                    .builder()
+                    .name(userDTO.getName())
+                    .email(userDTO.getEmail())
+                    .password(userDTO.getPassword())
+                    .latitude(userDTO.getLatitude())
+                    .longitude(userDTO.getLongitude())
+                    .phoneNumber(userDTO.getPhoneNumber())
+                    .build();
+            userRepository.save(user);
+            return user;
+        }
     }
 
     @Transactional(readOnly = true)
     public User signin(UserRequestDto userDTO) {
-        return userRepository.findByNameAndPassword(userDTO.getName(), userDTO.getPassword());
+        return userRepository.findByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
     }
 }
