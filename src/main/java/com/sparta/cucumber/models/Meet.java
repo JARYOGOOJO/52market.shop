@@ -8,11 +8,15 @@ import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
+@TableGenerator(
+        name = "MEET_GENERATOR",
+        table = "MY_SEQUENCES",
+        pkColumnValue = "MEET_SEQ", allocationSize = 50)
 @Entity(name = "meet")
 public class Meet extends Timestamped {
     @Id
     @Column(name = "meet_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE,generator = "MEET_GENERATOR")
     private Long id;
     @ManyToOne
     @JoinColumn(name = "comment_user")
