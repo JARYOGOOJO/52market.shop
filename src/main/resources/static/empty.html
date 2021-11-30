@@ -12,7 +12,7 @@
     <meta content="" property="og:url">
     <meta content="" property="og:image">
 
-    <link href="" rel="apple-touch-icon">
+    <link href="icon.png" rel="apple-touch-icon">
     <!-- Place favicon.ico in the root directory -->
 
     <script crossorigin="anonymous" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
@@ -30,13 +30,10 @@
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js"></script>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/aba5c3ead0.js"></script>
     <script src="js/index.js"></script>
-    <script>
-        window.onload = () => getArticles();
-    </script>
     <meta content="#fafafa" name="theme-color">
 </head>
 
-<body style="overflow-x: hidden;">
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Navbar</a>
@@ -57,22 +54,23 @@
                     <a class="nav-link" href="#">Features</a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
-                           data-bs-toggle="dropdown" href="#" role="button">Dropdown</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
-                        </div>
-                    </li>
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
+                       data-bs-toggle="dropdown"
+                       href="#" role="button">Dropdown</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Separated link</a>
+                    </div>
+                </li>
             </ul>
             <form class="d-flex">
                 <input class="form-control me-sm-2" placeholder="Search" type="text">
@@ -81,39 +79,6 @@
         </div>
     </div>
 </nav>
-<main style="height: 100vh; padding: 10px;">
-    <div class="card-deck row" id="articles-body">
-        <!-- Card -->
-        <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
-            <div class="card">
-                <!--Card image-->
-                <div class="view overlay">
-                    <img alt="Card image cap" class="card-img-top"
-                         src="https://mdbootstrap.com/img/Photos/Others/images/16.jpg">
-                    <a href="#">
-                        <div class="mask rgba-white-slight"></div>
-                    </a>
-                </div>
-                <!--Card content-->
-                <div class="card-body">
-                    <!--Title-->
-                    <h4 class="card-title">Damn I need a help</h4>
-                    <!--Text-->
-                    <p class="card-text">Is there someone can help me?</p>
-                    <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-                    <button class="btn btn-primary" onclick="console.log(this.title)" title="like" type="button"><i
-                            class="far fa-thumbs-up"></i></button>
-                    <button class="btn btn-primary" title="comment" type="button"><i
-                            class="fas fa-comments"></i></button>
-                    <button class="btn btn-primary" title="edit" type="button"><i class="far fa-edit"></i></button>
-                    <button class="btn btn-primary" title="delete" type="button"><i
-                            class="fas fa-trash-alt"></i></button>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-
 <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
 <script>
     window.ga = function () {

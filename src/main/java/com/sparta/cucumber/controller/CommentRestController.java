@@ -2,7 +2,6 @@ package com.sparta.cucumber.controller;
 
 import com.sparta.cucumber.dto.CommentRequestDto;
 import com.sparta.cucumber.models.Comment;
-import com.sparta.cucumber.repository.CommentRepository;
 import com.sparta.cucumber.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +15,11 @@ import java.util.List;
 @RestController
 public class CommentRestController {
 
-    public final CommentRepository commentRepository;
     public final CommentService commentService;
 
     @GetMapping("/api/comments/{id}")
     public ResponseEntity<List<Comment>> getComments(@PathVariable("id") Long articleId) {
-        List<Comment> comments = commentRepository.findAllByArticle_Id(articleId);
+        List<Comment> comments = commentService.getComments(articleId);
         return ResponseEntity.ok().body(comments);
     }
 

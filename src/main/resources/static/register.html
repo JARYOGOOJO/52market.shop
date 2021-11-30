@@ -3,16 +3,16 @@
 
 <head>
     <meta charset="utf-8">
-    <title>오이마켓</title>
+    <title>오이마켓::🥒 오늘의 이웃 소식</title>
     <meta content="" name="description">
     <meta content="width=device-width, initial-scale=1" name="viewport">
 
-    <meta content="" property="og:title">
+    <meta content="오이마켓::🥒 오늘의 이웃 소식" property="og:title">
     <meta content="" property="og:type">
     <meta content="" property="og:url">
     <meta content="" property="og:image">
 
-    <link href="icon.png" rel="apple-touch-icon">
+    <link href="" rel="apple-touch-icon">
     <!-- Place favicon.ico in the root directory -->
 
     <script crossorigin="anonymous" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
@@ -27,6 +27,7 @@
     <script crossorigin="anonymous"
         integrity="sha512-HNbo1d4BaJjXh+/e6q4enTyezg5wiXvY3p/9Vzb20NIvkJghZxhzaXeffbdJuuZSxFhJP87ORPadwmU9aN3wSA=="
         referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js"></script>
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/aba5c3ead0.js"></script>
     <script src="js/index.js"></script>
     <meta content="#fafafa" name="theme-color">
 </head>
@@ -78,12 +79,12 @@
             </div>
         </div>
     </nav>
-    <div class="col-lg-3 m-auto">
+    <div class="col-lg-3 col-sm-4 m-auto">
         <form action="" style="display: grid;">
             <div class="form-group">
                 <label class="form-label mt-4" for="exampleInputEmail1">Email address</label>
                 <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1" oninput="checkEmail()"
-                    placeholder="Enter email" type="email">
+                       placeholder="Enter email" type="email">
                 <small class="form-text text-muted" id="emailHelp"></small>
             </div>
             <div class="form-group">
@@ -107,7 +108,7 @@
             <div class="form-group">
                 <label class="form-label-sm mt-2" for="exampleInputPassword2">re-Password</label>
                 <input aria-describedby="repwdHelp" class="form-control" id="exampleInputPassword2"
-                    oninput="passwordOK()" onsubmit="activate()" placeholder="Confirm Password" type="password">
+                       oninput="passwordOK()" placeholder="Confirm Password" type="password">
                 <small class="form-text text-muted" id="repwdHelp"></small>
             </div>
             <button class="btn mt-3 btn-lg btn-primary" disabled id="submit" onclick="signup()" type="button">Register

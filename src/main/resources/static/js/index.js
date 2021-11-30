@@ -27,8 +27,8 @@ function login() {
 }
 
 function signup() {
-    const latitude = 37.49798901601007;
-    const longitude = 127.03796438656106;
+    let latitude = 37.49798901601007;
+    let longitude = 127.03796438656106;
     navigator
         .geolocation
         .getCurrentPosition((position) => {
@@ -107,4 +107,104 @@ const activate = () => {
     document.querySelectorAll("small").forEach(elem => {
         if (!elem.text) $("#submit").removeAttr("disabled")
     });
+}
+
+const getArticles = () => {
+    const User = JSON.parse(localStorage.getItem("user"));
+    if (User !== null) {
+        $("#name").text(User.name + "님 환영합니다.");
+    }
+    axios
+        .get("http://localhost:8080/api/articles")
+        .then(function (response) {
+            // handle success
+            console.log(response);
+            const {data} = response;
+            data.forEach((v, i) => {
+                console.log(v);
+                console.log(i);
+                const {id, title, content, address, createdAt, user} = v;
+                const {name} = user;
+                console.log(title, content, address, name);
+                const temp_html = `<!-- Card -->
+          <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
+              <div class="card">
+                  <!--Card image-->
+                  <div class="view overlay">
+                      <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/16.jpg"
+                          alt="Card image cap">
+                      <a href="#!">
+                          <div class="mask rgba-white-slight"></div>
+                      </a>
+                  </div>
+                  <!--Card content-->
+                  <div class="card-body">
+                      <!--Title-->
+                      <h4 class="card-title">${title}</h4>
+                      <!--Text-->
+                      <p class="card-text">${content}</p>
+                      <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+                      <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-primary">
+                      <i class="far fa-thumbs-up"></i></button>
+                      <button onclick="console.log(this.title, ${id}, '${name}')" title="comment" type="button" class="btn btn-primary">
+                      <i class="fas fa-comments"></i></button>
+                      <button onclick="console.log(this.title, ${id}, '${name}')" title="edit" type="button" class="btn btn-primary">
+                      <i class="far fa-edit"></i></button>
+                      <button onclick="console.log(this.title, ${id}, '${name}')" title="delete" type="button" class="btn btn-primary">
+                      <i class="fas fa-trash-alt"></i></button>
+                  </div>
+              </div>
+          </div>`;
+                $("#articles-body").append(temp_html);
+            });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
+};
+
+function boardUpdate(article_id) {
+    localStorage.setItem("article_id", article_id);
+    window.location.href = "/update.html";
+}
+
+function boardDelete(article_id) {
+    // alert("delete");
+    const user = JSON.parse(localStorage.getItem("user"));
+    axios
+        .delete(
+            `http://localhost:8080/api/article/${article_id}/${user.id}`,
+            {}
+        )
+        .then(function (response) {
+            console.log(response);
+            window.location.href = "/";
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .then(function () {
+            // always executed
+        });
+}
+
+function boardContent(article_id) {
+    console.log("article_id", article_id);
+    localStorage.setItem("article_id", article_id);
+    window.location.href = "/detail.html";
+    //   axios
+    //     .get(`http://localhost:8080/api/article/${article_id}`, {})
+    //     .then(function (response) {
+    //       console.log(response);
+    //     })
+    //     .catch(function (error) {
+    //       console.log(error);
+    //     })
+    //     .then(function () {
+    //       // always executed
+    //     });
 }

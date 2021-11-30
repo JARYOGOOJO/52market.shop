@@ -5,16 +5,22 @@ import com.sparta.cucumber.models.Article;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.repository.UserRepository;
+import com.sparta.cucumber.utils.LocationDistance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class ArticleService {
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
+    public final LocationDistance location;
 
     @Transactional
     public Article uploadOrUpdate(ArticleRequestDto requestDto) {
@@ -32,5 +38,48 @@ public class ArticleService {
                 .longitude(user.getLongitude())
                 .build();
         return articleRepository.save(article);
+    }
+
+    public List<Article> getArticles(String query) {
+        return articleRepository.findAllByTitleContains(query);
+    }
+
+    public List<Article> getAllArticles() {
+        return articleRepository.findAll();
+    }
+
+    public Article seeDetailOfArticle(Long articleId) {
+        return articleRepository
+                .findById(articleId)
+                .orElseThrow(NullPointerException::new);
+    }
+
+    public List<Article> getAroundArticle(Double lat, Double lon) {
+        return articleRepository
+                .findAll()
+                .stream()
+                .filter(article -> {
+                    double dist = location.distance(
+                            lat, lon,
+                            article.getLatitude(), article.getLongitude(),
+                            "meter");
+                    return dist < 1000;
+                }).collect(Collectors.toList());
+    }
+
+    public List<Article> getUsersArticles(@PathVariable("id") Long userId) {
+        return articleRepository.findAllByUser_Id(userId);
+    }
+
+
+    public Long removeArticle(Long userId, Long articleId) {
+        Article article = articleRepository
+                .findById(articleId)
+                .orElseThrow(
+                        () -> new NullPointerException("게시물이 존재하지 않습니다."));
+        if (Objects.equals(article.getUser().getId(), userId)) {
+            articleRepository.deleteById(articleId);
+        }
+        return articleId;
     }
 }

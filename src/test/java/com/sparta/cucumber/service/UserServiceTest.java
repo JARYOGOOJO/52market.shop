@@ -58,10 +58,8 @@ class UserServiceTest {
         assertThat(saveUser.getName()).isNotEqualTo(user2.getName());
 
         User saveUser2 = userRepository.save(user2);
-
     }
 
-    @Test
     @Transactional
     void signin() {
         User user = User
