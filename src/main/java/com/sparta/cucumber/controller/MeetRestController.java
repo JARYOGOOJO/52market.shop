@@ -7,10 +7,7 @@ import com.sparta.cucumber.service.MeetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,16 +19,16 @@ public class MeetRestController {
     private final MeetService meetService;
     private final MeetRepository meetRepository;
 
-    @GetMapping("/api/meets")
-    ResponseEntity<?> readMeets() {
-        List<Meet> meets = meetRepository.findAll();
+    @GetMapping("/api/meets/{id}")
+    ResponseEntity<?> readMeets(@PathVariable(name = "id") Long articleId) {
+        List<Meet> meets = meetService.readMeets(articleId);
         return ResponseEntity.ok().body(meets);
     }
 
     @PostMapping("/api/meet/delete")
     ResponseEntity<?> deleteMeet(@RequestBody MeetRequestDto meetDTO) {
-        meetRepository.deleteById(meetDTO.getId());
-        return ResponseEntity.ok().body(meetDTO.getId());
+        Long result = meetService.deleteMeet(meetDTO);
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/api/meet")

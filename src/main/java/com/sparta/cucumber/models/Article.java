@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @ToString
@@ -28,10 +27,6 @@ public class Article extends Timestamped {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user")
     private User user;
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private List<Comment> comments;
-
     @Column(length = 500, nullable = false)
     private String title;
     @Column(columnDefinition = "TEXT", nullable = false)
@@ -39,10 +34,6 @@ public class Article extends Timestamped {
     private String image;
     private Double latitude;
     private Double longitude;
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
 
     @Builder
     public Article(User user, String title,
