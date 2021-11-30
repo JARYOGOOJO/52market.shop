@@ -10,14 +10,18 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Getter
-@Entity(name = "comment")
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity(name = "comment")
+@TableGenerator(
+        name = "COMMENT_GENERATOR",
+        table = "MY_SEQUENCES",
+        pkColumnValue = "COMMENT_SEQ", allocationSize = 50)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Comment extends Timestamped {
     @Id
     @Column(name = "comment_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE,generator = "COMMENT_GENERATOR")
     private Long id;
     private String content;
     @ManyToOne
