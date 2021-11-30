@@ -2,9 +2,7 @@ package com.sparta.cucumber.controller;
 
 import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.models.Article;
-import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.service.ArticleService;
-import com.sparta.cucumber.utils.LocationDistance;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 public class ArticleRestController {
 
-    public final ArticleRepository articleRepository;
     public final ArticleService articleService;
-    public final LocationDistance location;
 
     @GetMapping("/api/articles/{query}")
     public ResponseEntity<List<Article>> getArticles(@PathVariable("query") String query) {
