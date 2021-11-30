@@ -14,11 +14,15 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 @Entity(name = "article")
+@TableGenerator(
+        name = "ARTICLE_GENERATOR",
+        table = "MY_SEQUENCES",
+        pkColumnValue = "ARTICLE_SEQ", allocationSize = 50)
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Article extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE,generator = "ARTICLE_GENERATOR")
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
