@@ -2,6 +2,7 @@ package com.sparta.cucumber.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.sparta.cucumber.dto.ArticleRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,15 +36,35 @@ public class Article extends Timestamped {
     private Double latitude;
     private Double longitude;
 
+    private String fileName;
+    private String filePath;
+
+//    @Builder
+//    public Article(User user, String title,
+//                   String content, String image,
+//                   Double latitude, Double longitude) {
+//        this.user = user;
+//        this.title = title;
+//        this.content = content;
+//        this.image = image;
+//        this.latitude = latitude;
+//        this.longitude = longitude;
+//    }
+
     @Builder
     public Article(User user, String title,
                    String content, String image,
-                   Double latitude, Double longitude) {
+                   Double latitude, Double longitude,
+                   String fileName, String filePath) {
         this.user = user;
         this.title = title;
         this.content = content;
         this.image = image;
         this.latitude = latitude;
         this.longitude = longitude;
+
+        this.fileName = fileName;
+        this.filePath = filePath;
+
     }
 }

@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -48,15 +50,15 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(articles);
     }
 
-    @PostMapping("/api/article/write")
-    public ResponseEntity<Article> writeArticle (@RequestBody ArticleRequestDto requestDto) {
-        Article article = articleService.uploadOrUpdate(requestDto);
-        return ResponseEntity.ok().body(article);
-    }
+//    @PostMapping("/api/article/write")
+//    public ResponseEntity<Article> writeArticle (@RequestBody ArticleRequestDto requestDto) {
+//        Article article = articleService.uploadOrUpdate(requestDto);
+//        return ResponseEntity.ok().body(article);
+//    }
 
     @PutMapping("/api/article/update")
-    public ResponseEntity<Article> editArticle (@RequestBody ArticleRequestDto requestDto) {
-        Article article = articleService.uploadOrUpdate(requestDto);
+    public ResponseEntity<Article> editArticle (@ModelAttribute ArticleRequestDto requestDto, @ModelAttribute MultipartFile file) throws IOException {
+        Article article = articleService.uploadOrUpdate(requestDto, file);
         return ResponseEntity.ok().body(article);
     }
 
@@ -65,5 +67,18 @@ public class ArticleRestController {
                                               @PathVariable("id") Long articleId) {
         Long id = articleService.removeArticle(userId, articleId);
         return ResponseEntity.ok().body(id);
+    }
+
+//    @PostMapping("/api/articles")
+//    public Article writeArticleWithImage(Article article, MultipartFile file) throws IOException {
+//        articleService.uploadWithImages(article, file);
+//
+//        return article;
+//    }
+
+    @PostMapping("/api/article/write")
+    public ResponseEntity<Article> writeArticle (@ModelAttribute ArticleRequestDto requestDto, @ModelAttribute MultipartFile file) throws IOException {
+        Article article = articleService.uploadOrUpdate(requestDto, file);
+        return ResponseEntity.ok().body(article);
     }
 }
