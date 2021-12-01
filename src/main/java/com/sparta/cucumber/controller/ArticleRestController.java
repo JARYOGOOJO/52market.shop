@@ -57,7 +57,8 @@ public class ArticleRestController {
 //    }
 
     @PutMapping("/api/article/update")
-    public ResponseEntity<Article> editArticle (@ModelAttribute ArticleRequestDto requestDto, @ModelAttribute MultipartFile file) throws IOException {
+    public ResponseEntity<Article> editArticle (@ModelAttribute ArticleRequestDto requestDto,
+                                                @ModelAttribute MultipartFile file) throws IOException {
         Article article = articleService.uploadOrUpdate(requestDto, file);
         return ResponseEntity.ok().body(article);
     }

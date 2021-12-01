@@ -46,11 +46,11 @@ public class ArticleService {
 
     @Transactional
     public Article uploadOrUpdate(ArticleRequestDto requestDto, MultipartFile file) throws IOException {
-//        Long userId = requestDto.getUserId();
-//        User user = userRepository
-//                .findById(userId)
-//                .orElseThrow(
-//                        () -> new NullPointerException("잘못된 접근입니다."));
+        Long userId = requestDto.getUserId();
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(
+                        () -> new NullPointerException("잘못된 접근입니다."));
 
         // 경로지정
         String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
@@ -64,12 +64,12 @@ public class ArticleService {
         file.transferTo(saveFile);
 
         Article article = Article.builder()
-                //.user(user)
+                .user(user)
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
                 .image(requestDto.getImage())
-                //.latitude(user.getLatitude())
-                //.longitude(user.getLongitude())
+                .latitude(user.getLatitude())
+                .longitude(user.getLongitude())
                 .fileName(saveFile.getName())
                 .filePath(saveFile.getPath())
                 .build();
