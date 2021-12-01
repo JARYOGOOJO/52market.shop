@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;900&display=swap');
+
 /*! HTML5 Boilerplate v8.0.0 | MIT License | https://html5boilerplate.com/ */
 
 /* main.css 2.1.0 | MIT License | https://github.com/h5bp/main.css#readme */
@@ -15,6 +18,7 @@ html {
     color: #222;
     font-size: 1em;
     line-height: 1.4;
+    font-family: 'Roboto', sans-serif;
 }
 
 /*
@@ -259,4 +263,79 @@ textarea {
     h3 {
         page-break-after: avoid;
     }
+}
+
+ul, ol, dl, dd {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+.loginKinds {
+    margin: 10px 0 0 0;
+    overflow: hidden;
+}
+
+.loginKinds li {
+    list-style: none;
+    /* width: 75%; */
+    /* margin: 0 auto; */
+    /* text-align: center; */
+    position: relative;
+    left: -3.819px;
+    width: 230px;
+}
+
+.loginKinds li a {
+    text-decoration: none;
+    padding: 0 0 0 0;
+    position: relative;
+    display: block;
+    margin: 6px 0 0 6px;
+    height: 42px;
+    line-height: 42px;
+    border: 1px solid transparent;
+    font-size: 14px;
+    color: #fff;
+    border-radius: 8px;
+    width: 230px;
+    margin: 5px -15px;
+}
+
+.loginKinds li a.btn {
+    background: url("../images/icon-52.png") 17px 50% no-repeat #78C2AD;
+    transition: 0.345s ease-in-out;
+}
+
+.loginKinds li a.facebook {
+    background: url("../images/icon-fb.png") 17px 50% no-repeat #4966b9;
+    transition: 0.345s ease-in-out;
+}
+
+.loginKinds li a.google {
+    background: url("../images/icon-gg.png") 12px 50% no-repeat #f4f4f4;
+    transition: 0.345s ease-in-out;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+.loginKinds li a.kakao {
+    background: url("../images/icon-kk.png") 12px 50% no-repeat #ffeb00;
+    transition: 0.345s ease-in-out;
+    color: #3e3a39;
+}
+
+.loginKinds li a.naver {
+    background: url("../images/icon-na.png") 15px 50% no-repeat #4bce35;
+    transition: 0.345s ease-in-out;
 }

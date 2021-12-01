@@ -1,19 +1,22 @@
 function login() {
     const email = $("#exampleInputEmail1").val();
     const password = $("#exampleInputPassword1").val();
+    if (!(email && password)) {
+        alert("올바른 아이디와 비밀번호를 입력해주세요.")
+    }
     axios.post("http://localhost:8080/api/signin", {
         email: email,
         password: password,
     })
         .then(function (response) {
             console.log(response);
-            const {data} = response;
+            const { data } = response;
             if (data) {
-                const {id, email} = data;
+                const { id, email } = data;
                 console.log("id", id, "email", email);
                 localStorage.setItem(
                     "user",
-                    JSON.stringify({id: id, email: email})
+                    JSON.stringify({ id: id, email: email })
                 );
                 const User = JSON.parse(localStorage.getItem("user"));
                 console.log("User", User);
@@ -23,12 +26,13 @@ function login() {
         })
         .catch(function (error) {
             console.log(error);
+            alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.")
         });
 }
 
 function signup() {
-    let latitude = 37.49798901601007;
-    let longitude = 127.03796438656106;
+    const latitude = 37.49798901601007;
+    const longitude = 127.03796438656106;
     navigator
         .geolocation
         .getCurrentPosition((position) => {
@@ -51,8 +55,8 @@ function signup() {
     })
         .then(function (response) {
             console.log(response);
-            const {data} = response;
-            const {id, name} = data;
+            const { data } = response;
+            const { id, name } = data;
             console.log(id, name)
             //   console.log("id", id, "name", name);
             //   localStorage.setItem(
@@ -119,19 +123,19 @@ const getArticles = () => {
         .then(function (response) {
             // handle success
             console.log(response);
-            const {data} = response;
+            const { data } = response;
             data.forEach((v, i) => {
                 console.log(v);
                 console.log(i);
-                const {id, title, content, address, createdAt, user} = v;
-                const {name} = user;
+                const { id, title, content, address, createdAt, user } = v;
+                const { name } = user;
                 console.log(title, content, address, name);
                 const temp_html = `<!-- Card -->
-          <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
-              <div class="card">
+                <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
+                <div class="card" style="margin: 10px; min-width: 200px;">
                   <!--Card image-->
                   <div class="view overlay">
-                      <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Others/images/16.jpg"
+                      <img class="card-img-top" src="http://loremflickr.com/320/150?random=${i}"
                           alt="Card image cap">
                       <a href="#!">
                           <div class="mask rgba-white-slight"></div>
@@ -207,4 +211,27 @@ function boardContent(article_id) {
     //     .then(function () {
     //       // always executed
     //     });
+}
+
+function Write() {
+    const User = JSON.parse(localStorage.getItem("user"));
+    const title = $("#exampleFormControlInput1").val();
+    const content = $("#exampleFormControlTextarea1").val();
+    const image = $("#formFile")[0].files[0];
+    console.log(User, title, content, image);
+
+    axios
+        .post("http://localhost:8080/api/article/write", {
+            userId: User.id,
+            title: title,
+            content: content,
+            image: image,
+        })
+        .then(function (response) {
+            console.log(response);
+            window.location.href = "/";
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
 }
