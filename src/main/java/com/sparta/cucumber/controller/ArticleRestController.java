@@ -70,12 +70,6 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(id);
     }
 
-//    @PostMapping("/api/articles")
-//    public Article writeArticleWithImage(Article article, MultipartFile file) throws IOException {
-//        articleService.uploadWithImages(article, file);
-//
-//        return article;
-//    }
 
     @PostMapping("/api/article/write")
     public ResponseEntity<Article> writeArticle (@ModelAttribute ArticleRequestDto requestDto,
