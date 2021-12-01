@@ -30,8 +30,7 @@
             referrerpolicy="no-referrer"
             src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js"></script>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/aba5c3ead0.js"></script>
-    <script src="js/naveridlogin_js_sdk_2.0.2.js" type="text/javascript"></script>
-
+    <script src="js\naveridlogin_js_sdk_2.0.2.js" type="text/javascript"></script>
     <script src="js/index.js"></script>
     <script src="js/kakao.js"></script>
     <meta content="#fafafa" name="theme-color">
@@ -92,37 +91,57 @@
                        placeholder="Enter email" type="email">
                 <small class="form-text text-muted" id="emailHelp"></small>
             </div>
+
             <div class="form-group">
                 <label class="form-label-sm mt-2" for="exampleInputPassword1">Password</label>
                 <input aria-describedby="pwdHelp" class="form-control" id="exampleInputPassword1"
                        onchange="passwordOK();" placeholder="Password" type="password">
                 <small class="form-text text-muted" id="pwdHelp"></small>
             </div>
-            <button class="btn-primary" disabled id="submit" onclick="login()"
-                    style="display: block;position: relative;top: 0;left: 0;height: 44px;width: 220px;border: 0;margin: -2px -10px;"
-                    type="button">Login
-            </button>
+
         </form>
+        <ul class="loginKinds">
+            <li><a class="btn" disabled id="submit" onclick="login()" type="button">Login</a></li>
+            <li><a class="btn google" id="customBtn" id="buttonDiv"><span>구글</span>로그인</a>
+            </li>
+            <li><a class="btn kakao" href="javascript:loginWithKakao();" id="custom-login-btn"
+                   onclick=""><span>카카오톡</span> 로그인</a></li>
+            <li>
+                <div id="naver_id_login"><a class="btn naver" href="javascript:shareNaverLogin();"
+                                            id="naverIdLogin_loginButton"><span>네이버</span> 로그인</a></div>
+            </li>
+        </ul>
         <!-- google login -->
-        <script async defer src="https://accounts.google.com/gsi/client"></script>
+        <script src="https://apis.google.com/js/api:client.js"></script>
         <script>
-            function handleCredentialResponse(response) {
-                console.log("Encoded JWT ID token: " + response.credential);
-            }
-            window.onload = function () {
-                google.accounts.id.initialize({
-                    client_id: "868049850755-c17j06hcs1mvomrte32vckndhnamoub1.apps.googleusercontent.com",
-                    callback: handleCredentialResponse
+            var googleUser = {};
+            var startApp = function () {
+                gapi.load('auth2', function () {
+                    // Retrieve the singleton for the GoogleAuth library and set up the client.
+                    auth2 = gapi.auth2.init({
+                        client_id: '868049850755-c17j06hcs1mvomrte32vckndhnamoub1.apps.googleusercontent.com',
+                        cookiepolicy: 'single_host_origin',
+                        // Request scopes in addition to 'profile' and 'email'
+                        //scope: 'additional_scope'
+                    });
+                    attachSignin(document.getElementById('customBtn'));
                 });
-                google.accounts.id.renderButton(
-                    document.getElementById("buttonDiv"),
-                    {theme: "outline", size: "large"}  // customization attributes
-                );
-                google.accounts.id.prompt(); // also display the One Tap dialog
+            };
+
+            function attachSignin(element) {
+                console.log(element.id);
+                auth2.attachClickHandler(element, {},
+                    function (googleUser) {
+                        console.log(googleUser)
+                        // document.getElementById('name').innerText = "Signed in: " +
+                        //     googleUser.getBasicProfile().getName();
+                    }, function (error) {
+                        alert(JSON.stringify(error, undefined, 2));
+                    });
             }
+
+            startApp();
         </script>
-        <!-- google button (user detect) -->
-        <div id="buttonDiv"></div>
         <!-- kakao login -->
         <script type="text/javascript">
             function loginWithKakao() {
@@ -130,10 +149,8 @@
                     redirectUri: 'http://localhost:5500/index.html'
                 })
             }
-
             // 아래는 데모를 위한 UI 코드입니다.
             displayToken()
-
             function displayToken() {
                 const token = getCookie('authorize-access-token')
                 if (token) {
@@ -155,24 +172,30 @@
             Kakao.init("e1289217c77f4f46dc511544f119d102");
         </script>
         <!-- kakao login button -->
-        <a href="javascript:loginWithKakao()" id="custom-login-btn">
-            <img alt="카카오 로그인 버튼" src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="222"/>
-        </a>
         <p id="token-result"></p>
-        <!-- 네이버 로그인 버튼 노출 영역 -->
-        <div id="naver_id_login"></div>
         <!-- //네이버 로그인 버튼 노출 영역 -->
         <script type="text/javascript">
             var naver_id_login = new naver_id_login("0GgMu2RrfcuVnJYM5Chy", "http://localhost:5500/callback.html");
             var state = naver_id_login.getUniqState();
-            naver_id_login.setButton("white", 2, 40);
+            naver_id_login.setButton("green", 3, 40);
             naver_id_login.setDomain("http://localhost:5500");
             naver_id_login.setState(state);
             naver_id_login.setPopup();
             naver_id_login.init_naver_id_login();
+
+            let link = document.querySelector("#naver_id_login_anchor").href
+            let fn = document.querySelector("#naver_id_login_anchor").onclick
+            let a = document.createElement('a')
+            a.href = link
+            a.classList.add('btn')
+            a.classList.add('naver')
+            a.innerText = "네이버 로그인";
+            a.addEventListener('click', fn);
+            document.querySelector("#naver_id_login").replaceChildren(a);
         </script>
         <a class="text-success" href="/register.html">let me signup</a>
     </div>
+
     <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
     <script>
         window.ga = function () {
