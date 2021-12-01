@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+       <script>
+        $(document).ready(function () {
+            getArticles();
+        })
+
+        function upload() {
+            let title = $("#title").val();
+            let content = $("#content").val();
+            let form = $("#file")[0].files[0];
+            let formData = new FormData();
+            formData.append('file', form);
+            formData.append('title', title);
+            formData.append('content',content);
+
+            $.ajax({
+                method: "POST",
+                url: "/api/article/write",
+                enctype: "multipart/form-data",
+                data: formData,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (data) {
+                    alert("등록 성공")
+                    window.location.reload();
+                }
+            })
+        }
+    function getArticles() {
+            $.ajax({
+                method: "GET",
+                url: "/api/articles",
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    console.log(response)
+                    for(let i = 0; i < response.length; i++) {
+                        let title = response[i]['title'];
+                        let content = response[i]['content'];
+                        let filePath = response[i]['filePath'];
+                        let fileName = response[i]['fileName'];
+
+                        let tempHtml = `<div>
+                                            <h2>${title}</h2>
+                                            <p>${content}</p>
+                                            <img src = "${filePath}" alt="${fileName}">
+                                       </div>`;
+                        $("#show-articles").append(tempHtml);
+                    }
+                }
+            })
+    }
+
+    </script>
+</head>
+<body>
+<div>
+    <input type="text" id="title"><br>
+    <input type="text" id="content"><br>
+    <input type="file" name="file" id="file"><br>
+
+    <button onclick="upload()">업로드</button>
+</div>
+
+<div id="show-articles">
+
+</div>
+
+</body>
+</html>
