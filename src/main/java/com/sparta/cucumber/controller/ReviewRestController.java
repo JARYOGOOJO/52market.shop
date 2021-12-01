@@ -23,13 +23,13 @@ public class ReviewRestController {
     }
 
     @PostMapping("/{id}/reviews")
-    public ResponseEntity<Review> writeReview(@PathVariable("id") Long reviewTargetId, ReviewRequestDto requestDto) {
+    public ResponseEntity<Review> writeReview(@PathVariable("id") Long reviewTargetId, @RequestBody ReviewRequestDto requestDto) {
         Review review = reviewService.uploadOrUpdate(requestDto);
         return ResponseEntity.ok().body(review);
     }
 
     @PutMapping("/reviews/{id}")
-    public ResponseEntity<Review> editReview(@PathVariable("id") Long reviewId, ReviewRequestDto requestDto) {
+    public ResponseEntity<Review> editReview(@PathVariable("id") Long reviewId, @RequestBody ReviewRequestDto requestDto) {
         Review review = reviewService.uploadOrUpdate(requestDto);
         return ResponseEntity.ok().body(review);
     }
