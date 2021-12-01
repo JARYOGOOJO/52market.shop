@@ -16,18 +16,20 @@
     <!-- Place favicon.ico in the root directory -->
 
     <script crossorigin="anonymous" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
-            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script crossorigin="anonymous" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="css/normalize.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/jquery-fab-button.min.css" rel="stylesheet">
+    <script src="js/jquery-fab-button.min.js"></script>
     <script src="js/vendor/modernizr-3.11.2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script crossorigin="anonymous"
-            integrity="sha512-HNbo1d4BaJjXh+/e6q4enTyezg5wiXvY3p/9Vzb20NIvkJghZxhzaXeffbdJuuZSxFhJP87ORPadwmU9aN3wSA=="
-            referrerpolicy="no-referrer"
-            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js"></script>
+        integrity="sha512-HNbo1d4BaJjXh+/e6q4enTyezg5wiXvY3p/9Vzb20NIvkJghZxhzaXeffbdJuuZSxFhJP87ORPadwmU9aN3wSA=="
+        referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js"></script>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/aba5c3ead0.js"></script>
     <script src="js/index.js"></script>
     <script>
@@ -37,26 +39,26 @@
 </head>
 
 <body style="overflow-x: hidden;">
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation"
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation"
                 class="navbar-toggler collapsed" data-bs-target="#navbarColor01" data-bs-toggle="collapse"
                 type="button">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        <div class="navbar-collapse collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">Home
-                        <span class="visually-hidden">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
+            <div class="navbar-collapse collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home
+                            <span class="visually-hidden">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#">Pricing</a>
                     </li>
                     <li class="nav-item">
@@ -64,7 +66,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
-                           data-bs-toggle="dropdown" href="#" role="button">Dropdown</a>
+                            data-bs-toggle="dropdown" href="#" role="button">Dropdown</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="#">Action</a>
                             <a class="dropdown-item" href="#">Another action</a>
@@ -73,60 +75,96 @@
                             <a class="dropdown-item" href="#">Separated link</a>
                         </div>
                     </li>
-            </ul>
-            <form class="d-flex">
-                <input class="form-control me-sm-2" placeholder="Search" type="text">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-sm-2" placeholder="Search" type="text">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
         </div>
-    </div>
-</nav>
-<main style="height: 100vh; padding: 10px;">
-    <div class="card-deck row" id="articles-body">
-        <!-- Card -->
-        <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
-            <div class="card">
-                <!--Card image-->
-                <div class="view overlay">
-                    <img alt="Card image cap" class="card-img-top"
-                         src="https://mdbootstrap.com/img/Photos/Others/images/16.jpg">
-                    <a href="#">
-                        <div class="mask rgba-white-slight"></div>
-                    </a>
-                </div>
-                <!--Card content-->
-                <div class="card-body">
-                    <!--Title-->
-                    <h4 class="card-title">Damn I need a help</h4>
-                    <!--Text-->
-                    <p class="card-text">Is there someone can help me?</p>
-                    <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-                    <button class="btn btn-primary" onclick="console.log(this.title)" title="like" type="button"><i
-                            class="far fa-thumbs-up"></i></button>
-                    <button class="btn btn-primary" title="comment" type="button"><i
-                            class="fas fa-comments"></i></button>
-                    <button class="btn btn-primary" title="edit" type="button"><i class="far fa-edit"></i></button>
-                    <button class="btn btn-primary" title="delete" type="button"><i
-                            class="fas fa-trash-alt"></i></button>
+    </nav>
+    <main style="height: 100vh; padding: 10px;">
+        <div class="card-deck" id="articles-body">
+            <!-- Card -->
+            <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
+                <div class="card" style="margin: 10px; min-width: 200px;">
+                    <!--Card image-->
+                    <div class="view overlay">
+                        <img alt="Card image cap" class="card-img-top"
+                            src="https://mdbootstrap.com/img/Photos/Others/images/16.jpg">
+                        <a href="#">
+                            <div class="mask rgba-white-slight"></div>
+                        </a>
+                    </div>
+                    <!--Card content-->
+                    <div class="card-body">
+                        <!--Title-->
+                        <h4 class="card-title">Damn I need a help</h4>
+                        <!--Text-->
+                        <p class="card-text">Is there someone can help me?</p>
+                        <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+                        <button class="btn btn-primary" onclick="console.log(this.title)" title="like" type="button"><i
+                                class="far fa-thumbs-up"></i></button>
+                        <button class="btn btn-primary" title="comment" type="button"><i
+                                class="fas fa-comments"></i></button>
+                        <button class="btn btn-primary" title="edit" type="button"><i class="far fa-edit"></i></button>
+                        <button class="btn btn-primary" title="delete" type="button"><i
+                                class="fas fa-trash-alt"></i></button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
+        <!-- Button trigger modal -->
+        <button class="btn btn-primary" data-bs-target="#staticBackdrop" data-bs-toggle="modal" type="button">
+            Launch static backdrop modal
+        </button>
 
-<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-<script>
-    window.ga = function () {
-        ga.q.push(arguments)
-    };
-    ga.q = [];
-    ga.l = +new Date;
-    ga('create', 'UA-XXXXX-Y', 'auto');
-    ga('set', 'anonymizeIp', true);
-    ga('set', 'transport', 'beacon');
-    ga('send', 'pageview')
-</script>
-<script async src="https://www.google-analytics.com/analytics.js"></script>
+        <!-- Modal -->
+        <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+            data-bs-keyboard="false" id="staticBackdrop" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="" enctype="multipart/form-data" method="post">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="mb-3">
+                                <label class="form-label" for="exampleFormControlInput1">Title</label>
+                                <input class="form-control" id="exampleFormControlInput1" placeholder="share your story"
+                                    type="text">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="exampleFormControlTextarea1">Content</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+                            </div>
+                            <input accept="image/*" class="form-control" id="formFile" name="u_file" type="file">
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+                            <button class="btn btn-primary" onclick="Write();" type="button">Understood</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+    <script>
+        window.ga = function () {
+            ga.q.push(arguments)
+        };
+        ga.q = [];
+        ga.l = +new Date;
+        ga('create', 'UA-XXXXX-Y', 'auto');
+        ga('set', 'anonymizeIp', true);
+        ga('set', 'transport', 'beacon');
+        ga('send', 'pageview')
+    </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
 </body>
 
 </html>
