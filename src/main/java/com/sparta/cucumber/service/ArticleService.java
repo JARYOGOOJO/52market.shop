@@ -44,6 +44,39 @@ public class ArticleService {
 //        return articleRepository.save(article);
 //    }
 
+    @Transactional
+    public Article uploadOrUpdate(ArticleRequestDto requestDto, MultipartFile file) throws IOException {
+//        Long userId = requestDto.getUserId();
+//        User user = userRepository
+//                .findById(userId)
+//                .orElseThrow(
+//                        () -> new NullPointerException("잘못된 접근입니다."));
+
+        // 경로지정
+        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
+        // 랜덤 식별자 생성
+        UUID uuid = UUID.randomUUID();
+        // uuid_원래파일명
+        String fileName = uuid + "_" + file.getOriginalFilename();
+        // 빈 파일 생성
+        File saveFile = new File(projectPath, fileName);
+        // 업로드 된 파일 저장
+        file.transferTo(saveFile);
+
+        Article article = Article.builder()
+                //.user(user)
+                .title(requestDto.getTitle())
+                .content(requestDto.getContent())
+                .image(requestDto.getImage())
+                //.latitude(user.getLatitude())
+                //.longitude(user.getLongitude())
+                .fileName(saveFile.getName())
+                .filePath(saveFile.getPath())
+                .build();
+
+        return articleRepository.save(article);
+    }
+
     public List<Article> getArticles(String query) {
         return articleRepository.findAllByTitleContains(query);
     }
@@ -85,39 +118,5 @@ public class ArticleService {
             articleRepository.deleteById(articleId);
         }
         return articleId;
-    }
-
-    @Transactional
-    public Article uploadOrUpdate(ArticleRequestDto requestDto, MultipartFile file) throws IOException {
-        Long userId = requestDto.getUserId();
-        User user = userRepository
-                .findById(userId)
-                .orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
-
-        // 경로지정
-        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
-        // 랜덤 식별자 생성
-        UUID uuid = UUID.randomUUID();
-
-        // uuid_원래파일명
-        String fileName = uuid + "_" + file.getOriginalFilename();
-        // 빈 파일 생성
-        File saveFile = new File(projectPath, fileName);
-        // 업로드 된 파일 저장
-        file.transferTo(saveFile);
-
-        Article article = Article.builder()
-                .user(user)
-                .title(requestDto.getTitle())
-                .content(requestDto.getContent())
-                .image(requestDto.getImage())
-                .latitude(user.getLatitude())
-                .longitude(user.getLongitude())
-                .fileName(requestDto.getFileName())
-                .filePath(requestDto.getFilePath())
-                .build();
-
-        return articleRepository.save(article);
     }
 }
