@@ -1,5 +1,6 @@
 package com.sparta.cucumber.service;
 
+import com.sparta.cucumber.dto.ChatRequestDto;
 import com.sparta.cucumber.dto.UserRequestDto;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;

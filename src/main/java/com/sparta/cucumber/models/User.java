@@ -30,6 +30,8 @@ public class User extends Timestamped {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+
+
     @Builder
     public User(String name, String email,
                 String picture, String password,
