@@ -29,7 +29,7 @@ public class CommentService {
         User user = userRepository
                 .findById(requestDto.getUserId())
                 .orElseThrow(
-                        () -> new NullPointerException("게시물 작성자가 올바르지 않습니다."));
+                        () -> new NullPointerException("게시물 작성자가 올바르지 않습니다.."));
         Comment comment = Comment
                 .builder()
                 .content(requestDto.getContent())
