@@ -1,7 +1,7 @@
 package com.sparta.cucumber.utils;
 
-import com.sparta.cucumber.controller.JwtAuthenticationEntryPoint;
-import com.sparta.cucumber.controller.JwtAuthenticationFilter;
+import com.sparta.cucumber.security.JwtAuthenticationEntryPoint;
+import com.sparta.cucumber.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,31 +29,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 
         http.authorizeRequests()
-                // image 폴더를 login 없이 허용
+                // images 폴더 내의 파일 로그인 없이 허용
                 .antMatchers("/images/**").permitAll()
                 // css 폴더를 login 없이 허용
                 .antMatchers("/css/**").permitAll()
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/api/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/basic.js").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/login/kakao").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/").permitAll()
-                // 그 외 모든 요청은 인증과정 필요
+                .antMatchers("/docs/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .formLogin()
                 .loginPage("/user/login")
-                .loginProcessingUrl("/user/login")
+                .failureUrl("/user/login/error")
                 .defaultSuccessUrl("/")
                 .permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/user/logout")
-                .permitAll();
+                .permitAll()
+                .and()
+                .exceptionHandling()
+                .accessDeniedPage("/user/forbidden");
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
@@ -68,5 +72,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
 }

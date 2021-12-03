@@ -1,7 +1,11 @@
 package com.sparta.cucumber.controller;
 
-import com.sparta.cucumber.dto.JwtResponse;
+import com.sparta.cucumber.dto.JwtResponseDto;
+import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
+import com.sparta.cucumber.security.UserDetailsImpl;
+import com.sparta.cucumber.security.kakao.KakaoOAuth2;
+import com.sparta.cucumber.security.kakao.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.UserService;
 import com.sparta.cucumber.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,17 +26,31 @@ public class UserRestController {
 
     private final JwtTokenUtil jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
-    private final UserDetailsService userDetailsService;
-    public final UserService userService;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final UserService userService;
+    private final KakaoOAuth2 kakaoOAuth2;
+
+    @PostMapping(value = "/login/kakao")
+    public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
+        System.out.println(socialLoginDto);
+        String username = userService.kakaoLogin(socialLoginDto.getToken());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
+        final String token = jwtTokenUtil.generateToken(userDetails);
+        System.out.println("token: " + token);
+        System.out.println("user:: " + userDetails.getUsername());
+        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser());
+        System.out.println(result);
+        return ResponseEntity.ok(result);
+    }
 
     @PostMapping("/api/signup")
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) throws Exception {
         System.out.println(userDTO.toString());
         userService.signup(userDTO);
         authenticate(userDTO.getName(), userDTO.getPassword());
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token, userDetails.getUsername()));
+        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser()));
     }
 
     @PostMapping("/api/signin")
@@ -42,9 +58,9 @@ public class UserRestController {
         System.out.println(userDTO.toString());
         userService.signin(userDTO);
         authenticate(userDTO.getName(), userDTO.getPassword());
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token, userDetails.getUsername()));
+        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser()));
     }
 
     private void authenticate(String username, String password) throws Exception {

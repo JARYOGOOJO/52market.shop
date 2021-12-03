@@ -1,4 +1,4 @@
-package com.sparta.cucumber.controller;
+package com.sparta.cucumber.security;
 
 import com.sparta.cucumber.utils.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
