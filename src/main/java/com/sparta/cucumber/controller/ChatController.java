@@ -3,6 +3,7 @@ package com.sparta.cucumber.controller;
 import com.sparta.cucumber.dto.ChatRequestDto;
 import com.sparta.cucumber.models.ChatRoom;
 import com.sparta.cucumber.service.ChatService;
+import com.sparta.cucumber.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,14 @@ import java.util.List;
 public class ChatController {
     private final ChatService chatService;
     private final SimpMessageSendingOperations messagingTemplate;
+    private final UserService userService;
+
+    @ResponseBody
+    @PostMapping("/api/room/enter")
+    public ResponseEntity<?> enterRoom(@RequestBody ChatRequestDto chatRequestDto){
+        log.debug("enterRoom chatRequestDto : "+chatRequestDto.toString());
+        return ResponseEntity.ok().body(chatService.enterRoom(chatRequestDto));
+    }
 
     @ResponseBody
     @GetMapping("/api/room/{id}")
