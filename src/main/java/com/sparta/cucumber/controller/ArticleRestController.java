@@ -1,7 +1,8 @@
 package com.sparta.cucumber.controller;
 
-import com.sparta.cucumber.dto.ArticleRequestDto;
+import  com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.models.Article;
+import com.sparta.cucumber.service.S3Uploader;
 import com.sparta.cucumber.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ArticleRestController {
 
     public final ArticleService articleService;
+    public final S3Uploader s3Uploader;
 
     @GetMapping("/api/articles/{query}")
     public ResponseEntity<List<Article>> getArticles(@PathVariable("query") String query) {
@@ -59,7 +61,8 @@ public class ArticleRestController {
     @PutMapping("/api/article/update")
     public ResponseEntity<Article> editArticle (@ModelAttribute ArticleRequestDto requestDto,
                                                 @ModelAttribute MultipartFile file) throws IOException {
-        Article article = articleService.uploadOrUpdate(requestDto, file);
+        String imagePath = s3Uploader.upload(file, "Article");
+        Article article = articleService.uploadOrUpdate(requestDto, imagePath);
         return ResponseEntity.ok().body(article);
     }
 
@@ -70,11 +73,11 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(id);
     }
 
-
     @PostMapping("/api/article/write")
     public ResponseEntity<Article> writeArticle (@ModelAttribute ArticleRequestDto requestDto,
                                                  @ModelAttribute MultipartFile file) throws IOException {
-        Article article = articleService.uploadOrUpdate(requestDto, file);
+        String imagePath = s3Uploader.upload(file, "Article");
+        Article article = articleService.uploadOrUpdate(requestDto, imagePath);
         return ResponseEntity.ok().body(article);
     }
 }

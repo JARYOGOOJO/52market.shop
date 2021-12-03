@@ -26,6 +26,7 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     public final LocationDistance location;
 
+    // 사진 업로드기닝이 없는 메소드
 //    @Transactional
 //    public Article uploadOrUpdate(ArticleRequestDto requestDto) {
 //        Long userId = requestDto.getUserId();
@@ -44,34 +45,25 @@ public class ArticleService {
 //        return articleRepository.save(article);
 //    }
 
+    // S3에 사진 업로드 가능한 메소드
     @Transactional
-    public Article uploadOrUpdate(ArticleRequestDto requestDto, MultipartFile file) throws IOException {
+    public Article uploadOrUpdate(ArticleRequestDto requestDto, String imagePath) {
         Long userId = requestDto.getUserId();
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(
                         () -> new NullPointerException("잘못된 접근입니다."));
 
-        // 경로지정
-        String projectPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files";
-        // 랜덤 식별자 생성
-        UUID uuid = UUID.randomUUID();
-        // uuid_원래파일명
-        String fileName = uuid + "_" + file.getOriginalFilename();
-        // 빈 파일 생성
-        File saveFile = new File(projectPath, fileName);
-        // 업로드 된 파일 저장
-        file.transferTo(saveFile);
+        String imageName = imagePath.split("/Article/")[1];
 
         Article article = Article.builder()
                 .user(user)
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
-                .image(requestDto.getImage())
+                .imagePath(imagePath)
+                .imageName(imageName)
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
-                .fileName(saveFile.getName())
-                .filePath(saveFile.getPath())
                 .build();
 
         return articleRepository.save(article);

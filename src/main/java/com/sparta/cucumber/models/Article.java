@@ -31,12 +31,11 @@ public class Article extends Timestamped {
     private String title;
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
-    private String image;
+    private String imagePath;
+    private String imageName;
     private Double latitude;
     private Double longitude;
 
-    private String fileName;
-    private String filePath;
 
 //    @Builder
 //    public Article(User user, String title,
@@ -52,18 +51,15 @@ public class Article extends Timestamped {
 
     @Builder
     public Article(User user, String title,
-                   String content, String image,
-                   Double latitude, Double longitude,
-                   String fileName, String filePath) {
+                   String content, String imagePath,
+                   String imageName,Double latitude,
+                   Double longitude) {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.image = image;
+        this.imagePath = imagePath;
+        this.imageName = imageName;
         this.latitude = latitude;
         this.longitude = longitude;
-
-        this.fileName = fileName;
-        this.filePath = filePath;
-
     }
 }
