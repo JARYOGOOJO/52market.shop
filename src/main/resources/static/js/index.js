@@ -1,6 +1,9 @@
 function login() {
     const email = $("#exampleInputEmail1").val();
     const password = $("#exampleInputPassword1").val();
+    if (!(email && password)) {
+        alert("올바른 아이디와 비밀번호를 입력해주세요.")
+    }
     axios.post("http://localhost:8080/api/signin", {
         email: email,
         password: password,
@@ -23,6 +26,7 @@ function login() {
         })
         .catch(function (error) {
             console.log(error);
+            alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.")
         });
 }
 

@@ -9,10 +9,14 @@ import com.sparta.cucumber.utils.LocationDistance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -22,21 +26,46 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     public final LocationDistance location;
 
+    // 사진 업로드기닝이 없는 메소드
+//    @Transactional
+//    public Article uploadOrUpdate(ArticleRequestDto requestDto) {
+//        Long userId = requestDto.getUserId();
+//        User user = userRepository
+//                .findById(userId)
+//                .orElseThrow(
+//                        () -> new NullPointerException("잘못된 접근입니다."));
+//        Article article = Article.builder()
+//                .user(user)
+//                .title(requestDto.getTitle())
+//                .content(requestDto.getContent())
+//                .image(requestDto.getImage())
+//                .latitude(user.getLatitude())
+//                .longitude(user.getLongitude())
+//                .build();
+//        return articleRepository.save(article);
+//    }
+
+    // S3에 사진 업로드 가능한 메소드
     @Transactional
-    public Article uploadOrUpdate(ArticleRequestDto requestDto) {
+    public Article uploadOrUpdate(ArticleRequestDto requestDto, String imagePath) {
         Long userId = requestDto.getUserId();
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(
                         () -> new NullPointerException("잘못된 접근입니다."));
+
+        String imageName = imagePath.split("/Article/")[1];
+
         Article article = Article.builder()
                 .user(user)
                 .title(requestDto.getTitle())
                 .content(requestDto.getContent())
-                .image(requestDto.getImage())
+                .imagePath(imagePath)
+                .imageName(imageName)
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
                 .build();
+
         return articleRepository.save(article);
     }
 

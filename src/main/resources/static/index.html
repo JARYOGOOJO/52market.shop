@@ -23,8 +23,6 @@
     <link href="css/normalize.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/jquery-fab-button.min.css" rel="stylesheet">
-    <script src="js/jquery-fab-button.min.js"></script>
     <script src="js/vendor/modernizr-3.11.2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script crossorigin="anonymous"
@@ -151,7 +149,12 @@
             </div>
         </div>
     </main>
-
+    <script>
+        let token = location.search?.split("?code=").pop()
+        if (token) {
+            console.log(token)
+        }
+    </script>
     <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
     <script>
         window.ga = function () {

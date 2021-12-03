@@ -2,6 +2,7 @@ package com.sparta.cucumber.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.sparta.cucumber.dto.ArticleRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,6 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Getter
-@ToString
 @NoArgsConstructor
 @Entity(name = "article")
 @TableGenerator(
@@ -31,18 +31,34 @@ public class Article extends Timestamped {
     private String title;
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
-    private String image;
+    private String imagePath;
+    private String imageName;
     private Double latitude;
     private Double longitude;
 
+
+//    @Builder
+//    public Article(User user, String title,
+//                   String content, String image,
+//                   Double latitude, Double longitude) {
+//        this.user = user;
+//        this.title = title;
+//        this.content = content;
+//        this.image = image;
+//        this.latitude = latitude;
+//        this.longitude = longitude;
+//    }
+
     @Builder
     public Article(User user, String title,
-                   String content, String image,
-                   Double latitude, Double longitude) {
+                   String content, String imagePath,
+                   String imageName,Double latitude,
+                   Double longitude) {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.image = image;
+        this.imagePath = imagePath;
+        this.imageName = imageName;
         this.latitude = latitude;
         this.longitude = longitude;
     }
