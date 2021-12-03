@@ -21,6 +21,13 @@ public class ChatController {
     private final SimpMessageSendingOperations messagingTemplate;
 
     @ResponseBody
+    @PostMapping("/api/room/enter")
+    public ResponseEntity<?> enterRoom(@RequestBody ChatRequestDto chatRequestDto){
+        log.debug("enterRoom chatRequestDto : "+chatRequestDto.toString());
+        return ResponseEntity.ok().body(chatService.enterRoom(chatRequestDto));
+    }
+
+    @ResponseBody
     @GetMapping("/api/room/{id}")
     public ResponseEntity<?> getRoom(@PathVariable("id") Long id){
         log.debug("getRoom : "+id);
