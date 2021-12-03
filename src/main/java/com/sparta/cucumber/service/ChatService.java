@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,6 +31,12 @@ public class ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRequestDto.getRoomId()).orElseThrow(
                 () -> new NullPointerException("해당 방이 존재하지 않습니다.")
         );
+
+        // 중복검사
+        Optional<EnterRoom> findEnterRoom = enterRoomRepository.findByUserAndRoom(user,chatRoom);
+        if(findEnterRoom.isPresent()){
+            return null;
+        }
 
         EnterRoom enterRoom = EnterRoom
                 .builder()
