@@ -38,9 +38,8 @@ public class S3Uploader {
         String newFormat = simpleDateFormat.format(date);
         String extension = newFormat + "_" + uploadFile.getName();
         String fileName = dirName + "/" + extension;   // S3에 저장된 파일 이름
-        String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
 
-        return uploadImageUrl;
+        return putS3(uploadFile, fileName);
 
     }
 

@@ -1,9 +1,9 @@
 package com.sparta.cucumber.controller;
 
-import  com.sparta.cucumber.dto.ArticleRequestDto;
+import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.models.Article;
-import com.sparta.cucumber.service.S3Uploader;
 import com.sparta.cucumber.service.ArticleService;
+import com.sparta.cucumber.service.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -52,11 +52,18 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(articles);
     }
 
-//    @PostMapping("/api/article/write")
+    //    @PostMapping("/api/article/write")
 //    public ResponseEntity<Article> writeArticle (@RequestBody ArticleRequestDto requestDto) {
 //        Article article = articleService.uploadOrUpdate(requestDto);
 //        return ResponseEntity.ok().body(article);
 //    }
+    @PostMapping("/api/article/write")
+    public ResponseEntity<Article> writeArticle(@ModelAttribute ArticleRequestDto requestDto,
+                                                @ModelAttribute MultipartFile file) throws IOException {
+        String imagePath = s3Uploader.upload(file, "Article");
+        Article article = articleService.uploadOrUpdate(requestDto, imagePath);
+        return ResponseEntity.ok().body(article);
+    }
 
     @PutMapping("/api/article/update")
     public ResponseEntity<Article> editArticle (@ModelAttribute ArticleRequestDto requestDto,
@@ -73,11 +80,4 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(id);
     }
 
-    @PostMapping("/api/article/write")
-    public ResponseEntity<Article> writeArticle (@ModelAttribute ArticleRequestDto requestDto,
-                                                 @ModelAttribute MultipartFile file) throws IOException {
-        String imagePath = s3Uploader.upload(file, "Article");
-        Article article = articleService.uploadOrUpdate(requestDto, imagePath);
-        return ResponseEntity.ok().body(article);
-    }
 }

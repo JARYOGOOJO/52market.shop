@@ -43,11 +43,10 @@ public class ReviewService {
     }
 
     @Transactional
-    public Long deleteReview(Long reviewId) {
+    public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new NullPointerException("해당 게시글이 존재하지 않습니다.")
         );
         reviewRepository.deleteById(review.getId());
-        return review.getId();
     }
 }

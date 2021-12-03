@@ -8,7 +8,6 @@ import com.sparta.cucumber.repository.ChatRoomRepository;
 import com.sparta.cucumber.repository.EnterRoomRepository;
 import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,10 +40,9 @@ public class ChatService {
 
     @Transactional(readOnly = true)
     public ChatRoom getRoom(Long id){
-        ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow(
+        return chatRoomRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당 방이 존재하지 않습니다.")
         );
-        return chatRoom;
     }
 
     @Transactional(readOnly = true)

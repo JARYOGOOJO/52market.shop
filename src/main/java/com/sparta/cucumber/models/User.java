@@ -35,15 +35,16 @@ public class User extends Timestamped {
 
     @Builder
     public User(String name, String email,
-                String picture, String password,
+                String picture, String encodedPassword,
                 String phoneNumber, Double latitude, Double longitude) {
         this.name = name;
         this.email = email;
         this.picture = picture;
-        this.password = password;
+        this.password = encodedPassword;
         this.phoneNumber = phoneNumber;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.star = 0.0;
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
@@ -52,5 +53,15 @@ public class User extends Timestamped {
         this.password = encodedPassword;
         this.role = role;
         this.socialId = kakaoId;
+        this.star = 0.0;
+    }
+
+    public User updateKakao(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
+        this.name = nickname;
+        this.email = email;
+        this.password = encodedPassword;
+        this.role = role;
+        this.socialId = kakaoId;
+        return this;
     }
 }
