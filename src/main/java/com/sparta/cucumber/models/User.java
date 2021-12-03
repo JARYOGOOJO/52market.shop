@@ -19,6 +19,7 @@ public class User extends Timestamped {
     private Long id;
     @Column(nullable = false)
     private String name;
+    private Long socialId;
     @Column(nullable = false)
     private String email;
     private String picture;
@@ -43,5 +44,13 @@ public class User extends Timestamped {
         this.phoneNumber = phoneNumber;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
+        this.name = nickname;
+        this.email = email;
+        this.password = encodedPassword;
+        this.role = role;
+        this.socialId = kakaoId;
     }
 }
