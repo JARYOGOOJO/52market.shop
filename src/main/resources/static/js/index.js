@@ -31,8 +31,8 @@ function login() {
 }
 
 function signup() {
-    const latitude = 37.49798901601007;
-    const longitude = 127.03796438656106;
+    let latitude = 37.49798901601007;
+    let longitude = 127.03796438656106;
     navigator
         .geolocation
         .getCurrentPosition((position) => {
@@ -234,4 +234,10 @@ function Write() {
         .catch(function (error) {
             console.log(error);
         });
+}
+
+function getCookie(name) {
+    const value = "; " + document.cookie;
+    const parts = value.split("; " + name + "=");
+    if (parts.length === 2) return parts.pop().split(";").shift();
 }
