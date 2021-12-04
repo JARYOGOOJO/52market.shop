@@ -273,7 +273,7 @@ ul, ol, dl, dd {
 
 ul {
     display: block;
-    list-style-type: disc;
+    list-style-type: none;
     margin-block-start: 1em;
     margin-block-end: 1em;
     margin-inline-start: 0px;
@@ -294,6 +294,11 @@ ul {
     justify-items: center;
 }
 
+.tit {
+    font-weight: 600;
+    font-family: "Noto Sans KR";
+}
+
 button.btn-login {
     background: url("../images/icon-52.png") 15px 50% no-repeat #78C2AD;
     transition: 0.345s ease-in-out;
@@ -304,4 +309,8 @@ button.btn-kakao {
     background: url("../images/icon-kk.png") 12px 50% no-repeat #ffeb00;
     transition: 0.345s ease-in-out;
     color: #3e3a39;
+}
+
+div.list-group-item {
+    border-width: 0;
 }

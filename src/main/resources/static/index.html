@@ -26,12 +26,17 @@
     <script src="js/vendor/modernizr-3.11.2.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script crossorigin="anonymous"
-        integrity="sha512-HNbo1d4BaJjXh+/e6q4enTyezg5wiXvY3p/9Vzb20NIvkJghZxhzaXeffbdJuuZSxFhJP87ORPadwmU9aN3wSA=="
-        referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js"></script>
+            integrity="sha512-HNbo1d4BaJjXh+/e6q4enTyezg5wiXvY3p/9Vzb20NIvkJghZxhzaXeffbdJuuZSxFhJP87ORPadwmU9aN3wSA=="
+            referrerpolicy="no-referrer"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.js"></script>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/aba5c3ead0.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ=="
+            referrerpolicy="no-referrer"
+            src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
     <script src="js/index.js"></script>
     <script>
-        window.onload = () => getArticles();
+        window.onload = async () => await getArticles();
     </script>
     <meta content="#fafafa" name="theme-color">
 </head>
@@ -110,6 +115,7 @@
                                 <label class="form-label" for="exampleFormControlTextarea1">Content</label>
                                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
                             </div>
+                            <label id="formLabel"></label>
                             <input accept="image/*" class="form-control" id="formFile" name="u_file" type="file">
                         </div>
                         <div class="modal-footer">

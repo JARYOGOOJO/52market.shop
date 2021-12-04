@@ -28,10 +28,4 @@ public class CommentRestController {
         Comment comment = commentService.uploadOrUpdate(requestDto);
         return ResponseEntity.ok().body(comment);
     }
-
-    @PutMapping("/api/comment")
-    public ResponseEntity<Comment> editComment(@RequestBody CommentRequestDto requestDto) {
-        Comment comment = commentService.uploadOrUpdate(requestDto);
-        return ResponseEntity.ok().body(comment);
-    }
 }
