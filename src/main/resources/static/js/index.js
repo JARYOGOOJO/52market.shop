@@ -190,7 +190,7 @@ function writeComment(idx) {
     console.log(content);
     const body = {articleId: idx, userId: user.id, content}
     axios.post(`http://localhost:8080/api/comment/`, body)
-        .then(callComments(idx))
+        .then(() => callComments(idx))
         .catch(function (error) {
             // handle error
             console.log(error);
@@ -202,7 +202,6 @@ function callComments(idx) {
     axios
         .get(`http://localhost:8080/api/comments/${idx}`)
         .then((response) => {
-            let comments = [];
             let {data} = response
             console.log(data)
             data.forEach((comment) => {
@@ -254,23 +253,6 @@ function deleteArticle(idx) {
         .then(function () {
             // always executed
         });
-}
-
-function boardContent(article_id) {
-    console.log("article_id", article_id);
-    localStorage.setItem("article_id", article_id);
-    window.location.href = "/detail.html";
-    //   axios
-    //     .get(`http://localhost:8080/api/article/${article_id}`, {})
-    //     .then(function (response) {
-    //       console.log(response);
-    //     })
-    //     .catch(function (error) {
-    //       console.log(error);
-    //     })
-    //     .then(function () {
-    //       // always executed
-    //     });
 }
 
 function Write() {
