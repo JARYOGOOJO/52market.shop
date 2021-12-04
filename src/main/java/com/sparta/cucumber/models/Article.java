@@ -6,7 +6,6 @@ import com.sparta.cucumber.dto.ArticleRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -52,7 +51,7 @@ public class Article extends Timestamped {
     @Builder
     public Article(User user, String title,
                    String content, String imagePath,
-                   String imageName,Double latitude,
+                   String imageName, Double latitude,
                    Double longitude) {
         this.user = user;
         this.title = title;
@@ -61,5 +60,10 @@ public class Article extends Timestamped {
         this.imageName = imageName;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Article update(ArticleRequestDto requestDto) {
+        this.content = requestDto.getContent();
+        return this;
     }
 }

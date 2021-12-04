@@ -20,7 +20,6 @@ function login() {
                 );
                 const User = JSON.parse(localStorage.getItem("user"));
                 console.log("User", User);
-                email
                 window.location.href = "/";
             }
         })
@@ -130,7 +129,6 @@ const getArticles = () => {
                     id,
                     title,
                     content,
-                    address,
                     createdAt,
                     modifiedAt,
                     longitude,
@@ -140,51 +138,59 @@ const getArticles = () => {
                     imageName
                 } = article;
                 const {name} = user;
-                console.log(title, content, address, name);
+                console.log(title, content, name);
                 const temp_html = `<!-- Card -->
-                <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
-                <div class="card" style="margin: 10px; min-width: 200px;">
-                  <!--Card image-->
-                  <div class="view overlay">
-                      <img class="card-img-top" src="${imagePath}"
-                          alt="${imageName}">
-                      <a href="#!">
-                          <div class="mask rgba-white-slight"></div>
-                      </a>
-                  </div>
-                  <!--Card content-->
-                  <div class="card-body">
-                      <!--Title-->
-                      <h4 class="card-title">${title}</h4>
-                      <!--Text-->
-                      <p class="card-text">${content}</p>
-                      <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-                      <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-primary">
-                      <i class="far fa-thumbs-up"></i></button>
-                      <button onclick="console.log(this.title, ${id}, '${name}')" title="comment" type="button" class="btn btn-primary">
-                      <i class="fas fa-comments"></i></button>
-                      <button onclick="console.log(this.title, ${id}, '${name}')" title="edit" type="button" class="btn btn-primary">
-                      <i class="far fa-edit"></i></button>
-                      <button onclick="console.log(this.title, ${id}, '${name}')" title="delete" type="button" class="btn btn-primary">
-                      <i class="fas fa-trash-alt"></i></button>
-                  </div>
-              </div>
-          </div>`;
-                $("#articles-body").append(temp_html);
+                        <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
+                        <div class="card" style="margin: 10px; min-width: 200px;">
+                        <!--Card image-->
+                        <div class="view overlay">
+                        <img class="card-img-top" src="${imagePath}"
+                            alt="${imageName}"><a href="#!">
+                        <div class="mask rgba-white-slight"></div>
+                        </a></div>
+                        <!--Card content-->
+                        <div class="card-body">
+                        <!--Title-->
+                        <h4 class="card-title">${title}</h4>
+                        <!--Text-->
+                        <p class="card-text">${content}</p>
+                        <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+                        <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-primary">
+                        <i class="far fa-thumbs-up"></i></button>
+                        <button onclick="console.log(this.title, ${id}, '${name}')" title="comment" type="button" class="btn btn-primary">
+                        <i class="fas fa-comments"></i></button>
+                        {{__is_this_yours?__}}</div></div></div>`;
+                const no_not_mine = "";
+                const my_contents = `<button onclick="showArticle(${id}, '${name}')" title="edit" type="button" class="btn btn-primary">
+                    <i class="far fa-edit"></i></button>
+                    <button onclick="console.log(this.title, ${id}, '${name}')" title="delete" type="button" class="btn btn-primary">
+                    <i class="fas fa-trash-alt"></i></button>`
+                if (user.id === User.id) {
+                    $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", my_contents));
+                } else {
+                    $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", no_not_mine));
+                }
+
             });
         })
         .catch(function (error) {
             // handle error
             console.log(error);
-        })
-        .finally(function () {
-            // always executed
         });
 };
 
-function boardUpdate(article_id) {
-    localStorage.setItem("article_id", article_id);
-    window.location.href = "/update.html";
+function showArticle(id) {
+    axios.get(`http://localhost:8080/api/article/${id}`)
+        .then(response => {
+            let {content, user} = response.data;
+            let answer = window.prompt("수정할 내용을 입력해주세요.", content)
+            if (answer) {
+                let send = {...response.data, content: answer, userId: user.id};
+                console.log(send)
+                axios.put(`http://localhost:8080/api/article/edit`, send);
+                location.reload();
+            }
+        })
 }
 
 function boardDelete(article_id) {

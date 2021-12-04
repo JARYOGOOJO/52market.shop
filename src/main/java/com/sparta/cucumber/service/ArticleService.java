@@ -9,14 +9,10 @@ import com.sparta.cucumber.utils.LocationDistance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -110,5 +106,20 @@ public class ArticleService {
             articleRepository.deleteById(articleId);
         }
         return articleId;
+    }
+
+    public Article update(ArticleRequestDto requestDto) {
+        Long userId = requestDto.getUserId();
+        User user = userRepository
+                .findById(userId)
+                .orElseThrow(
+                        () -> new NullPointerException("잘못된 접근입니다."));
+        Article article = articleRepository.findById(requestDto.getId()).orElse(null);
+        if (article != null) {
+            if (article.getUser() == user) {
+                return article.update(requestDto);
+            }
+        }
+        return article;
     }
 }

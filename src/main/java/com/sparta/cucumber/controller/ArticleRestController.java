@@ -65,13 +65,19 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(article);
     }
 
-    @PutMapping("/api/article/update")
-    public ResponseEntity<Article> editArticle (@ModelAttribute ArticleRequestDto requestDto,
-                                                @ModelAttribute MultipartFile file) throws IOException {
-        String imagePath = s3Uploader.upload(file, "Article");
-        Article article = articleService.uploadOrUpdate(requestDto, imagePath);
+    @PutMapping("/api/article/edit")
+    public ResponseEntity<Article> editArticle(@RequestBody ArticleRequestDto requestDto) {
+        Article article = articleService.update(requestDto);
         return ResponseEntity.ok().body(article);
     }
+
+//    @PutMapping("/api/article/update")
+//    public ResponseEntity<Article> editArticle (@ModelAttribute ArticleRequestDto requestDto,
+//                                                @ModelAttribute MultipartFile file) throws IOException {
+//        String imagePath = s3Uploader.upload(file, "Article");
+//        Article article = articleService.uploadOrUpdate(requestDto, imagePath);
+//        return ResponseEntity.ok().body(article);
+//    }
 
     @DeleteMapping("/api/article/{id}/{userId}")
     public ResponseEntity<Long> removeArticle(@PathVariable("userId") Long userId,
