@@ -129,48 +129,53 @@ const getArticles = () => {
                     id,
                     title,
                     content,
-                    createdAt,
-                    modifiedAt,
-                    longitude,
-                    latitude,
                     user,
                     imagePath,
                     imageName
                 } = article;
                 const {name} = user;
                 console.log(title, content, name);
-                const temp_html = `<!-- Card -->
-                        <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
-                        <div class="card" style="margin: 10px; min-width: 200px;">
-                        <!--Card image-->
-                        <div class="view overlay">
-                        <img class="card-img-top" src="${imagePath}"
-                            alt="${imageName}"><a href="#!">
-                        <div class="mask rgba-white-slight"></div>
-                        </a></div>
-                        <!--Card content-->
-                        <div class="card-body">
-                        <!--Title-->
-                        <h4 class="card-title">${title}</h4>
-                        <!--Text-->
-                        <p class="card-text">${content}</p>
-                        <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-                        <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-primary">
-                        <i class="far fa-thumbs-up"></i></button>
-                        <button onclick="console.log(this.title, ${id}, '${name}')" title="comment" type="button" class="btn btn-primary">
-                        <i class="fas fa-comments"></i></button>
-                        {{__is_this_yours?__}}</div></div></div>`;
+                let temp_html = `<!-- Card -->
+                    <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
+                    <div class="card" style="margin: 10px; min-width: 230px;">
+                    <!--Card image-->
+                    <div class="view overlay">
+                    <img class="card-img-top" src="${imagePath}" alt="${imageName}"><a href="#!">
+                    <div class="mask rgba-white-slight"></div>
+                    </a></div>
+                    <!--Card content-->
+                    <div class="card-body">
+                    <!--Title-->
+                    <h5 class="card-title tit">${title}</h5>
+                    <!--Text-->
+                    <p class="card-text">${content}</p>
+                    <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+                    <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-primary">
+                    <i class="far fa-thumbs-up"></i></button>
+                    <button onclick="$('#commentEdit-${id}').toggle('fade')" title="comment" type="button" class="btn btn-primary">
+                    <i class="fas fa-comments"></i></button>
+                    {{__is_this_yours?__}}
+                    </div>
+                    <div id="commentEdit-${id}" class="input-group m-3 form-floating">
+                    <input id="commentWrite-${id}" class="form-control" aria-describedby="button-addon2">
+                    <label for="floatingInput">Leave a Comment...</label>
+                    <button class="btn btn-primary" onclick="writeComment(${id})" id="button-addon2">Button</button>
+                    </div>
+                    <ul class="list-group" id="comment-list-${id}">
+                    </ul></div></div>`;
                 const no_not_mine = "";
-                const my_contents = `<button onclick="showArticle(${id}, '${name}')" title="edit" type="button" class="btn btn-primary">
-                    <i class="far fa-edit"></i></button>
-                    <button onclick="console.log(this.title, ${id}, '${name}')" title="delete" type="button" class="btn btn-primary">
-                    <i class="fas fa-trash-alt"></i></button>`
+                const my_contents = `
+                <button onclick="editArticle(${id})" title="edit" type="button" class="btn btn-primary">
+                <i class="far fa-edit"></i></button>
+                <button onclick="deleteArticle(${id})" title="delete" type="button" class="btn btn-primary">
+                <i class="fas fa-trash-alt"></i></button>`
                 if (user.id === User.id) {
                     $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", my_contents));
                 } else {
                     $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", no_not_mine));
                 }
-
+                callComments(id);
+                $(`#commentEdit-${id}`).hide();
             });
         })
         .catch(function (error) {
@@ -179,13 +184,55 @@ const getArticles = () => {
         });
 };
 
-function showArticle(id) {
-    axios.get(`http://localhost:8080/api/article/${id}`)
+function writeComment(idx) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const content = $(`#commentWrite-${idx}`).val();
+    console.log(content);
+    const body = {articleId: idx, userId: user.id, content}
+    axios.post(`http://localhost:8080/api/comment/`, body)
+        .then(callComments(idx))
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        });
+}
+
+
+function callComments(idx) {
+    axios
+        .get(`http://localhost:8080/api/comments/${idx}`)
+        .then((response) => {
+            let comments = [];
+            let {data} = response
+            console.log(data)
+            data.forEach((comment) => {
+                addComment(idx, comment);
+            })
+        })
+}
+
+function addComment(idx, data) {
+    const User = JSON.parse(localStorage.getItem("user"));
+    const {id, content, createdAt, user} = data;
+    $(`#comment-list-${idx}`).append(`
+    <li><div href="#" class="list-group-item list-group-item-action flex-column
+    align-items-start"><div class="d-flex w-100 justify-content-between">
+      <small class="mb-1 tit">${user.name}</small>
+      </div>
+      <p class="mb-1">${content}</p>
+      <small>${moment(createdAt).fromNow()}</small>
+    </div></li>`);
+
+
+}
+
+function editArticle(idx) {
+    axios.get(`http://localhost:8080/api/article/${idx}`)
         .then(response => {
-            let {content, user} = response.data;
+            let {id, title, content, user} = response.data;
             let answer = window.prompt("수정할 내용을 입력해주세요.", content)
             if (answer) {
-                let send = {...response.data, content: answer, userId: user.id};
+                let send = {id, title, content: answer, userId: user.id};
                 console.log(send)
                 axios.put(`http://localhost:8080/api/article/edit`, send);
                 location.reload();
@@ -193,14 +240,10 @@ function showArticle(id) {
         })
 }
 
-function boardDelete(article_id) {
-    // alert("delete");
+function deleteArticle(idx) {
     const user = JSON.parse(localStorage.getItem("user"));
     axios
-        .delete(
-            `http://localhost:8080/api/article/${article_id}/${user.id}`,
-            {}
-        )
+        .delete(`http://localhost:8080/api/article/${idx}/${user.id}`, {})
         .then(function (response) {
             console.log(response);
             window.location.href = "/";
@@ -240,7 +283,10 @@ function Write() {
     formData.append('file', image)
     formData.append('title', title)
     formData.append('content', content)
-    console.log(User, title, content, image);
+    console.log(User);
+    console.log(title);
+    console.log(content);
+    console.log(image);
 
     axios
         .post("http://localhost:8080/api/article/write", formData)

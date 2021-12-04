@@ -108,6 +108,7 @@ public class ArticleService {
         return articleId;
     }
 
+    @Transactional
     public Article update(ArticleRequestDto requestDto) {
         Long userId = requestDto.getUserId();
         User user = userRepository
