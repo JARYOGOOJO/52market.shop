@@ -23,6 +23,14 @@ public class ChatController {
     private final UserService userService;
 
     @ResponseBody
+    @PostMapping("/api/room/exit")
+    public ResponseEntity<?> exitRoom(@RequestBody ChatRequestDto chatRequestDto){
+        log.debug("exitRoom chatRequestDto : "+chatRequestDto.toString());
+        chatService.exitRoom(chatRequestDto);
+        return ResponseEntity.ok().body(null);
+    }
+
+    @ResponseBody
     @PostMapping("/api/room/enter")
     public ResponseEntity<?> enterRoom(@RequestBody ChatRequestDto chatRequestDto){
         log.debug("enterRoom chatRequestDto : "+chatRequestDto.toString());
