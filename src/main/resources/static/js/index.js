@@ -123,20 +123,31 @@ const getArticles = () => {
         .then(function (response) {
             // handle success
             console.log(response);
-            const { data } = response;
-            data.forEach((v, i) => {
-                console.log(v);
-                console.log(i);
-                const { id, title, content, address, createdAt, user } = v;
-                const { name } = user;
+            const {data} = response;
+            data.forEach((article) => {
+                console.log(article);
+                const {
+                    id,
+                    title,
+                    content,
+                    address,
+                    createdAt,
+                    modifiedAt,
+                    longitude,
+                    latitude,
+                    user,
+                    imagePath,
+                    imageName
+                } = article;
+                const {name} = user;
                 console.log(title, content, address, name);
                 const temp_html = `<!-- Card -->
                 <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
                 <div class="card" style="margin: 10px; min-width: 200px;">
                   <!--Card image-->
                   <div class="view overlay">
-                      <img class="card-img-top" src="http://loremflickr.com/320/150?random=${i}"
-                          alt="Card image cap">
+                      <img class="card-img-top" src="${imagePath}"
+                          alt="${imageName}">
                       <a href="#!">
                           <div class="mask rgba-white-slight"></div>
                       </a>
@@ -166,7 +177,7 @@ const getArticles = () => {
             // handle error
             console.log(error);
         })
-        .then(function () {
+        .finally(function () {
             // always executed
         });
 };
@@ -218,15 +229,15 @@ function Write() {
     const title = $("#exampleFormControlInput1").val();
     const content = $("#exampleFormControlTextarea1").val();
     const image = $("#formFile")[0].files[0];
+    const formData = new FormData();
+    formData.append('userId', User.id)
+    formData.append('file', image)
+    formData.append('title', title)
+    formData.append('content', content)
     console.log(User, title, content, image);
 
     axios
-        .post("http://localhost:8080/api/article/write", {
-            userId: User.id,
-            title: title,
-            content: content,
-            image: image,
-        })
+        .post("http://localhost:8080/api/article/write", formData)
         .then(function (response) {
             console.log(response);
             window.location.href = "/";

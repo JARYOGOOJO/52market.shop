@@ -99,47 +99,13 @@
                 <small class="form-text text-muted" id="pwdHelp"></small>
             </div>
 
+            <button class="btn mt-3 btn-lg login btn-login" disabled id="submit" onclick="login()"
+                    type="button">Login
+            </button>
+            <button class="btn mt-3 btn-lg login btn-kakao" id="custom-login-btn" onclick="loginWithKakao();">Kakao
+                Login
+            </button>
         </form>
-        <ul class="loginKinds">
-            <li><a class="btn" disabled id="submit" onclick="login()" type="button">Login</a></li>
-            <li><a class="btn google" id="customBtn"><span>구글</span>로그인</a>
-            </li>
-            <li><a class="btn kakao" href="javascript:loginWithKakao();" id="custom-login-btn"
-                   onclick=""><span>카카오톡</span> 로그인</a></li>
-            <li>
-                <div id="naver_id_login"></div>
-            </li>
-        </ul>
-        <!-- google login -->
-        <script src="https://apis.google.com/js/api:client.js"></script>
-        <script>
-            var googleUser = {};
-            var startApp = function () {
-                gapi.load('auth2', function () {
-                    // Retrieve the singleton for the GoogleAuth library and set up the client.
-                    auth2 = gapi.auth2.init({
-                        client_id: '868049850755-c17j06hcs1mvomrte32vckndhnamoub1.apps.googleusercontent.com',
-                        cookiepolicy: 'single_host_origin',
-                        // Request scopes in addition to 'profile' and 'email'
-                        //scope: 'additional_scope'
-                    });
-                    attachSignin(document.getElementById('customBtn'));
-                });
-            };
-
-            function attachSignin(element) {
-                auth2.attachClickHandler(element, {},
-                    function (googleUser) {
-                        console.log(googleUser.wc)
-                        // document.getElementById('name').innerText = "Signed in: " +
-                        //     googleUser.getBasicProfile().getName();
-                    }, function (error) {
-                        alert(JSON.stringify(error, undefined, 2));
-                    });
-            }
-
-            startApp();
-        </script>
         <!-- kakao login -->
         <script type="text/javascript">
             function loginWithKakao() {
@@ -151,7 +117,7 @@
                                 console.log(response)
                                 localStorage.setItem("token", response.data['token']);
                                 localStorage.setItem("user", JSON.stringify(response.data['user']));
-                                location.href = 'http://localhost:5500/index.html';
+                                location.href = '/index.html';
                             })
                             .catch((err) => console.log(err))
                     },
@@ -179,43 +145,19 @@
             displayToken()
         </script>
         <!-- kakao login button -->
-        <p id="token-result"></p>
-        <!-- //네이버 로그인 버튼 노출 영역 -->
-        <script type="text/javascript">
-            var naver_id_login = new naver_id_login("0GgMu2RrfcuVnJYM5Chy", "http://localhost:5500/callback.html");
-            var state = naver_id_login.getUniqState();
-            naver_id_login.setButton("green", 3, 40);
-            naver_id_login.setDomain("http://localhost:5500");
-            naver_id_login.setState(state);
-            naver_id_login.setPopup();
-            naver_id_login.init_naver_id_login();
-
-            let link = document.querySelector("#naver_id_login_anchor").href
-            let fn = document.querySelector("#naver_id_login_anchor").onclick
-            let a = document.createElement('a')
-            a.href = link
-            a.classList.add('btn')
-            a.classList.add('naver')
-            a.innerText = "네이버 로그인";
-            a.addEventListener('click', fn);
-            document.querySelector("#naver_id_login").replaceChildren(a);
+        <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+        <script>
+            window.ga = function () {
+                ga.q.push(arguments)
+            };
+            ga.q = [];
+            ga.l = +new Date;
+            ga('create', 'UA-XXXXX-Y', 'auto');
+            ga('set', 'anonymizeIp', true);
+            ga('set', 'transport', 'beacon');
+            ga('send', 'pageview')
         </script>
-        <a class="text-success" href="/register.html">let me signup</a>
-    </div>
-
-    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-    <script>
-        window.ga = function () {
-            ga.q.push(arguments)
-        };
-        ga.q = [];
-        ga.l = +new Date;
-        ga('create', 'UA-XXXXX-Y', 'auto');
-        ga('set', 'anonymizeIp', true);
-        ga('set', 'transport', 'beacon');
-        ga('send', 'pageview')
-    </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
 </body>
 
 </html>

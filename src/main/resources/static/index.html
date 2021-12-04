@@ -82,44 +82,16 @@
         </div>
     </nav>
     <main style="height: 100vh; padding: 10px;">
-        <div class="card-deck" id="articles-body">
-            <!-- Card -->
-            <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
-                <div class="card" style="margin: 10px; min-width: 200px;">
-                    <!--Card image-->
-                    <div class="view overlay">
-                        <img alt="Card image cap" class="card-img-top"
-                            src="https://mdbootstrap.com/img/Photos/Others/images/16.jpg">
-                        <a href="#">
-                            <div class="mask rgba-white-slight"></div>
-                        </a>
-                    </div>
-                    <!--Card content-->
-                    <div class="card-body">
-                        <!--Title-->
-                        <h4 class="card-title">Damn I need a help</h4>
-                        <!--Text-->
-                        <p class="card-text">Is there someone can help me?</p>
-                        <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-                        <button class="btn btn-primary" onclick="console.log(this.title)" title="like" type="button"><i
-                                class="far fa-thumbs-up"></i></button>
-                        <button class="btn btn-primary" title="comment" type="button"><i
-                                class="fas fa-comments"></i></button>
-                        <button class="btn btn-primary" title="edit" type="button"><i class="far fa-edit"></i></button>
-                        <button class="btn btn-primary" title="delete" type="button"><i
-                                class="fas fa-trash-alt"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="card-deck" id="articles-body"></div>
         <!-- Button trigger modal -->
-        <button class="btn btn-primary" data-bs-target="#staticBackdrop" data-bs-toggle="modal" type="button">
-            Launch static backdrop modal
+        <button class="btn btn-primary" data-bs-target="#staticBackdrop" data-bs-toggle="modal" id="backDrop"
+                type="button">
+            write a post
         </button>
 
         <!-- Modal -->
         <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
-            data-bs-keyboard="false" id="staticBackdrop" tabindex="-1">
+             data-bs-keyboard="false" id="staticBackdrop" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <form action="" enctype="multipart/form-data" method="post">
@@ -142,19 +114,13 @@
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
-                            <button class="btn btn-primary" onclick="Write();" type="button">Understood</button>
+                            <button class="btn btn-primary" onclick="Write();" type="button">Write</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </main>
-    <script>
-        let token = location.search?.split("?code=").pop()
-        if (token) {
-            console.log(token)
-        }
-    </script>
     <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
     <script>
         window.ga = function () {

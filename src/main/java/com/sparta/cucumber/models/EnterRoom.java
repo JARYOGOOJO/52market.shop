@@ -14,9 +14,8 @@ import javax.persistence.*;
         table = "MY_SEQUENCES",
         pkColumnValue = "ENTERROOM_SEQ", allocationSize = 50)
 public class EnterRoom {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "ENTERROOM_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "ENTERROOM_GENERATOR")
     private Long id;
 
     @ManyToOne
