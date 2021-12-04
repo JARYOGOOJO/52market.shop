@@ -1,3 +1,11 @@
+import moment from 'moment';
+import axios from 'axios';
+import $ from 'jquery'
+import 'bootstrap'
+import './css/bootstrap.min.css';
+import './css/main.css'
+import '@popperjs/core'
+
 function login() {
     const email = $("#exampleInputEmail1").val();
     const password = $("#exampleInputPassword1").val();
@@ -111,7 +119,6 @@ const activate = () => {
         if (!elem.text) $("#submit").removeAttr("disabled")
     });
 }
-
 const getArticles = () => {
     const User = JSON.parse(localStorage.getItem("user"));
     if (User !== null) {
@@ -184,6 +191,10 @@ const getArticles = () => {
         });
 };
 
+if (location.pathname.split("/")[2] === "" || location.pathname.split("/")[2] === "index.html") {
+    getArticles();
+}
+
 function writeComment(idx) {
     const user = JSON.parse(localStorage.getItem("user"));
     const content = $(`#commentWrite-${idx}`).val();
@@ -233,8 +244,7 @@ function editArticle(idx) {
             if (answer) {
                 let send = {id, title, content: answer, userId: user.id};
                 console.log(send)
-                axios.put(`http://localhost:8080/api/article/edit`, send);
-                location.reload();
+                axios.put(`http://localhost:8080/api/article/edit`, send).then(() => location.reload());
             }
         })
 }
