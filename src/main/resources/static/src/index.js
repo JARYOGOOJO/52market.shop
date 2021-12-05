@@ -5,8 +5,105 @@ import 'bootstrap'
 import './css/bootstrap.min.css';
 import './css/main.css'
 import '@popperjs/core'
+import './kakao'
+import './aba5c3ead0';
 
-function login() {
+Kakao.init("e1289217c77f4f46dc511544f119d102");
+
+export function showNavigator() {
+    $("body").append(`<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+      <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation"
+        class="navbar-toggler collapsed" data-bs-target="#navbarColor01" data-bs-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbarColor01">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+          <a class="nav-link active" href="#">Home
+              <span class="visually-hidden">(current)</span>
+            </a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Features</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Pricing</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <label>
+            <input class="form-control me-sm-2" placeholder="Search" type="text">
+            </label>
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+        </form>
+        </div>
+    </div>
+    </nav>`)
+}
+
+window.onload = () => {
+    showNavigator();
+    let path = location.hash.replace("#", "")
+    if (!path) {
+        let main = document.createElement("main");
+        main.style = "height: 100vh; padding: 10px;"
+        let root = document.createElement("div");
+        root.classList.add("card-deck")
+        $("body").append(main);
+        $("main").append(root)
+        root.id = "articles-body"
+        console.log("hi")
+        getArticles();
+    } else if (path === "signup") {
+
+    }
+}
+
+export function loginWithKakao() {
+    Kakao.Auth.login({
+        success: function (authObj) {
+            console.log(authObj)
+            axios.post("http://localhost:8080/login/kakao", {'token': `${authObj['access_token']}`})
+                .then(response => {
+                    console.log(response)
+                    localStorage.setItem("token", response.data['token']);
+                    localStorage.setItem("user", JSON.stringify(response.data['user']));
+                    location.href = '/index.html';
+                })
+                .catch((err) => console.log(err))
+        },
+        fail: function (err) {
+            alert(JSON.stringify(err))
+        }
+    })
+}
+
+// 아래는 데모를 위한 UI 코드입니다.
+export function displayToken() {
+    const token = getCookie('authorize-access-token')
+    if (token) {
+        Kakao.Auth.setAccessToken(token)
+        Kakao.Auth.getStatusInfo(({status}) => {
+            if (status === 'connected') {
+                console.log('login success. token: ' + Kakao.Auth.getAccessToken())
+            } else {
+                Kakao.Auth.setAccessToken(null)
+            }
+        })
+    }
+}
+
+displayToken()
+
+export function login() {
     const email = $("#exampleInputEmail1").val();
     const password = $("#exampleInputPassword1").val();
     if (!(email && password)) {
@@ -37,7 +134,7 @@ function login() {
         });
 }
 
-function signup() {
+export function signup() {
     let latitude = 37.49798901601007;
     let longitude = 127.03796438656106;
     navigator
@@ -80,13 +177,13 @@ function signup() {
         });
 }
 
-const autoHyphen = (target) => {
+export const autoHyphen = (target) => {
     target.value = target.value
         .replace(/[^0-9]/, '')
         .replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
 }
 
-const passwordOK = () => {
+export const passwordOK = () => {
     const password = $("#exampleInputPassword1").val();
     const repassword = $("#exampleInputPassword2").val();
     const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
@@ -103,7 +200,7 @@ const passwordOK = () => {
     }
 }
 
-const checkEmail = () => {
+export const checkEmail = () => {
     const email = $("#exampleInputEmail1").val();
     const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!regex.test(email)) {
@@ -114,12 +211,17 @@ const checkEmail = () => {
     }
 }
 
-const activate = () => {
+export const activate = () => {
     document.querySelectorAll("small").forEach(elem => {
         if (!elem.text) $("#submit").removeAttr("disabled")
     });
 }
-const getArticles = () => {
+
+export function toggleComment(idx) {
+    $(`#commentEdit-${idx}`).toggle('fade')
+}
+
+export const getArticles = () => {
     const User = JSON.parse(localStorage.getItem("user"));
     if (User !== null) {
         $("#name").text(User.name + "님 환영합니다.");
@@ -127,11 +229,8 @@ const getArticles = () => {
     axios
         .get("http://localhost:8080/api/articles")
         .then(function (response) {
-            // handle success
-            console.log(response);
             const {data} = response;
             data.forEach((article) => {
-                console.log(article);
                 const {
                     id,
                     title,
@@ -141,7 +240,6 @@ const getArticles = () => {
                     imageName
                 } = article;
                 const {name} = user;
-                console.log(title, content, name);
                 let temp_html = `<!-- Card -->
                     <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
                     <div class="card" style="margin: 10px; min-width: 230px;">
@@ -159,24 +257,24 @@ const getArticles = () => {
                     <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
                     <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-primary">
                     <i class="far fa-thumbs-up"></i></button>
-                    <button onclick="$('#commentEdit-${id}').toggle('fade')" title="comment" type="button" class="btn btn-primary">
+                    <button onclick="app.toggleComment(${id})" title="comment" type="button" class="btn btn-primary">
                     <i class="fas fa-comments"></i></button>
                     {{__is_this_yours?__}}
                     </div>
                     <div id="commentEdit-${id}" class="input-group m-3 form-floating">
                     <input id="commentWrite-${id}" class="form-control" aria-describedby="button-addon2">
                     <label for="floatingInput">Leave a Comment...</label>
-                    <button class="btn btn-primary" onclick="writeComment(${id})" id="button-addon2">Button</button>
+                    <button class="btn btn-primary" onclick="app.writeComment(${id})" id="button-addon2">Button</button>
                     </div>
                     <ul class="list-group" id="comment-list-${id}">
                     </ul></div></div>`;
                 const no_not_mine = "";
                 const my_contents = `
-                <button onclick="editArticle(${id})" title="edit" type="button" class="btn btn-primary">
+                <button onclick="app.editArticle(${id})" title="edit" type="button" class="btn btn-primary">
                 <i class="far fa-edit"></i></button>
-                <button onclick="deleteArticle(${id})" title="delete" type="button" class="btn btn-primary">
+                <button onclick="app.deleteArticle(${id})" title="delete" type="button" class="btn btn-primary">
                 <i class="fas fa-trash-alt"></i></button>`
-                if (user.id === User.id) {
+                if (user.id === User?.id) {
                     $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", my_contents));
                 } else {
                     $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", no_not_mine));
@@ -191,11 +289,7 @@ const getArticles = () => {
         });
 };
 
-if (location.pathname.split("/")[2] === "" || location.pathname.split("/")[2] === "index.html") {
-    getArticles();
-}
-
-function writeComment(idx) {
+export function writeComment(idx) {
     const user = JSON.parse(localStorage.getItem("user"));
     const content = $(`#commentWrite-${idx}`).val();
     console.log(content);
@@ -208,8 +302,7 @@ function writeComment(idx) {
         });
 }
 
-
-function callComments(idx) {
+export function callComments(idx) {
     axios
         .get(`http://localhost:8080/api/comments/${idx}`)
         .then((response) => {
@@ -221,7 +314,7 @@ function callComments(idx) {
         })
 }
 
-function addComment(idx, data) {
+export function addComment(idx, data) {
     const User = JSON.parse(localStorage.getItem("user"));
     const {id, content, createdAt, user} = data;
     $(`#comment-list-${idx}`).append(`
@@ -236,7 +329,7 @@ function addComment(idx, data) {
 
 }
 
-function editArticle(idx) {
+export function editArticle(idx) {
     axios.get(`http://localhost:8080/api/article/${idx}`)
         .then(response => {
             let {id, title, content, user} = response.data;
@@ -249,7 +342,7 @@ function editArticle(idx) {
         })
 }
 
-function deleteArticle(idx) {
+export function deleteArticle(idx) {
     const user = JSON.parse(localStorage.getItem("user"));
     axios
         .delete(`http://localhost:8080/api/article/${idx}/${user.id}`, {})
@@ -265,7 +358,7 @@ function deleteArticle(idx) {
         });
 }
 
-function Write() {
+export function Write() {
     const User = JSON.parse(localStorage.getItem("user"));
     const title = $("#exampleFormControlInput1").val();
     const content = $("#exampleFormControlTextarea1").val();
@@ -291,7 +384,7 @@ function Write() {
         });
 }
 
-function getCookie(name) {
+export function getCookie(name) {
     const value = "; " + document.cookie;
     const parts = value.split("; " + name + "=");
     if (parts.length === 2) return parts.pop().split(";").shift();
