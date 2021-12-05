@@ -11,10 +11,10 @@
     <meta content="" property="og:type">
     <meta content="" property="og:url">
     <meta content="" property="og:image">
-    <script src="https://kit.fontawesome.com/aba5c3ead0.js" crossorigin="anonymous"></script>
     <link href="" rel="apple-touch-icon">
-    <script src="bundle.js"></script>
-    <meta content="#fafafa" name="theme-color">
+    <!-- Place favicon.ico in the root directory -->
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/aba5c3ead0.js"></script>
+    <script defer src="bundle.js"></script>
 </head>
 
 <body style="overflow-x: hidden;">
@@ -35,24 +35,16 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
+                        <a class="nav-link" href="#signin">signin</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Pricing</a>
+                        <a class="nav-link" href="#signup">signup</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
+                        <a class="nav-link" href="#mypage">mypage</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
-                            data-bs-toggle="dropdown" href="#" role="button">Dropdown</a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Separated link</a>
-                        </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#mytown">mytown</a>
                     </li>
                 </ul>
                 <form class="d-flex">
@@ -63,47 +55,10 @@
         </div>
     </nav>
     <main style="height: 100vh; padding: 10px;">
-        <div class="card-deck" id="articles-body"></div>
-        <!-- Button trigger modal -->
-        <button class="btn btn-primary" data-bs-target="#staticBackdrop" data-bs-toggle="modal" id="backDrop"
-                type="button">
-            write a post
-        </button>
-
-        <!-- Modal -->
-        <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
-             data-bs-keyboard="false" id="staticBackdrop" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form action="" enctype="multipart/form-data" method="post">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-                        </div>
-                        <div class="modal-body">
-
-                            <div class="mb-3">
-                                <label class="form-label" for="exampleFormControlInput1">Title</label>
-                                <input class="form-control" id="exampleFormControlInput1" placeholder="share your story"
-                                    type="text">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="exampleFormControlTextarea1">Content</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
-                            </div>
-                            <label id="formLabel"></label>
-                            <input accept="image/*" class="form-control" id="formFile" name="u_file" type="file">
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
-                            <button class="btn btn-primary" onclick="Write();" type="button">Write</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="card-deck" id="articles-body">
+            <!-- Button trigger modal -->
         </div>
     </main>
-    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
     <script>
         window.ga = function () {
             ga.q.push(arguments)

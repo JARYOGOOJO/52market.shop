@@ -27,5 +27,8 @@ module.exports = {
         compress: true,
         port: 5500,
     },
-    plugins: [new HtmlWebpackPlugin()],
+    plugins: [new HtmlWebpackPlugin({
+        template: './src/index.html',
+        filename: './index.html'
+    })],
 };

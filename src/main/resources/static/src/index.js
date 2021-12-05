@@ -10,68 +10,11 @@ import './aba5c3ead0';
 
 Kakao.init("e1289217c77f4f46dc511544f119d102");
 
-export function showNavigator() {
-    $("body").append(`<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-      <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation"
-        class="navbar-toggler collapsed" data-bs-target="#navbarColor01" data-bs-toggle="collapse" type="button">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="navbar-collapse collapse" id="navbarColor01">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-          <a class="nav-link active" href="#">Home
-              <span class="visually-hidden">(current)</span>
-            </a>
-            </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
-            </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Pricing</a>
-            </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-            </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-        </ul>
-        <form class="d-flex">
-          <label>
-            <input class="form-control me-sm-2" placeholder="Search" type="text">
-            </label>
-          <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>
-        </div>
-    </div>
-    </nav>`)
-}
-
-window.onload = () => {
-    showNavigator();
-    let path = location.hash.replace("#", "")
-    if (!path) {
-        let main = document.createElement("main");
-        main.style = "height: 100vh; padding: 10px;"
-        let root = document.createElement("div");
-        root.classList.add("card-deck")
-        $("body").append(main);
-        $("main").append(root)
-        root.id = "articles-body"
-        console.log("hi")
-        getArticles();
-    } else if (path === "signup") {
-
-    }
-}
-
 export function loginWithKakao() {
     Kakao.Auth.login({
         success: function (authObj) {
             console.log(authObj)
-            axios.post("http://localhost:8080/login/kakao", {'token': `${authObj['access_token']}`})
+            axios.post("http://localhost:8080/login/kakao", { 'token': `${authObj['access_token']}` })
                 .then(response => {
                     console.log(response)
                     localStorage.setItem("token", response.data['token']);
@@ -85,23 +28,6 @@ export function loginWithKakao() {
         }
     })
 }
-
-// 아래는 데모를 위한 UI 코드입니다.
-export function displayToken() {
-    const token = getCookie('authorize-access-token')
-    if (token) {
-        Kakao.Auth.setAccessToken(token)
-        Kakao.Auth.getStatusInfo(({status}) => {
-            if (status === 'connected') {
-                console.log('login success. token: ' + Kakao.Auth.getAccessToken())
-            } else {
-                Kakao.Auth.setAccessToken(null)
-            }
-        })
-    }
-}
-
-displayToken()
 
 export function login() {
     const email = $("#exampleInputEmail1").val();
@@ -211,7 +137,7 @@ export const checkEmail = () => {
     }
 }
 
-export const activate = () => {
+const activate = () => {
     document.querySelectorAll("small").forEach(elem => {
         if (!elem.text) $("#submit").removeAttr("disabled")
     });
@@ -221,92 +147,32 @@ export function toggleComment(idx) {
     $(`#commentEdit-${idx}`).toggle('fade')
 }
 
-export const getArticles = () => {
-    const User = JSON.parse(localStorage.getItem("user"));
-    if (User !== null) {
-        $("#name").text(User.name + "님 환영합니다.");
-    }
-    axios
-        .get("http://localhost:8080/api/articles")
-        .then(function (response) {
-            const {data} = response;
-            data.forEach((article) => {
-                const {
-                    id,
-                    title,
-                    content,
-                    user,
-                    imagePath,
-                    imageName
-                } = article;
-                const {name} = user;
-                let temp_html = `<!-- Card -->
-                    <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
-                    <div class="card" style="margin: 10px; min-width: 230px;">
-                    <!--Card image-->
-                    <div class="view overlay">
-                    <img class="card-img-top" src="${imagePath}" alt="${imageName}"><a href="#!">
-                    <div class="mask rgba-white-slight"></div>
-                    </a></div>
-                    <!--Card content-->
-                    <div class="card-body">
-                    <!--Title-->
-                    <h5 class="card-title tit">${title}</h5>
-                    <!--Text-->
-                    <p class="card-text">${content}</p>
-                    <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-                    <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-primary">
-                    <i class="far fa-thumbs-up"></i></button>
-                    <button onclick="app.toggleComment(${id})" title="comment" type="button" class="btn btn-primary">
-                    <i class="fas fa-comments"></i></button>
-                    {{__is_this_yours?__}}
-                    </div>
-                    <div id="commentEdit-${id}" class="input-group m-3 form-floating">
-                    <input id="commentWrite-${id}" class="form-control" aria-describedby="button-addon2">
-                    <label for="floatingInput">Leave a Comment...</label>
-                    <button class="btn btn-primary" onclick="app.writeComment(${id})" id="button-addon2">Button</button>
-                    </div>
-                    <ul class="list-group" id="comment-list-${id}">
-                    </ul></div></div>`;
-                const no_not_mine = "";
-                const my_contents = `
-                <button onclick="app.editArticle(${id})" title="edit" type="button" class="btn btn-primary">
-                <i class="far fa-edit"></i></button>
-                <button onclick="app.deleteArticle(${id})" title="delete" type="button" class="btn btn-primary">
-                <i class="fas fa-trash-alt"></i></button>`
-                if (user.id === User?.id) {
-                    $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", my_contents));
-                } else {
-                    $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", no_not_mine));
-                }
-                callComments(id);
-                $(`#commentEdit-${id}`).hide();
-            });
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        });
-};
+
+export const showWriteButton = () => {
+    $("#articles-body").append(`<button class="btn btn-primary" data-bs-target="#staticBackdrop" data-bs-toggle="modal" id="backDrop"
+            type="button">
+            write a post
+        </button>`);
+}
 
 export function writeComment(idx) {
     const user = JSON.parse(localStorage.getItem("user"));
     const content = $(`#commentWrite-${idx}`).val();
     console.log(content);
-    const body = {articleId: idx, userId: user.id, content}
+    const body = { articleId: idx, userId: user.id, content }
     axios.post(`http://localhost:8080/api/comment/`, body)
-        .then(() => callComments(idx))
+        .then(({ data }) => addComment(idx, data))
         .catch(function (error) {
             // handle error
             console.log(error);
         });
 }
 
-export function callComments(idx) {
+function callComments(idx) {
     axios
         .get(`http://localhost:8080/api/comments/${idx}`)
         .then((response) => {
-            let {data} = response
+            let { data } = response
             console.log(data)
             data.forEach((comment) => {
                 addComment(idx, comment);
@@ -316,15 +182,16 @@ export function callComments(idx) {
 
 export function addComment(idx, data) {
     const User = JSON.parse(localStorage.getItem("user"));
-    const {id, content, createdAt, user} = data;
+    const { id, content, createdAt, user } = data;
     $(`#comment-list-${idx}`).append(`
-    <li><div href="#" class="list-group-item list-group-item-action flex-column
-    align-items-start"><div class="d-flex w-100 justify-content-between">
-      <small class="mb-1 tit">${user.name}</small>
-      </div>
-      <p class="mb-1">${content}</p>
-      <small>${moment(createdAt).fromNow()}</small>
-    </div></li>`);
+    <li href="#" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <small class="mb-1"><small class="mb-1 tit">${user.name}</small>
+      ${moment(createdAt).fromNow()}</small>
+      <button type="button" class="btn-close small" aria-label="Close"></button>
+    </div>
+    <p class="mb-1">${content}</small>
+  </li>`);
 
 
 }
@@ -332,10 +199,10 @@ export function addComment(idx, data) {
 export function editArticle(idx) {
     axios.get(`http://localhost:8080/api/article/${idx}`)
         .then(response => {
-            let {id, title, content, user} = response.data;
+            let { id, title, content, user } = response.data;
             let answer = window.prompt("수정할 내용을 입력해주세요.", content)
             if (answer) {
-                let send = {id, title, content: answer, userId: user.id};
+                let send = { id, title, content: answer, userId: user.id };
                 console.log(send)
                 axios.put(`http://localhost:8080/api/article/edit`, send).then(() => location.reload());
             }
@@ -368,10 +235,6 @@ export function Write() {
     formData.append('file', image)
     formData.append('title', title)
     formData.append('content', content)
-    console.log(User);
-    console.log(title);
-    console.log(content);
-    console.log(image);
 
     axios
         .post("http://localhost:8080/api/article/write", formData)
@@ -388,4 +251,151 @@ export function getCookie(name) {
     const value = "; " + document.cookie;
     const parts = value.split("; " + name + "=");
     if (parts.length === 2) return parts.pop().split(";").shift();
+
 }
+
+const getArticles = () => {
+    let div = document.createElement("div");
+    div.className = "card-deck";
+    div.id = "articles-body"
+    $("main > div").replaceWith(div);
+    const User = JSON.parse(localStorage.getItem("user"));
+    axios
+        .get("http://localhost:8080/api/articles")
+        .then(function (response) {
+            const { data } = response;
+            data.forEach((article) => {
+                const { id, title, content, user, imagePath, imageName } = article;
+                const { name } = user;
+                let temp_html = `<!-- Card -->
+                <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
+                    <div class="card" style="margin: 10px; min-width: 230px;">
+                    <!--Card image-->
+                    <div class="view overlay">
+                    <img class="card-img-top" src="${imagePath}" alt="${imageName}"><a href="#!">
+                    <div class="mask rgba-white-slight"></div>
+                    </a></div>
+                    <!--Card content-->
+                    <div class="card-body">
+                    <!--Title-->
+                    <h5 class="card-title tit">${title}</h5>
+                    <!--Text-->
+                    <p class="card-text">${content}</p>
+                    <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+                    <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-primary">
+                    <i class="far fa-thumbs-up"></i></button>
+                    <button onclick="app.toggleComment(${id})" title="comment" type="button" class="btn btn-primary">
+                    <i class="fas fa-comments"></i></button>
+                    {{__is_this_yours?__}}
+                    </div>
+                    <div id="commentEdit-${id}" class="input-group m-3 form-floating">
+                    <input id="commentWrite-${id}" class="form-control" aria-describedby="button-addon2">
+                    <label for="floatingInput">Leave a Comment...</label>
+                    <button class="btn btn-primary" onclick="app.writeComment(${id})" id="button-addon2">Button</button>
+                    </div>
+                    <ul class="list-group" id="comment-list-${id}">
+                    </ul></div></div>`;
+                const no_not_mine = "";
+                const my_contents = `
+                    <button onclick="app.editArticle(${id})" title="edit" type="button" class="btn btn-primary">
+                <i class="far fa-edit"></i></button>
+                <button onclick="app.deleteArticle(${id})" title="delete" type="button" class="btn btn-primary">
+                <i class="fas fa-trash-alt"></i></button>`
+                if (user.id === User?.id) {
+                    $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", my_contents));
+                } else {
+                    $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", no_not_mine));
+                }
+                callComments(id);
+                $(`#commentEdit-${id}`).hide();
+            });
+        })
+        .catch(function (error) {
+            // handle error
+            console.log(error);
+        });
+};
+
+function registerView() {
+    document.querySelector("main").innerHTML = `<div class="col-lg-3 col-sm-4 m-auto">
+        <form action="" style="display: grid;">
+            <div class="form-group">
+                <label class="form-label mt-4" for="exampleInputEmail1">Email address</label>
+                <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1" oninput="app.checkEmail()"
+                    placeholder="Enter email" type="email">
+                <small class="form-text text-muted" id="emailHelp"></small>
+            </div>
+            <div class="form-group">
+                <label class="col-form-label-sm mt-2" for="inputDefault">Name</label>
+                <input aria-describedby="nameHelp" class="form-control" id="inputDefault"
+                    placeholder="Tell us your Name"
+                    type="text">
+                <small class="form-text text-muted" id="nameHelp"></small>
+            </div>
+            <div class="form-group">
+                <label class="col-form-label-sm mt-2" for="phoneDefault">Phone</label>
+                <input aria-describedby="phoneHelp" class="form-control" id="phoneDefault" oninput="app.autoHyphen(this)"
+                    pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="insert your phone number" type="tel">
+                <small class="form-text text-muted" id="phoneHelp"></small>
+            </div>
+            <div class="form-group">
+                <label class="form-label mt-2" for="exampleInputPassword1">Password</label>
+                <input aria-describedby="pwdHelp" class="form-control" id="exampleInputPassword1" oninput="app.passwordOK()"
+                    placeholder="Password" type="password">
+                <small class="form-text text-muted" id="pwdHelp"></small>
+            </div>
+            <div class="form-group">
+                <label class="form-label-sm mt-2" for="exampleInputPassword2">re-Password</label>
+                <input aria-describedby="repwdHelp" class="form-control" id="exampleInputPassword2"
+                    oninput="app.passwordOK()" placeholder="Confirm Password" type="password">
+                <small class="form-text text-muted" id="repwdHelp"></small>
+            </div>
+            <button class="btn mt-3 btn-lg btn-primary" disabled id="submit" onclick="app.signup()" type="button">Register
+            </button>
+        </form>
+        <a class="text-success" href="#signin">let me signin</a></div>`
+}
+
+function logInView() {
+    document.querySelector("main").innerHTML = `
+    <div class="col-lg-3 col-sm-4 m-auto">
+    <form action="">
+        <div class="form-group">
+            <label class="form-label-sm mt-4" for="exampleInputEmail1">Email address</label>
+            <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1"
+                   placeholder="Enter email" type="email">
+            <small class="form-text text-muted" id="emailHelp"></small>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label-sm mt-2" for="exampleInputPassword1">Password</label>
+            <input aria-describedby="pwdHelp" class="form-control" id="exampleInputPassword1"
+                   onchange="passwordOK()" placeholder="Password" type="password">
+            <small class="form-text text-muted" id="pwdHelp"></small>
+        </div>
+
+        <button class="btn mt-3 btn-lg login btn-login" disabled id="submit" onclick="login()" type="button">Login
+        </button>
+        <button class="btn mt-3 btn-lg login btn-kakao" id="custom-login-btn" onclick="loginWithKakao();">Kakao
+            Login
+        </button>
+    </form>
+    <a class="text-success" href="#signup">let me signup</a>
+    </div>`;
+}
+
+const router = () => {
+    let path = location.hash.replace("#", "")
+    if (path === "") {
+        getArticles();
+        setTimeout(() => showWriteButton(), 1000);
+    } else if (path == "signup") {
+        registerView();
+    } else if (path == "signin") {
+        logInView();
+    }
+}
+
+window.addEventListener('hashchange', router)
+
+router();

@@ -13,28 +13,64 @@
     <meta content="" property="og:image">
     <link href="" rel="apple-touch-icon">
     <!-- Place favicon.ico in the root directory -->
-    <script crossorigin="anonymous"
-            integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
-            referrerpolicy="no-referrer"
-            src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="app.js"></script>
+    <script src="index.js"></script>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/aba5c3ead0.js"></script>
 </head>
 
-<body>
-<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-<script>
-    window.ga = function () {
-        ga.q.push(arguments)
-    };
-    ga.q = [];
-    ga.l = +new Date;
-    ga('create', 'UA-XXXXX-Y', 'auto');
-    ga('set', 'anonymizeIp', true);
-    ga('set', 'transport', 'beacon');
-    ga('send', 'pageview')
-</script>
-<script async src="https://www.google-analytics.com/analytics.js"></script>
+<body style="overflow-x: hidden;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler collapsed" data-bs-target="#navbarColor01" data-bs-toggle="collapse"
+                type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home
+                            <span class="visually-hidden">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#signin">signin</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#signup">signup</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#mypage">mypage</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#mytown">mytown</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-sm-2" placeholder="Search" type="text">
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <main style="height: 100vh; padding: 10px;">
+        <div class="card-deck" id="articles-body">
+
+        </div>
+    </main>
+    <script>
+        window.ga = function () {
+            ga.q.push(arguments)
+        };
+        ga.q = [];
+        ga.l = +new Date;
+        ga('create', 'UA-XXXXX-Y', 'auto');
+        ga('set', 'anonymizeIp', true);
+        ga('set', 'transport', 'beacon');
+        ga('send', 'pageview')
+    </script>
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
 </body>
 
 </html>

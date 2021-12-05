@@ -338,3 +338,7 @@ button.btn-kakao {
 div.list-group-item {
     border-width: 0;
 }
+
+.card {
+    font-family: "Roboto", sans-serif;
+}
