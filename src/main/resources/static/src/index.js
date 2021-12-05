@@ -149,10 +149,12 @@ export function toggleComment(idx) {
 
 
 export const showWriteButton = () => {
-    $("#articles-body").append(`<button class="btn btn-primary" data-bs-target="#staticBackdrop" data-bs-toggle="modal" id="backDrop"
-            type="button">
-            write a post
-        </button>`);
+    $("#articles-body").append(`
+    <button class="btn btn-success"
+        data-bs-target="#staticBackdrop"
+        data-bs-toggle="modal" id="backDrop"
+        type="button">write a post
+    </button>`);
 }
 
 export function writeComment(idx) {
@@ -182,18 +184,30 @@ function callComments(idx) {
 
 export function addComment(idx, data) {
     const User = JSON.parse(localStorage.getItem("user"));
-    const { id, content, createdAt, user } = data;
+    const { id, content, createdAt, user, article } = data;
     $(`#comment-list-${idx}`).append(`
     <li href="#" class="list-group-item list-group-item-action">
     <div class="d-flex w-100 justify-content-between">
       <small class="mb-1"><small class="mb-1 tit">${user.name}</small>
       ${moment(createdAt).fromNow()}</small>
-      <button type="button" class="btn-close small" aria-label="Close"></button>
+      ${User?.id === user.id
+            ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${id})"></button>`
+            : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">meet</button>`}
     </div>
     <p class="mb-1">${content}</small>
   </li>`);
+}
 
-
+export function letsMeet(idx, userId) {
+    const body = {
+        articleId: idx,
+        commenterId: userId
+    }
+    axios.post(`http://localhost:8080/api/meet`, body)
+        .then((response) => {
+            console.log(response.data);
+            location.hash = "chat";
+        })
 }
 
 export function editArticle(idx) {
@@ -282,24 +296,24 @@ const getArticles = () => {
                     <!--Text-->
                     <p class="card-text">${content}</p>
                     <!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
-                    <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-primary">
+                    <button onclick="console.log(this.title, ${id}, '${name}')" title="like" type="button" class="btn btn-success">
                     <i class="far fa-thumbs-up"></i></button>
-                    <button onclick="app.toggleComment(${id})" title="comment" type="button" class="btn btn-primary">
+                    <button onclick="app.toggleComment(${id})" title="comment" type="button" class="btn btn-success">
                     <i class="fas fa-comments"></i></button>
                     {{__is_this_yours?__}}
                     </div>
                     <div id="commentEdit-${id}" class="input-group m-3 form-floating">
                     <input id="commentWrite-${id}" class="form-control" aria-describedby="button-addon2">
                     <label for="floatingInput">Leave a Comment...</label>
-                    <button class="btn btn-primary" onclick="app.writeComment(${id})" id="button-addon2">Button</button>
+                    <button class="btn btn-success" onclick="app.writeComment(${id})" id="button-addon2">Button</button>
                     </div>
                     <ul class="list-group" id="comment-list-${id}">
                     </ul></div></div>`;
                 const no_not_mine = "";
                 const my_contents = `
-                    <button onclick="app.editArticle(${id})" title="edit" type="button" class="btn btn-primary">
+                    <button onclick="app.editArticle(${id})" title="edit" type="button" class="btn btn-success">
                 <i class="far fa-edit"></i></button>
-                <button onclick="app.deleteArticle(${id})" title="delete" type="button" class="btn btn-primary">
+                <button onclick="app.deleteArticle(${id})" title="delete" type="button" class="btn btn-success">
                 <i class="fas fa-trash-alt"></i></button>`
                 if (user.id === User?.id) {
                     $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", my_contents));
@@ -322,13 +336,13 @@ function registerView() {
             <div class="form-group">
                 <label class="form-label mt-4" for="exampleInputEmail1">Email address</label>
                 <input aria-describedby="emailHelp" class="form-control" id="exampleInputEmail1" oninput="app.checkEmail()"
-                    placeholder="Enter email" type="email">
+                    placeholder="enter email" type="email">
                 <small class="form-text text-muted" id="emailHelp"></small>
             </div>
             <div class="form-group">
                 <label class="col-form-label-sm mt-2" for="inputDefault">Name</label>
                 <input aria-describedby="nameHelp" class="form-control" id="inputDefault"
-                    placeholder="Tell us your Name"
+                    placeholder="tell us your name"
                     type="text">
                 <small class="form-text text-muted" id="nameHelp"></small>
             </div>
@@ -341,16 +355,16 @@ function registerView() {
             <div class="form-group">
                 <label class="form-label mt-2" for="exampleInputPassword1">Password</label>
                 <input aria-describedby="pwdHelp" class="form-control" id="exampleInputPassword1" oninput="app.passwordOK()"
-                    placeholder="Password" type="password">
+                    placeholder="password" type="password">
                 <small class="form-text text-muted" id="pwdHelp"></small>
             </div>
             <div class="form-group">
                 <label class="form-label-sm mt-2" for="exampleInputPassword2">re-Password</label>
                 <input aria-describedby="repwdHelp" class="form-control" id="exampleInputPassword2"
-                    oninput="app.passwordOK()" placeholder="Confirm Password" type="password">
+                    oninput="app.passwordOK()" placeholder="confirm password" type="password">
                 <small class="form-text text-muted" id="repwdHelp"></small>
             </div>
-            <button class="btn mt-3 btn-lg btn-primary" disabled id="submit" onclick="app.signup()" type="button">Register
+            <button class="btn mt-3 btn-lg btn-success" disabled id="submit" onclick="app.signup()" type="button">Register
             </button>
         </form>
         <a class="text-success" href="#signin">let me signin</a></div>`
@@ -370,13 +384,13 @@ function logInView() {
         <div class="form-group">
             <label class="form-label-sm mt-2" for="exampleInputPassword1">Password</label>
             <input aria-describedby="pwdHelp" class="form-control" id="exampleInputPassword1"
-                   onchange="passwordOK()" placeholder="Password" type="password">
+                   onchange="app.passwordOK()" placeholder="Password" type="password">
             <small class="form-text text-muted" id="pwdHelp"></small>
         </div>
 
-        <button class="btn mt-3 btn-lg login btn-login" disabled id="submit" onclick="login()" type="button">Login
+        <button class="btn mt-3 btn-lg login btn-login" disabled id="submit" onclick="app.login()" type="button">Login
         </button>
-        <button class="btn mt-3 btn-lg login btn-kakao" id="custom-login-btn" onclick="loginWithKakao();">Kakao
+        <button class="btn mt-3 btn-lg login btn-kakao" id="custom-login-btn" onclick="app.loginWithKakao();">Kakao
             Login
         </button>
     </form>
