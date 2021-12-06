@@ -22,7 +22,6 @@ public class ReviewService {
         return reviewRepository.findAllByReviewTargetUser_Id(reviewTargetId);
     }
 
-
     @Transactional
     public Review uploadOrUpdate(ReviewRequestDto requestDto) {
         User reviewUser = userRepository.findById(requestDto.getReviewUserid()).orElseThrow(

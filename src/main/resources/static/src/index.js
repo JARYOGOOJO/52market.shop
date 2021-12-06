@@ -1,10 +1,10 @@
 import moment from 'moment';
 import axios from 'axios';
 import $ from 'jquery'
+import '@popperjs/core'
 import 'bootstrap'
 import './css/bootstrap.min.css';
 import './css/main.css'
-import '@popperjs/core'
 import './kakao'
 import './aba5c3ead0';
 
@@ -162,7 +162,7 @@ export function writeComment(idx) {
     const content = $(`#commentWrite-${idx}`).val();
     console.log(content);
     const body = { articleId: idx, userId: user.id, content }
-    axios.post(`http://localhost:8080/api/comment/`, body)
+    axios.post(`http://localhost:8080/api/comment`, body)
         .then(({ data }) => addComment(idx, data))
         .catch(function (error) {
             // handle error
@@ -184,19 +184,21 @@ function callComments(idx) {
 
 export function addComment(idx, data) {
     const User = JSON.parse(localStorage.getItem("user"));
-    const { id, content, createdAt, user, article } = data;
+    let { id, content, createdAt, user, article } = data;
+
     $(`#comment-list-${idx}`).append(`
     <li href="#" class="list-group-item list-group-item-action">
     <div class="d-flex w-100 justify-content-between">
       <small class="mb-1"><small class="mb-1 tit">${user.name}</small>
       ${moment(createdAt).fromNow()}</small>
       ${User?.id === user.id
-            ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${id})"></button>`
-            : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
+        ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${idx}, ${id})"></button>`
+        : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
     </div>
     <p class="mb-1">${content}</small>
   </li>`);
 }
+
 
 export function letsMeet(idx, userId) {
     const body = {
@@ -210,13 +212,22 @@ export function letsMeet(idx, userId) {
         })
 }
 
+export function removeComment(idx, id) {
+    axios.delete(`http://localhost:8080/api/comment/${id}`)
+        .then(({data}) => console.log(data))
+        .then(() => {
+            $(`#comment-list-${idx}`).empty();
+            callComments(idx);
+        })
+}
+
 export function editArticle(idx) {
     axios.get(`http://localhost:8080/api/article/${idx}`)
         .then(response => {
-            let { id, title, content, user } = response.data;
+            let {id, title, content, user} = response.data;
             let answer = window.prompt("수정할 내용을 입력해주세요.", content)
             if (answer) {
-                let send = { id, title, content: answer, userId: user.id };
+                let send = {id, title, content: answer, userId: user.id};
                 console.log(send)
                 axios.put(`http://localhost:8080/api/article/edit`, send).then(() => location.reload());
             }
