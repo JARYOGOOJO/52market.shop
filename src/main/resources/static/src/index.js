@@ -1,10 +1,10 @@
 import moment from 'moment';
 import axios from 'axios';
 import $ from 'jquery'
+import '@popperjs/core'
 import 'bootstrap'
 import './css/bootstrap.min.css';
 import './css/main.css'
-import '@popperjs/core'
 import './kakao'
 import './aba5c3ead0';
 
@@ -184,7 +184,10 @@ function callComments(idx) {
 
 export function addComment(idx, data) {
     const User = JSON.parse(localStorage.getItem("user"));
-    const { id, content, createdAt, user, article } = data;
+    let { id, content, createdAt, user, article } = data;
+    if (typeof article === 'object') {
+        article = article.id;
+    }
     $(`#comment-list-${idx}`).append(`
     <li href="#" class="list-group-item list-group-item-action">
     <div class="d-flex w-100 justify-content-between">
@@ -192,7 +195,7 @@ export function addComment(idx, data) {
       ${moment(createdAt).fromNow()}</small>
       ${User?.id === user.id
             ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${id})"></button>`
-            : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
+            : `<button onclick="app.letsMeet(${article}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
     </div>
     <p class="mb-1">${content}</small>
   </li>`);
