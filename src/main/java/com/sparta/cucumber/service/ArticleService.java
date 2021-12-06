@@ -43,7 +43,7 @@ public class ArticleService {
 
     // S3에 사진 업로드 가능한 메소드
     @Transactional
-    public Article uploadOrUpdate(ArticleRequestDto requestDto, String imagePath) {
+    public Article upload(ArticleRequestDto requestDto, String imagePath) {
         Long userId = requestDto.getUserId();
         User user = userRepository
                 .findById(userId)
