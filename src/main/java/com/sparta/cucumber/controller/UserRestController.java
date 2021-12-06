@@ -3,11 +3,14 @@ package com.sparta.cucumber.controller;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
+import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.security.kakao.UserDetailsServiceImpl;
+import com.sparta.cucumber.service.S3Uploader;
 import com.sparta.cucumber.service.UserService;
 import com.sparta.cucumber.utils.JwtTokenUtil;
+import com.sun.org.apache.xpath.internal.operations.Mult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +18,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +33,7 @@ public class UserRestController {
     private final UserDetailsServiceImpl userDetailsService;
     private final UserService userService;
     private final KakaoOAuth2 kakaoOAuth2;
+    private final S3Uploader s3Uploader;
 
     @PostMapping(value = "/login/kakao")
     public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
@@ -71,5 +76,13 @@ public class UserRestController {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
+    }
+
+    @PutMapping("/api/users/{id}")
+    public ResponseEntity<User> updateProfileImage(@PathVariable("id") Long userId, UserRequestDto userDTO,
+                                                   @ModelAttribute MultipartFile profile) throws IOException {
+        String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
+        User updateUser = userService.updateProfileImage(userDTO, profileImage);
+        return ResponseEntity.ok().body(updateUser);
     }
 }

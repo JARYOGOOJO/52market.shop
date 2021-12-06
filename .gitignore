@@ -36,7 +36,6 @@ out/
 
 ### VS Code ###
 .vscode/
-src/main/resources/application.yml
 /node_modules/
 /src/main/resources/static/dist/125e84d3c8f273bf0b7a.png
 /src/main/resources/static/dist/bundle.js

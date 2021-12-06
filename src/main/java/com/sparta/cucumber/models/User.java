@@ -1,5 +1,6 @@
 package com.sparta.cucumber.models;
 
+import  com.sparta.cucumber.dto.UserRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +31,7 @@ public class User extends Timestamped {
     private Double star;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String profileImage;
 
 
 
@@ -62,6 +64,11 @@ public class User extends Timestamped {
         this.password = encodedPassword;
         this.role = role;
         this.socialId = kakaoId;
+        return this;
+    }
+
+    public User updateImage(UserRequestDto userDTO) {
+        this.profileImage = userDTO.getProfileImage();
         return this;
     }
 }
