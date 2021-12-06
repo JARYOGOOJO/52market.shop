@@ -69,4 +69,18 @@ public class ChatController {
         log.debug("chatRequestDto : "+chatRequestDto.toString());
         messagingTemplate.convertAndSend("/sub/chat/room",chatRequestDto.getMsg());
     }
+
+    @MessageMapping("/article/notice/All")
+    public void articleNoticeAll(ChatRequestDto chatRequestDto) throws Exception{
+        log.debug("/article/notice/All");
+        log.debug("chatRequestDto : "+chatRequestDto.toString());
+        messagingTemplate.convertAndSend("/sub/article/notice/All",chatRequestDto.getMsg());
+    }
+
+    @MessageMapping("/comment/notice/All")
+    public void commentNoticeAll(ChatRequestDto chatRequestDto) throws Exception{
+        log.debug("/comment/notice/All");
+        log.debug("chatRequestDto : "+chatRequestDto.toString());
+        messagingTemplate.convertAndSend("/sub/comment/notice/All",chatRequestDto.getMsg());
+    }
 }

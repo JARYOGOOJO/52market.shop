@@ -2,8 +2,12 @@ package com.sparta.cucumber.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.sparta.cucumber.dto.UserRequestDto;
+import com.sparta.cucumber.models.Article;
+import com.sparta.cucumber.repository.ArticleRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +27,7 @@ import java.util.Optional;
 public class S3Uploader {
 
     private final AmazonS3Client amazonS3Client;
+    private final ArticleRepository articleRepository;
 
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;
@@ -81,5 +86,14 @@ public class S3Uploader {
     private String upload(File uploadFile, String dirName, String userName) {
         String fileName = dirName + "/" + userName;
         return putS3(uploadFile, fileName);
+    }
+
+    public void deleteImage(Long articleId){
+        Article article = articleRepository.findById(articleId).orElseThrow(
+                () -> new NullPointerException("해당 게시글이 존재하지 않습니다")
+        );
+        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(bucket, "Article/" + article.getImageName());
+        amazonS3Client.deleteObject(deleteObjectRequest);
+
     }
 }

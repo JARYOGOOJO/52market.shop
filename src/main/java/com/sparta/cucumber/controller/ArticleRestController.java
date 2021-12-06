@@ -83,6 +83,7 @@ public class ArticleRestController {
     public ResponseEntity<Long> removeArticle(@PathVariable("userId") Long userId,
                                               @PathVariable("id") Long articleId) {
         Long id = articleService.removeArticle(userId, articleId);
+        s3Uploader.deleteImage(articleId);
         return ResponseEntity.ok().body(id);
     }
 
