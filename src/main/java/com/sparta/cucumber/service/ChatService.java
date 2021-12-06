@@ -2,7 +2,6 @@ package com.sparta.cucumber.service;
 
 import com.sparta.cucumber.dto.ChatRequestDto;
 import com.sparta.cucumber.models.ChatRoom;
-import com.sparta.cucumber.models.EnterRoom;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ChatRoomRepository;
 import com.sparta.cucumber.repository.EnterRoomRepository;
