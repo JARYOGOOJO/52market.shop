@@ -29,9 +29,9 @@ public class CommentRestController {
         return ResponseEntity.ok().body(comment);
     }
 
-    @DeleteMapping("/api/comment")
-    public ResponseEntity<Long> removeComment(@RequestBody CommentRequestDto requestDto) {
-        Long result = commentService.checkAndDelete(requestDto);
+    @DeleteMapping("/api/comment/{id}")
+    public ResponseEntity<Long> removeComment(@PathVariable("id") Long commentId) {
+        Long result = commentService.checkAndDelete(commentId);
         return ResponseEntity.ok().body(result);
     }
 }

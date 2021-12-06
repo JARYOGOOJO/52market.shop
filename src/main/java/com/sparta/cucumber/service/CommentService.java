@@ -46,18 +46,17 @@ public class CommentService {
     }
 
     @Transactional
-    public Long checkAndDelete(CommentRequestDto requestDto) {
-        Article article = articleRepository
-                .findById(requestDto.getArticleId())
-                .orElseThrow(
-                        () -> new NullPointerException("게시물이 존재하지 않습니다."));
-        User user = userRepository
-                .findById(requestDto.getUserId())
-                .orElseThrow(
-                        () -> new NullPointerException("게시물 작성자가 올바르지 않습니다.."));
-        Comment comment = commentRepository.findAllByArticleAndUserAndContent(article, user, requestDto.getContent());
-        Long id = comment.getId();
-        commentRepository.delete(comment);
-        return id;
+    public Long checkAndDelete(Long commentId) {
+//        Article article = articleRepository
+//                .findById(requestDto.getArticleId())
+//                .orElseThrow(
+//                        () -> new NullPointerException("게시물이 존재하지 않습니다."));
+//        User user = userRepository
+//                .findById(requestDto.getUserId())
+//                .orElseThrow(
+//                        () -> new NullPointerException("게시물 작성자가 올바르지 않습니다.."));
+//        Comment comment = commentRepository.findAllByArticleAndUserAndContent(article, user, requestDto.getContent());
+        commentRepository.deleteById(commentId);
+        return commentId;
     }
 }
