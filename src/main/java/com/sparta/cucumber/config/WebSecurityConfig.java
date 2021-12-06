@@ -1,4 +1,4 @@
-package com.sparta.cucumber.utils;
+package com.sparta.cucumber.config;
 
 import com.sparta.cucumber.security.JwtAuthenticationEntryPoint;
 import com.sparta.cucumber.security.JwtAuthenticationFilter;

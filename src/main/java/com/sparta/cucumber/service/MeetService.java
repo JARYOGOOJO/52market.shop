@@ -34,7 +34,7 @@ public class MeetService {
                 .orElseThrow(
                         () -> new NullPointerException("작성자가 존재하지 않습니다.")
                 );
-        if (commenter != article.getUser()) {
+        if (commenter == article.getUser()) {
             throw new NoSuchElementException("자신의 댓글에 거래를 시작할 수 없어요!");
         }
         Meet meet = Meet

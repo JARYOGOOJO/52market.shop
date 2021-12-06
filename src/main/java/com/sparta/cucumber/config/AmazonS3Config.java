@@ -1,4 +1,4 @@
-package com.sparta.cucumber.utils;
+package com.sparta.cucumber.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

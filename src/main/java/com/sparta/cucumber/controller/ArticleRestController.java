@@ -61,7 +61,7 @@ public class ArticleRestController {
     public ResponseEntity<Article> writeArticle(@ModelAttribute ArticleRequestDto requestDto,
                                                 @ModelAttribute MultipartFile file) throws IOException {
         String imagePath = s3Uploader.upload(file, "Article");
-        Article article = articleService.uploadOrUpdate(requestDto, imagePath);
+        Article article = articleService.upload(requestDto, imagePath);
         return ResponseEntity.ok().body(article);
     }
 

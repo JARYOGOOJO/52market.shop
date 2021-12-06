@@ -1,7 +1,5 @@
 package com.sparta.cucumber.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sparta.cucumber.dto.ArticleRequestDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,14 +14,13 @@ import javax.persistence.*;
         name = "ARTICLE_GENERATOR",
         table = "MY_SEQUENCES",
         pkColumnValue = "ARTICLE_SEQ", allocationSize = 50)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Article extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE,generator = "ARTICLE_GENERATOR")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user")
     private User user;
     @Column(length = 500, nullable = false)
