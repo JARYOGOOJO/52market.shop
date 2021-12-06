@@ -28,4 +28,10 @@ public class CommentRestController {
         Comment comment = commentService.uploadOrUpdate(requestDto);
         return ResponseEntity.ok().body(comment);
     }
+
+    @DeleteMapping("/api/comment")
+    public ResponseEntity<Long> removeComment(@RequestBody CommentRequestDto requestDto) {
+        Long result = commentService.checkAndDelete(requestDto);
+        return ResponseEntity.ok().body(result);
+    }
 }
