@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
@@ -74,5 +75,17 @@ public class UserService {
         Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return nickname;
+    }
+
+    @Transactional
+    public User updateProfileImage(UserRequestDto userDTO, String profileImage) {
+        User user = userRepository
+                .findByEmail(userDTO.getEmail())
+                .orElseThrow(()
+                        -> new NullPointerException("잘못된 접근입니다."));
+        userDTO.setProfileImage(profileImage);
+        User updateUser = user.updateImage(userDTO);
+        return updateUser;
+
     }
 }
