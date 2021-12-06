@@ -314,13 +314,13 @@ ul {
     border: 1px solid transparent;
     font-size: 14px;
     border-radius: 8px;
-    font-family: "Noto Sans KR";
+    font-family: "Noto Sans KR", sans-serif;
     justify-items: center;
 }
 
 .tit {
     font-weight: 600;
-    font-family: "Noto Sans KR";
+    font-family: "Noto Sans KR", sans-serif;
 }
 
 button.btn-login {
@@ -337,4 +337,19 @@ button.btn-kakao {
 
 div.list-group-item {
     border-width: 0;
+}
+
+.card {
+    font-family: "Roboto", sans-serif;
+}
+
+#backDrop {
+    position:fixed;
+    right: 30px;
+    bottom: 30px;
+}
+
+.badge:hover {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-danger-rgb),var(--bs-bg-opacity))!important;
 }
