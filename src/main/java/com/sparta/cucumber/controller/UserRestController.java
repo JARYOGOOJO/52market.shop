@@ -9,7 +9,6 @@ import com.sparta.cucumber.security.kakao.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.S3Uploader;
 import com.sparta.cucumber.service.UserService;
 import com.sparta.cucumber.utils.JwtTokenUtil;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
