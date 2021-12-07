@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.sparta.cucumber.dto.UserRequestDto;
 import com.sparta.cucumber.models.Article;
 import com.sparta.cucumber.repository.ArticleRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -75,8 +76,7 @@ public class S3Uploader {
         return Optional.empty();
     }
 
-    public String upload(UserRequestDto userDTO, MultipartFile multipartFile,
-                         String dirName) throws IOException {
+    public String upload(UserRequestDto userDTO, MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
                 .orElseThrow(() -> new IllegalArgumentException("파일 변환 에러 MultipartFile -> File convert fail"));
         return upload(uploadFile, dirName, userDTO.getName());
@@ -87,7 +87,7 @@ public class S3Uploader {
         return putS3(uploadFile, fileName);
     }
 
-    public void deleteImage(Long articleId) {
+    public void deleteImage(Long articleId){
         Article article = articleRepository.findById(articleId).orElseThrow(
                 () -> new NullPointerException("해당 게시글이 존재하지 않습니다")
         );
