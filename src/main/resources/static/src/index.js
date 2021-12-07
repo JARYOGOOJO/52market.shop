@@ -1,6 +1,8 @@
 import moment from 'moment';
 import axios from 'axios';
 import $ from 'jquery'
+import SockJS from 'sockjs-client'
+import {Stomp} from '@stomp/stompjs'
 import '@popperjs/core'
 import 'bootstrap'
 import './css/bootstrap.min.css';
@@ -10,11 +12,87 @@ import './aba5c3ead0';
 
 Kakao.init("e1289217c77f4f46dc511544f119d102");
 
+const genRandomName = length => {
+    let name = '';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        let number = Math.random() * charactersLength;
+        let index = Math.floor(number);
+        name += characters.charAt(index);
+    }
+    return name;
+}
+
+let stompClient;
+
+export function connect() {
+    let socket = new SockJS('http://localhost:8080/api/ws-stomp');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, (frame) => {
+        console.log("connected");
+        let room = genRandomName(10);
+        roomName(room)
+        chatView();
+        location.hash = `chat?r=${room}`;
+        stompClient.subscribe(`http://localhost:8080/api/sub/${room}`, (msg) => {
+            showMessage(JSON.parse(msg.body).content);
+        })
+    })
+}
+
+export function joinConnect(room) {
+    let socket = new SockJS('http://localhost:8080/api/ws-stomp');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, (frame) => {
+        console.log("connected");
+        chatView();
+        location.hash = `chat?r=${room}`;
+        stompClient.subscribe(`http://localhost:8080/api/sub/${room}`, (msg) => {
+            showMessage(JSON.parse(msg.body).content);
+        })
+    })
+}
+
+export const sendMessage = () => {
+    let msg = $('.message_input').val().toString();
+    let roomId = location.hash.split("r=").pop()
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user.id;
+    let message_side = 'right';
+    if (!msg.trim()) return;
+    $('.message_input').val('');
+    let message = new Message({text: msg, message_side});
+    message.draw();
+    stompClient.send(`http://localhost:8080/api/sub/${roomId}`, {},
+        JSON.stringify({msg, roomId, userId}))
+    return $('.messages').animate({scrollTop: $('.messages').prop('scrollHeight')}, 300);
+};
+
+export const showMessage = (msg) => {
+    let message_side = 'left';
+    let message = new Message({text: msg, message_side});
+    message.draw();
+    return $('.messages').animate({scrollTop: $('.messages').prop('scrollHeight')}, 300);
+};
+
+function disconnect() {
+    if (stompClient !== null) {
+        stompClient.disconnect();
+    }
+    console.log("disconnected")
+}
+
+function roomName(roomSubscribeId, text) {
+    stompClient.send("/api/room", {},
+        JSON.stringify({roomSubscribeId}))
+}
+
 export function loginWithKakao() {
     Kakao.Auth.login({
         success: function (authObj) {
             console.log(authObj)
-            axios.post("http://localhost:8080/login/kakao", { 'token': `${authObj['access_token']}` })
+            axios.post("http://localhost:8080/login/kakao", {'token': `${authObj['access_token']}`})
                 .then(response => {
                     console.log(response)
                     localStorage.setItem("token", response.data['token']);
@@ -341,16 +419,6 @@ const getArticles = () => {
         });
 };
 
-export const sendMessage = () => {
-    let text = $('.message_input').val();
-    let message_side = 'right';
-    if (!text.trim()) return;
-    $('.message_input').val('');
-    let message = new Message({ text, message_side });
-    message.draw();
-    return $('.messages').animate({ scrollTop: $('.messages').prop('scrollHeight') }, 300);
-};
-
 export const send = () => event.which === 13 ? sendMessage() : null;
 const Message = function (arg) {
     this.text = arg.text, this.message_side = arg.message_side;
@@ -518,6 +586,10 @@ const router = () => {
             break
         case "chat":
             chatView();
+            break
+    }
+    if (path.startsWith("chat")) {
+        chatView();
     }
 }
 
