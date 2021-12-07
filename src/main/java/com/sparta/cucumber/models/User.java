@@ -12,7 +12,7 @@ import javax.persistence.*;
 @TableGenerator(
         name = "USER_GENERATOR",
         table = "MY_SEQUENCES",
-        pkColumnValue = "USER_SEQ", allocationSize = 50)
+        pkColumnValue = "USER_SEQ", allocationSize = 30)
 @Entity(name = "user")
 public class User extends Timestamped {
     @Id

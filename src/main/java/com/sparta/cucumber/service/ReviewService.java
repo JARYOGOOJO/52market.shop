@@ -30,14 +30,24 @@ public class ReviewService {
         User targetUser = userRepository.findById(requestDto.getReviewTargetUserId()).orElseThrow(
                 () -> new NullPointerException("해당 아이디가 존재하지 않습니다.")
         );
-
         Review review = Review.builder()
                 .from(reviewUser)
                 .to(targetUser)
                 .content(requestDto.getContent())
                 .star(requestDto.getScore())
                 .build();
+        return reviewRepository.save(review);
+    }
 
+    @Transactional
+    public Review uploadOrUpdate(Review review, ReviewRequestDto requestDto) {
+        User reviewUser = userRepository.findById(requestDto.getReviewUserid()).orElseThrow(
+                () -> new NullPointerException("해당 아이디가 존재하지 않습니다.")
+        );
+        User targetUser = userRepository.findById(requestDto.getReviewTargetUserId()).orElseThrow(
+                () -> new NullPointerException("해당 아이디가 존재하지 않습니다.")
+        );
+        review.update(requestDto, reviewUser, targetUser);
         return reviewRepository.save(review);
     }
 

@@ -12,7 +12,7 @@ import javax.persistence.*;
 @TableGenerator(
         name = "ENTERROOM_GENERATOR",
         table = "MY_SEQUENCES",
-        pkColumnValue = "ENTERROOM_SEQ", allocationSize = 50)
+        pkColumnValue = "ENTERROOM_SEQ", allocationSize = 30)
 public class EnterRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "ENTERROOM_GENERATOR")

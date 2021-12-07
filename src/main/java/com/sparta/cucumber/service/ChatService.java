@@ -2,6 +2,7 @@ package com.sparta.cucumber.service;
 
 import com.sparta.cucumber.dto.ChatRequestDto;
 import com.sparta.cucumber.models.ChatRoom;
+import com.sparta.cucumber.models.EnterRoom;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ChatRoomRepository;
 import com.sparta.cucumber.repository.EnterRoomRepository;
@@ -31,9 +32,7 @@ public class ChatService {
                 () -> new NullPointerException("해당 방이 존재하지 않습니다.")
         );
         Optional<EnterRoom> findEnterRoom = enterRoomRepository.findByUserAndRoom(user,chatRoom);
-        if(findEnterRoom.isPresent()){
-            enterRoomRepository.deleteById(findEnterRoom.get().getId());
-        }
+        findEnterRoom.ifPresent(enterRoom -> enterRoomRepository.deleteById(enterRoom.getId()));
     }
 
     @Transactional

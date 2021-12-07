@@ -3,7 +3,6 @@ package com.sparta.cucumber.models;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @TableGenerator(
         name = "CHATROOM_GENERATOR",
         table = "MY_SEQUENCES",
-        pkColumnValue = "CHATROOM_SEQ", allocationSize = 50)
+        pkColumnValue = "CHATROOM_SEQ", allocationSize = 30)
 public class ChatRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE,generator = "CHATROOM_GENERATOR")

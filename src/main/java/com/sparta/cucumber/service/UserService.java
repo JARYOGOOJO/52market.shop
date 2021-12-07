@@ -82,7 +82,7 @@ public class UserService {
                 .findByEmail(userDTO.getEmail())
                 .orElseThrow(()
                         -> new NullPointerException("잘못된 접근입니다."));
-        userDTO.setProfileImage(profileImage);
+        userDTO.setPicture(profileImage);
         User updateUser = user.updateImage(userDTO);
         return updateUser;
 
