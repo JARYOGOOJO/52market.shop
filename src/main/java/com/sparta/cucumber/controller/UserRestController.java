@@ -5,12 +5,10 @@ import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.security.UserDetailsImpl;
-import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.security.kakao.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.S3Uploader;
 import com.sparta.cucumber.service.UserService;
 import com.sparta.cucumber.utils.JwtTokenUtil;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +30,6 @@ public class UserRestController {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsServiceImpl userDetailsService;
     private final UserService userService;
-    private final KakaoOAuth2 kakaoOAuth2;
     private final S3Uploader s3Uploader;
 
     @PostMapping(value = "/login/kakao")
@@ -78,9 +75,8 @@ public class UserRestController {
         }
     }
 
-    @PutMapping("/api/users/{id}")
-    public ResponseEntity<User> updateProfileImage(@PathVariable("id") Long userId, UserRequestDto userDTO,
-                                                   @ModelAttribute MultipartFile profile) throws IOException {
+    @PutMapping("/api/users")
+    public ResponseEntity<User> updateProfileImage(UserRequestDto userDTO, @ModelAttribute MultipartFile profile) throws IOException {
         String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
         User updateUser = userService.updateProfileImage(userDTO, profileImage);
         return ResponseEntity.ok().body(updateUser);

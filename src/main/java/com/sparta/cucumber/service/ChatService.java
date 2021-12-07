@@ -31,9 +31,7 @@ public class ChatService {
                 () -> new NullPointerException("해당 방이 존재하지 않습니다.")
         );
         Optional<EnterRoom> findEnterRoom = enterRoomRepository.findByUserAndRoom(user,chatRoom);
-        if(findEnterRoom.isPresent()){
-            enterRoomRepository.deleteById(findEnterRoom.get().getId());
-        }
+        findEnterRoom.ifPresent(enterRoom -> enterRoomRepository.deleteById(enterRoom.getId()));
     }
 
     @Transactional

@@ -11,7 +11,7 @@ import javax.persistence.*;
 @TableGenerator(
         name = "MEET_GENERATOR",
         table = "MY_SEQUENCES",
-        pkColumnValue = "MEET_SEQ", allocationSize = 50)
+        pkColumnValue = "MEET_SEQ", allocationSize = 30)
 @Entity(name = "meet")
 public class Meet extends Timestamped {
     @Id

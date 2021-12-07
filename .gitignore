@@ -37,8 +37,4 @@ out/
 ### VS Code ###
 .vscode/
 /node_modules/
-/src/main/resources/static/dist/125e84d3c8f273bf0b7a.png
-/src/main/resources/static/dist/bundle.js
-/src/main/resources/static/dist/bundle.js.LICENSE.txt
-/src/main/resources/static/dist/d732f0f9cc860c3cea79.png
-/src/main/resources/static/package.json
+/src/main/resources/static/dist/

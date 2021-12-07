@@ -22,25 +22,6 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     public final LocationDistance location;
 
-    // 사진 업로드기닝이 없는 메소드
-//    @Transactional
-//    public Article uploadOrUpdate(ArticleRequestDto requestDto) {
-//        Long userId = requestDto.getUserId();
-//        User user = userRepository
-//                .findById(userId)
-//                .orElseThrow(
-//                        () -> new NullPointerException("잘못된 접근입니다."));
-//        Article article = Article.builder()
-//                .user(user)
-//                .title(requestDto.getTitle())
-//                .content(requestDto.getContent())
-//                .image(requestDto.getImage())
-//                .latitude(user.getLatitude())
-//                .longitude(user.getLongitude())
-//                .build();
-//        return articleRepository.save(article);
-//    }
-
     // S3에 사진 업로드 가능한 메소드
     @Transactional
     public Article upload(ArticleRequestDto requestDto, String imagePath) {

@@ -56,30 +56,30 @@ public class ChatController {
     }
 
     @MessageMapping("/chat/message")
-    public void message(ChatRequestDto chatRequestDto) throws Exception {
+    public void message(ChatRequestDto chatRequestDto) {
         log.debug("/chat/message");
-        log.debug("chatRequestDto : "+chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/chat/room/"+chatRequestDto.getRoomSubscribeId(),chatRequestDto.getMsg());
+        log.debug("chatRequestDto : " + chatRequestDto.toString());
+        messagingTemplate.convertAndSend("/sub/chat/room/" + chatRequestDto.getRoomSubscribeId(), chatRequestDto.getMsg());
     }
 
     @MessageMapping("/chat/message/All")
-    public void messageAll(ChatRequestDto chatRequestDto) throws Exception{
+    public void messageAll(ChatRequestDto chatRequestDto) {
         log.debug("/chat/message/All");
-        log.debug("chatRequestDto : "+chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/chat/room",chatRequestDto.getMsg());
+        log.debug("chatRequestDto : " + chatRequestDto.toString());
+        messagingTemplate.convertAndSend("/sub/chat/room", chatRequestDto.getMsg());
     }
 
     @MessageMapping("/article/notice/All")
-    public void articleNoticeAll(ChatRequestDto chatRequestDto) throws Exception{
+    public void articleNoticeAll(ChatRequestDto chatRequestDto) {
         log.debug("/article/notice/All");
-        log.debug("chatRequestDto : "+chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/article/notice/All",chatRequestDto.getMsg());
+        log.debug("chatRequestDto : " + chatRequestDto.toString());
+        messagingTemplate.convertAndSend("/sub/article/notice/All", chatRequestDto.getMsg());
     }
 
     @MessageMapping("/comment/notice/All")
-    public void commentNoticeAll(ChatRequestDto chatRequestDto) throws Exception{
+    public void commentNoticeAll(ChatRequestDto chatRequestDto) {
         log.debug("/comment/notice/All");
-        log.debug("chatRequestDto : "+chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/comment/notice/All",chatRequestDto.getMsg());
+        log.debug("chatRequestDto : " + chatRequestDto.toString());
+        messagingTemplate.convertAndSend("/sub/comment/notice/All", chatRequestDto.getMsg());
     }
 }

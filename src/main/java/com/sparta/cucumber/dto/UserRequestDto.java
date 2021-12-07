@@ -10,5 +10,5 @@ public class UserRequestDto {
     private String email;
     private Double latitude;
     private Double longitude;
-    private String profileImage;
+    private String picture;
 }

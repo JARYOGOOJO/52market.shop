@@ -13,7 +13,7 @@ import javax.persistence.*;
 @TableGenerator(
         name = "ARTICLE_GENERATOR",
         table = "MY_SEQUENCES",
-        pkColumnValue = "ARTICLE_SEQ", allocationSize = 50)
+        pkColumnValue = "ARTICLE_SEQ", allocationSize = 30)
 public class Article extends Timestamped {
 
     @Id
@@ -31,19 +31,6 @@ public class Article extends Timestamped {
     private String imageName;
     private Double latitude;
     private Double longitude;
-
-
-//    @Builder
-//    public Article(User user, String title,
-//                   String content, String image,
-//                   Double latitude, Double longitude) {
-//        this.user = user;
-//        this.title = title;
-//        this.content = content;
-//        this.image = image;
-//        this.latitude = latitude;
-//        this.longitude = longitude;
-//    }
 
     @Builder
     public Article(User user, String title,
