@@ -78,12 +78,12 @@ public class ArticleService {
     }
 
 
-    public Long removeArticle(Long userId, Long articleId) {
+    public Long removeArticle(User user, Long articleId) {
         Article article = articleRepository
                 .findById(articleId)
                 .orElseThrow(
                         () -> new NullPointerException("게시물이 존재하지 않습니다."));
-        if (Objects.equals(article.getUser().getId(), userId)) {
+        if (Objects.equals(article.getUser(), user)) {
             articleRepository.deleteById(articleId);
         }
         return articleId;
