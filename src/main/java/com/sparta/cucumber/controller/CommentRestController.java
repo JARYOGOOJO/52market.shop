@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 public class CommentRestController {
 
-    public final CommentService commentService;
+    private final CommentService commentService;
 
     @Operation(description = "댓글 id로 가져오기",method = "GET")
     @GetMapping("/api/comments/{id}")

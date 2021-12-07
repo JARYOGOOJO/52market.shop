@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class ArticleService {
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
-    public final LocationDistance location;
+    private final LocationDistance location;
 
     // S3에 사진 업로드 가능한 메소드
     @Transactional

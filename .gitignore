@@ -3,8 +3,7 @@ HELP.md
 build/
 /src/main/resources/*.properties
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+!**/src/**/**/build/
 
 ### STS ###
 .apt_generated
@@ -15,8 +14,7 @@ build/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+!**/src/**/**/bin/
 
 ### IntelliJ IDEA ###
 .idea
@@ -24,8 +22,7 @@ bin/
 *.iml
 *.ipr
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+!**/src/**/**/out/
 
 ### NetBeans ###
 /nbproject/private/
@@ -36,5 +33,6 @@ out/
 
 ### VS Code ###
 .vscode/
-/node_modules/
-application.yml
+src/main/resources/application.yml
+/src/main/resources/static/node_modules/
+/src/main/resources/static/package-lock.json

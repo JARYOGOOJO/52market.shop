@@ -5,7 +5,7 @@ import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.security.UserDetailsImpl;
-import com.sparta.cucumber.security.kakao.UserDetailsServiceImpl;
+import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.S3Uploader;
 import com.sparta.cucumber.service.UserService;
 import com.sparta.cucumber.utils.JwtTokenUtil;
@@ -42,7 +42,7 @@ public class UserRestController {
         final String token = jwtTokenUtil.generateToken(userDetails);
         System.out.println("token: " + token);
         System.out.println("user:: " + userDetails.getUsername());
-        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser());
+        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId());
         System.out.println(result);
         return ResponseEntity.ok(result);
     }
@@ -55,7 +55,7 @@ public class UserRestController {
         authenticate(userDTO.getName(), userDTO.getPassword());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser()));
+        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
     }
 
     @Operation(description = "로그인",method = "POST")
@@ -66,7 +66,7 @@ public class UserRestController {
         authenticate(userDTO.getName(), userDTO.getPassword());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser()));
+        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
     }
 
     private void authenticate(String username, String password) throws Exception {
