@@ -2,7 +2,6 @@ package com.sparta.cucumber.service;
 
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,7 +24,7 @@ class UserServiceTest {
         User user = User
                 .builder()
                 .name("test")
-                .password("111")
+                .encodedPassword("111")
                 .phoneNumber("010-1111-2222")
                 .email("test@naver.com")
                 .latitude(0.0)
@@ -48,7 +45,7 @@ class UserServiceTest {
         User user2 = User
                 .builder()
                 .name("test1")
-                .password("111")
+                .encodedPassword("111")
                 .phoneNumber("010-1111-2222")
                 .email("test@naver.com")
                 .latitude(0.0)
@@ -65,7 +62,7 @@ class UserServiceTest {
         User user = User
                 .builder()
                 .name("test")
-                .password("111")
+                .encodedPassword("111")
                 .phoneNumber("010-1111-2222")
                 .email("test@naver.com")
                 .latitude(0.0)
@@ -73,7 +70,7 @@ class UserServiceTest {
                 .build();
         User saveUser = userRepository.save(user);
 
-        User findUser = userRepository.findByNameAndPassword(saveUser.getName(),saveUser.getPassword());
+        User findUser = userRepository.findByNameAndPassword(saveUser.getName(), saveUser.getPassword()).orElse(null);
         assertThat(saveUser).isEqualTo(findUser);
     }
 }

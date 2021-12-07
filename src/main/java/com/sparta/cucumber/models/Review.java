@@ -1,5 +1,6 @@
 package com.sparta.cucumber.models;
 
+import com.sparta.cucumber.dto.ReviewRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 @TableGenerator(
         name = "REVIEW_GENERATOR",
         table = "MY_SEQUENCES",
-        pkColumnValue = "REVIEW_SEQ", allocationSize = 50)
+        pkColumnValue = "REVIEW_SEQ", allocationSize = 30)
 @Entity(name = "review")
 public class Review extends Timestamped {
     @Id
@@ -33,5 +34,12 @@ public class Review extends Timestamped {
         this.reviewTargetUser = to;
         this.score = star;
         this.content = content;
+    }
+
+    public void update(ReviewRequestDto requestDto, User reviewUser, User reviewTargetUser) {
+        this.reviewUser = reviewUser;
+        this.reviewTargetUser = reviewTargetUser;
+        this.score = requestDto.getScore();
+        this.content = requestDto.getContent();
     }
 }
