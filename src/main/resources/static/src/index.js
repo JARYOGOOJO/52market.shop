@@ -341,64 +341,6 @@ const getArticles = () => {
         });
 };
 
-export const sendMessage = () => {
-    let text = $('.message_input').val();
-    let message_side = 'right';
-    if (!text.trim()) return;
-    $('.message_input').val('');
-    let message = new Message({ text, message_side });
-    message.draw();
-    return $('.messages').animate({ scrollTop: $('.messages').prop('scrollHeight') }, 300);
-};
-
-export const send = () => event.which === 13 ? sendMessage() : null;
-const Message = function (arg) {
-    this.text = arg.text, this.message_side = arg.message_side;
-    this.draw = function (msg) {
-        return function () {
-            let $message = $($('.message_template').clone().html());
-            $message.addClass(msg.message_side).find('.text').html(msg.text);
-            $('.messages').append($message);
-            return setTimeout(() => $message.addClass('appeared'), 0);
-        };
-    }(this);
-    return this;
-};
-
-function setModal() {
-    $("main").append(`
-    <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
-        data-bs-keyboard="false" id="staticBackdrop" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form action="" enctype="multipart/form-data" method="post">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="mb-3">
-                            <label class="form-label" for="exampleFormControlInput1">Title</label>
-                            <input class="form-control" id="exampleFormControlInput1" placeholder="share your story"
-                                type="text">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="exampleFormControlTextarea1">Content</label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
-                        </div>
-                        <input accept="image/*" class="form-control" id="formFile" name="u_file" type="file">
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
-                        <button class="btn btn-primary" onclick="app.Write();" type="button">Understood</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>`)
-}
-
 function registerView() {
     document.querySelector("main").innerHTML = `
     <div class="col-lg-3 col-sm-4 m-auto">
@@ -450,12 +392,14 @@ function logInView() {
                    placeholder="Enter email" type="email">
             <small class="form-text text-muted" id="emailHelp"></small>
         </div>
+
         <div class="form-group">
             <label class="form-label-sm mt-2" for="exampleInputPassword1">Password</label>
             <input aria-describedby="pwdHelp" class="form-control" id="exampleInputPassword1"
                    onchange="app.passwordOK()" placeholder="Password" type="password">
             <small class="form-text text-muted" id="pwdHelp"></small>
         </div>
+
         <button class="btn mt-3 btn-lg login btn-login" disabled id="submit" onclick="app.login()" type="button">Login
         </button>
         <button class="btn mt-3 btn-lg login btn-kakao" id="custom-login-btn" onclick="app.loginWithKakao();">Kakao
@@ -504,20 +448,13 @@ function extractParam(word) {
 
 const router = () => {
     let path = location.hash.replace("#", "")
-    switch (path) {
-        case "":
-            getArticles();
-            setModal();
-            setTimeout(() => showWriteButton(), 1000);
-            break
-        case "signup":
-            registerView();
-            break
-        case "signin":
-            logInView();
-            break
-        case "chat":
-            chatView();
+    if (path === "") {
+        getArticles();
+        setTimeout(() => showWriteButton(), 1000);
+    } else if (path == "signup") {
+        registerView();
+    } else if (path == "signin") {
+        logInView();
     }
 }
 
