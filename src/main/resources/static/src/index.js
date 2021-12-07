@@ -2,7 +2,7 @@ import moment from 'moment';
 import axios from 'axios';
 import $ from 'jquery'
 import SockJS from 'sockjs-client'
-import { Stomp } from '@stomp/stompjs'
+import {Stomp} from '@stomp/stompjs'
 import '@popperjs/core'
 import 'bootstrap'
 import './css/bootstrap.min.css';
@@ -57,7 +57,7 @@ export function joinConnect(room) {
 export const sendMessage = () => {
     let msg = $('.message_input').val().toString();
     let roomId = location.hash.split("r=").pop()
-    const user = localStorage.getItem("userId");
+    const user = parseInt(localStorage.getItem("userId"));
     let message_side = 'right';
     if (!msg.trim()) return;
     $('.message_input').val('');
@@ -260,17 +260,17 @@ function callComments(idx) {
 }
 
 export function addComment(idx, data) {
-    const userId = localStorage.getItem("userId");
-    let { id, content, createdAt, user, article } = data;
-
+    const userId = parseInt(localStorage.getItem("userId"));
+    let {id, content, createdAt, user, article} = data;
+    console.log(userId)
     $(`#comment-list-${idx}`).append(`
     <li href="#" class="list-group-item list-group-item-action">
     <div class="d-flex w-100 justify-content-between">
       <small class="mb-1"><small class="mb-1 tit">${user.name}</small>
       ${moment(createdAt).fromNow()}</small>
       ${userId === user.id
-            ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${idx}, ${id})"></button>`
-            : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
+        ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${idx}, ${id})"></button>`
+        : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
     </div>
     <p class="mb-1">${content}</small>
   </li>`);
@@ -312,7 +312,7 @@ export function editArticle(idx) {
 }
 
 export function deleteArticle(idx) {
-    const userId = localStorage.getItem("userId");
+    const userId = parseInt(localStorage.getItem("userId"));
     axios
         .delete(`http://localhost:8080/api/article/${idx}/${userId}`, {})
         .then(function (response) {
@@ -328,7 +328,7 @@ export function deleteArticle(idx) {
 }
 
 export function Write() {
-    const User = localStorage.getItem("userId");
+    const User = parseInt(localStorage.getItem("userId"));
     const title = $("#exampleFormControlInput1").val();
     const content = $("#exampleFormControlTextarea1").val();
     const image = $("#formFile")[0].files[0];
@@ -361,7 +361,7 @@ const getArticles = () => {
     div.className = "card-deck";
     div.id = "articles-body"
     $("main > div").replaceWith(div);
-    const User = localStorage.getItem("userId");
+    const userId = parseInt(localStorage.getItem("userId"));
     axios
         .get("http://localhost:8080/api/articles")
         .then(function (response) {
