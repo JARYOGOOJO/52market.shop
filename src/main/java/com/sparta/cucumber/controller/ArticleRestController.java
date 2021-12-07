@@ -19,8 +19,8 @@ import java.util.List;
 @RestController
 public class ArticleRestController {
 
-    public final ArticleService articleService;
-    public final S3Uploader s3Uploader;
+    private final ArticleService articleService;
+    private final S3Uploader s3Uploader;
     
     @Operation(description = "게시글 검색",method = "GET")
     @GetMapping("/api/articles/{query}")

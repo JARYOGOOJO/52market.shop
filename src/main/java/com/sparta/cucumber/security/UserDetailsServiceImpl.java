@@ -1,8 +1,7 @@
-package com.sparta.cucumber.security.kakao;
+package com.sparta.cucumber.security;
 
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
-import com.sparta.cucumber.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

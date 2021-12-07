@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
@@ -84,8 +83,6 @@ public class UserService {
                 .orElseThrow(()
                         -> new NullPointerException("잘못된 접근입니다."));
         userDTO.setPicture(profileImage);
-        User updateUser = user.updateImage(userDTO);
-        return updateUser;
-
+        return user.updateImage(userDTO);
     }
 }

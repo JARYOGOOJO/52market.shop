@@ -2,7 +2,7 @@ import moment from 'moment';
 import axios from 'axios';
 import $ from 'jquery'
 import SockJS from 'sockjs-client'
-import {Stomp} from '@stomp/stompjs'
+import { Stomp } from '@stomp/stompjs'
 import '@popperjs/core'
 import 'bootstrap'
 import './css/bootstrap.min.css';
@@ -57,23 +57,22 @@ export function joinConnect(room) {
 export const sendMessage = () => {
     let msg = $('.message_input').val().toString();
     let roomId = location.hash.split("r=").pop()
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user.id;
+    const user = localStorage.getItem("userId");
     let message_side = 'right';
     if (!msg.trim()) return;
     $('.message_input').val('');
-    let message = new Message({text: msg, message_side});
+    let message = new Message({ text: msg, message_side });
     message.draw();
     stompClient.send(`http://localhost:8080/api/sub/${roomId}`, {},
-        JSON.stringify({msg, roomId, userId}))
-    return $('.messages').animate({scrollTop: $('.messages').prop('scrollHeight')}, 300);
+        JSON.stringify({ msg, roomId, userId }))
+    return $('.messages').animate({ scrollTop: $('.messages').prop('scrollHeight') }, 300);
 };
 
 export const showMessage = (msg) => {
     let message_side = 'left';
-    let message = new Message({text: msg, message_side});
+    let message = new Message({ text: msg, message_side });
     message.draw();
-    return $('.messages').animate({scrollTop: $('.messages').prop('scrollHeight')}, 300);
+    return $('.messages').animate({ scrollTop: $('.messages').prop('scrollHeight') }, 300);
 };
 
 function disconnect() {
@@ -85,18 +84,18 @@ function disconnect() {
 
 function roomName(roomSubscribeId, text) {
     stompClient.send("/api/room", {},
-        JSON.stringify({roomSubscribeId}))
+        JSON.stringify({ roomSubscribeId }))
 }
 
 export function loginWithKakao() {
     Kakao.Auth.login({
         success: function (authObj) {
             console.log(authObj)
-            axios.post("http://localhost:8080/login/kakao", {'token': `${authObj['access_token']}`})
+            axios.post("http://localhost:8080/login/kakao", { 'token': `${authObj['access_token']}` })
                 .then(response => {
                     console.log(response)
                     localStorage.setItem("token", response.data['token']);
-                    localStorage.setItem("user", JSON.stringify(response.data['user']));
+                    localStorage.setItem("userId", response.data['userId']);
                     location.href = '/index.html';
                 })
                 .catch((err) => console.log(err))
@@ -236,10 +235,10 @@ export const showWriteButton = () => {
 }
 
 export function writeComment(idx) {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = localStorage.getItem("user");
     const content = $(`#commentWrite-${idx}`).val();
     console.log(content);
-    const body = { articleId: idx, userId: user.id, content }
+    const body = { articleId: idx, userId, content }
     axios.post(`http://localhost:8080/api/comment`, body)
         .then(({ data }) => addComment(idx, data))
         .catch(function (error) {
@@ -261,7 +260,7 @@ function callComments(idx) {
 }
 
 export function addComment(idx, data) {
-    const User = JSON.parse(localStorage.getItem("user"));
+    const userId = localStorage.getItem("userId");
     let { id, content, createdAt, user, article } = data;
 
     $(`#comment-list-${idx}`).append(`
@@ -269,7 +268,7 @@ export function addComment(idx, data) {
     <div class="d-flex w-100 justify-content-between">
       <small class="mb-1"><small class="mb-1 tit">${user.name}</small>
       ${moment(createdAt).fromNow()}</small>
-      ${User?.id === user.id
+      ${userId === user.id
             ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${idx}, ${id})"></button>`
             : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
     </div>
@@ -305,7 +304,7 @@ export function editArticle(idx) {
             let { id, title, content, user } = response.data;
             let answer = window.prompt("수정할 내용을 입력해주세요.", content)
             if (answer) {
-                let send = { id, title, content: answer, userId: user.id };
+                let send = { id, title, content: answer, userId };
                 console.log(send)
                 axios.put(`http://localhost:8080/api/article/edit`, send).then(() => location.reload());
             }
@@ -313,9 +312,9 @@ export function editArticle(idx) {
 }
 
 export function deleteArticle(idx) {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = localStorage.getItem("userId");
     axios
-        .delete(`http://localhost:8080/api/article/${idx}/${user.id}`, {})
+        .delete(`http://localhost:8080/api/article/${idx}/${userId}`, {})
         .then(function (response) {
             console.log(response);
             window.location.href = "/";
@@ -329,12 +328,12 @@ export function deleteArticle(idx) {
 }
 
 export function Write() {
-    const User = JSON.parse(localStorage.getItem("user"));
+    const User = localStorage.getItem("userId");
     const title = $("#exampleFormControlInput1").val();
     const content = $("#exampleFormControlTextarea1").val();
     const image = $("#formFile")[0].files[0];
     const formData = new FormData();
-    formData.append('userId', User.id)
+    formData.append('userId', userId)
     formData.append('file', image)
     formData.append('title', title)
     formData.append('content', content)
@@ -362,7 +361,7 @@ const getArticles = () => {
     div.className = "card-deck";
     div.id = "articles-body"
     $("main > div").replaceWith(div);
-    const User = JSON.parse(localStorage.getItem("user"));
+    const User = localStorage.getItem("userId");
     axios
         .get("http://localhost:8080/api/articles")
         .then(function (response) {
@@ -404,7 +403,7 @@ const getArticles = () => {
                 <i class="far fa-edit"></i></button>
                 <button onclick="app.deleteArticle(${id})" title="delete" type="button" class="btn btn-success">
                 <i class="fas fa-trash-alt"></i></button>`
-                if (user.id === User?.id) {
+                if (user.id === userId) {
                     $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", my_contents));
                 } else {
                     $("#articles-body").append(temp_html.replace("{{__is_this_yours?__}}", no_not_mine));
