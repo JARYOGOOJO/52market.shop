@@ -192,8 +192,8 @@ export function addComment(idx, data) {
       <small class="mb-1"><small class="mb-1 tit">${user.name}</small>
       ${moment(createdAt).fromNow()}</small>
       ${User?.id === user.id
-        ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${idx}, ${id})"></button>`
-        : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
+            ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${idx}, ${id})"></button>`
+            : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
     </div>
     <p class="mb-1">${content}</small>
   </li>`);
@@ -214,7 +214,7 @@ export function letsMeet(idx, userId) {
 
 export function removeComment(idx, id) {
     axios.delete(`http://localhost:8080/api/comment/${id}`)
-        .then(({data}) => console.log(data))
+        .then(({ data }) => console.log(data))
         .then(() => {
             $(`#comment-list-${idx}`).empty();
             callComments(idx);
@@ -224,10 +224,10 @@ export function removeComment(idx, id) {
 export function editArticle(idx) {
     axios.get(`http://localhost:8080/api/article/${idx}`)
         .then(response => {
-            let {id, title, content, user} = response.data;
+            let { id, title, content, user } = response.data;
             let answer = window.prompt("수정할 내용을 입력해주세요.", content)
             if (answer) {
-                let send = {id, title, content: answer, userId: user.id};
+                let send = { id, title, content: answer, userId: user.id };
                 console.log(send)
                 axios.put(`http://localhost:8080/api/article/edit`, send).then(() => location.reload());
             }
