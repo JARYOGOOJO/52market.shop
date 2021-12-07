@@ -2,12 +2,14 @@ package com.sparta.cucumber.controller;
 
 import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.models.Article;
+import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.service.ArticleService;
 import com.sparta.cucumber.service.S3Uploader;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,10 +53,10 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(articles);
     }
 
-    @Operation(description = "유저 게시글 가져오기",method = "GET")
-    @GetMapping("/api/article/user/{id}")
-    public ResponseEntity<List<Article>> getUsersArticles (@PathVariable("id") Long userId) {
-        List<Article> articles = articleService.getUsersArticles(userId);
+    @Operation(description = "유저 게시글 가져오기", method = "GET")
+    @GetMapping("/api/article/user")
+    public ResponseEntity<List<Article>> getUsersArticles(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<Article> articles = articleService.getUsersArticles(userDetails.getUser().getId());
         return ResponseEntity.ok().body(articles);
     }
 
@@ -74,11 +76,11 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(article);
     }
 
-    @Operation(description = "게시글 삭제",method = "DELETE")
-    @DeleteMapping("/api/article/{id}/{userId}")
-    public ResponseEntity<Long> removeArticle(@PathVariable("userId") Long userId,
+    @Operation(description = "게시글 삭제", method = "DELETE")
+    @DeleteMapping("/api/article/{id}")
+    public ResponseEntity<Long> removeArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                               @PathVariable("id") Long articleId) {
-        Long id = articleService.removeArticle(userId, articleId);
+        Long id = articleService.removeArticle(userDetails.getUser(), articleId);
         s3Uploader.deleteImage(articleId);
         return ResponseEntity.ok().body(id);
     }
