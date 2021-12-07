@@ -76,8 +76,7 @@ public class S3Uploader {
         return Optional.empty();
     }
 
-    public String upload(UserRequestDto userDTO, MultipartFile multipartFile,
-                                                        String dirName) throws IOException {
+    public String upload(UserRequestDto userDTO, MultipartFile multipartFile, String dirName) throws IOException {
         File uploadFile = convert(multipartFile)  // 파일 변환할 수 없으면 에러
                 .orElseThrow(() -> new IllegalArgumentException("파일 변환 에러 MultipartFile -> File convert fail"));
         return upload(uploadFile, dirName, userDTO.getName());

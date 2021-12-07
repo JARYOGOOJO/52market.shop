@@ -1,6 +1,6 @@
 package com.sparta.cucumber.models;
 
-import  com.sparta.cucumber.dto.UserRequestDto;
+import com.sparta.cucumber.dto.UserRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @TableGenerator(
         name = "USER_GENERATOR",
         table = "MY_SEQUENCES",
-        pkColumnValue = "USER_SEQ", allocationSize = 50)
+        pkColumnValue = "USER_SEQ", allocationSize = 30)
 @Entity(name = "user")
 public class User extends Timestamped {
     @Id
@@ -31,9 +31,6 @@ public class User extends Timestamped {
     private Double star;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String profileImage;
-
-
 
     @Builder
     public User(String name, String email,
@@ -68,7 +65,7 @@ public class User extends Timestamped {
     }
 
     public User updateImage(UserRequestDto userDTO) {
-        this.profileImage = userDTO.getProfileImage();
+        this.picture = userDTO.getPicture();
         return this;
     }
 }
