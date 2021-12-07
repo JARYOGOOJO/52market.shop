@@ -400,7 +400,8 @@ function setModal() {
 }
 
 function registerView() {
-    document.querySelector("main").innerHTML = `<div class="col-lg-3 col-sm-4 m-auto">
+    document.querySelector("main").innerHTML = `
+    <div class="col-lg-3 col-sm-4 m-auto">
         <form action="" style="display: grid;">
             <div class="form-group">
                 <label class="form-label mt-4" for="exampleInputEmail1">Email address</label>
@@ -495,6 +496,10 @@ function chatView() {
             </div>
         </li>
     </div>`
+}
+
+function extractParam(word) {
+    return window.location.hash.split(word + "=").pop()
 }
 
 const router = () => {

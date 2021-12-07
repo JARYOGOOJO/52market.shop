@@ -75,4 +75,16 @@ public class UserService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return nickname;
     }
+
+    @Transactional
+    public User updateProfileImage(UserRequestDto userDTO, String profileImage) {
+        User user = userRepository
+                .findByEmail(userDTO.getEmail())
+                .orElseThrow(()
+                        -> new NullPointerException("잘못된 접근입니다."));
+        userDTO.setProfileImage(profileImage);
+        User updateUser = user.updateImage(userDTO);
+        return updateUser;
+
+    }
 }
