@@ -31,9 +31,6 @@ public class User extends Timestamped {
     private Double star;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String profileImage;
-
-
 
     @Builder
     public User(String name, String email,
@@ -68,7 +65,7 @@ public class User extends Timestamped {
     }
 
     public User updateImage(UserRequestDto userDTO) {
-        this.profileImage = userDTO.getProfileImage();
+        this.picture = userDTO.getPicture();
         return this;
     }
 }

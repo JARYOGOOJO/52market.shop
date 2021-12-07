@@ -56,10 +56,10 @@ public class ChatController {
     }
 
     @MessageMapping("/chat/message")
-    public void message(ChatRequestDto chatRequestDto) throws Exception {
+    public void message(ChatRequestDto chatRequestDto) {
         log.debug("/chat/message");
-        log.debug("chatRequestDto : "+chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/chat/room/"+chatRequestDto.getRoomSubscribeId(),chatRequestDto.getMsg());
+        log.debug("chatRequestDto : " + chatRequestDto.toString());
+        messagingTemplate.convertAndSend("/sub/chat/room/" + chatRequestDto.getRoomSubscribeId(), chatRequestDto.getMsg());
     }
 
     @MessageMapping("/chat/message/All")
@@ -77,9 +77,9 @@ public class ChatController {
     }
 
     @MessageMapping("/comment/notice/All")
-    public void commentNoticeAll(ChatRequestDto chatRequestDto) throws Exception{
+    public void commentNoticeAll(ChatRequestDto chatRequestDto) {
         log.debug("/comment/notice/All");
-        log.debug("chatRequestDto : "+chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/comment/notice/All",chatRequestDto.getMsg());
+        log.debug("chatRequestDto : " + chatRequestDto.toString());
+        messagingTemplate.convertAndSend("/sub/comment/notice/All", chatRequestDto.getMsg());
     }
 }

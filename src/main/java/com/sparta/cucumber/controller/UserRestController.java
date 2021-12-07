@@ -78,8 +78,7 @@ public class UserRestController {
     }
 
     @PutMapping("/api/users/{id}")
-    public ResponseEntity<User> updateProfileImage(@PathVariable("id") Long userId, UserRequestDto userDTO,
-                                                   @ModelAttribute MultipartFile profile) throws IOException {
+    public ResponseEntity<User> updateProfileImage(UserRequestDto userDTO, @ModelAttribute MultipartFile profile) throws IOException {
         String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
         User updateUser = userService.updateProfileImage(userDTO, profileImage);
         return ResponseEntity.ok().body(updateUser);
