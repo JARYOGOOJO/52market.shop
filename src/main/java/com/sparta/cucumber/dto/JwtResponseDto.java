@@ -1,6 +1,5 @@
 package com.sparta.cucumber.dto;
 
-import com.sparta.cucumber.models.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,5 +8,5 @@ import lombok.RequiredArgsConstructor;
 public class JwtResponseDto {
 
     private final String token;
-    private final User user;
+    private final Long userId;
 }

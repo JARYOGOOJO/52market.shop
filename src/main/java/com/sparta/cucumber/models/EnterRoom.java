@@ -17,13 +17,10 @@ public class EnterRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "ENTERROOM_GENERATOR")
     private Long id;
-
     @ManyToOne
     private User user;
-
     @ManyToOne
     private ChatRoom room;
-
     @Builder
     public EnterRoom(User user, ChatRoom room) {
         this.user = user;

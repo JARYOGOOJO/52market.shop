@@ -43,9 +43,10 @@ dependencies {
     implementation 'org.webjars:webjars-locator-core:0.48'
     implementation 'org.webjars:sockjs-client:1.5.1'
     implementation 'org.webjars:stomp-websocket:2.3.4'
-
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.13'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.13'
+    // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
+    implementation 'org.modelmapper:modelmapper:2.4.4'
 }
 
 test {
