@@ -1,4 +1,4 @@
-package com.sparta.cucumber.utils;
+package com.sparta.cucumber.config;
 
 import com.sparta.cucumber.security.JwtAuthenticationEntryPoint;
 import com.sparta.cucumber.security.JwtAuthenticationFilter;
@@ -42,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/docs/**").permitAll()
+                .antMatchers("/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

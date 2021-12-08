@@ -22,7 +22,6 @@ public class ReviewService {
         return reviewRepository.findAllByReviewTargetUser_Id(reviewTargetId);
     }
 
-
     @Transactional
     public Review uploadOrUpdate(ReviewRequestDto requestDto) {
         User reviewUser = userRepository.findById(requestDto.getReviewUserid()).orElseThrow(
@@ -31,23 +30,32 @@ public class ReviewService {
         User targetUser = userRepository.findById(requestDto.getReviewTargetUserId()).orElseThrow(
                 () -> new NullPointerException("해당 아이디가 존재하지 않습니다.")
         );
-
         Review review = Review.builder()
                 .from(reviewUser)
                 .to(targetUser)
                 .content(requestDto.getContent())
                 .star(requestDto.getScore())
                 .build();
-
         return reviewRepository.save(review);
     }
 
     @Transactional
-    public Long deleteReview(Long reviewId) {
+    public Review uploadOrUpdate(Review review, ReviewRequestDto requestDto) {
+        User reviewUser = userRepository.findById(requestDto.getReviewUserid()).orElseThrow(
+                () -> new NullPointerException("해당 아이디가 존재하지 않습니다.")
+        );
+        User targetUser = userRepository.findById(requestDto.getReviewTargetUserId()).orElseThrow(
+                () -> new NullPointerException("해당 아이디가 존재하지 않습니다.")
+        );
+        review.update(requestDto, reviewUser, targetUser);
+        return reviewRepository.save(review);
+    }
+
+    @Transactional
+    public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
                 () -> new NullPointerException("해당 게시글이 존재하지 않습니다.")
         );
         reviewRepository.deleteById(review.getId());
-        return review.getId();
     }
 }

@@ -44,4 +44,10 @@ public class CommentService {
     public List<Comment> getComments(Long articleId) {
         return commentRepository.findAllByArticle_Id(articleId);
     }
+
+    @Transactional
+    public Long checkAndDelete(Long commentId) {
+        commentRepository.deleteById(commentId);
+        return commentId;
+    }
 }
