@@ -1,7 +1,5 @@
 package com.sparta.cucumber.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,8 +14,7 @@ import javax.persistence.*;
 @TableGenerator(
         name = "COMMENT_GENERATOR",
         table = "MY_SEQUENCES",
-        pkColumnValue = "COMMENT_SEQ", allocationSize = 50)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+        pkColumnValue = "COMMENT_SEQ", allocationSize = 30)
 public class Comment extends Timestamped {
     @Id
     @Column(name = "comment_id")

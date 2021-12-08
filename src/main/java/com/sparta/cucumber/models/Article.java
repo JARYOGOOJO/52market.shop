@@ -1,12 +1,9 @@
 package com.sparta.cucumber.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sparta.cucumber.dto.ArticleRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -16,15 +13,14 @@ import javax.persistence.*;
 @TableGenerator(
         name = "ARTICLE_GENERATOR",
         table = "MY_SEQUENCES",
-        pkColumnValue = "ARTICLE_SEQ", allocationSize = 50)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
+        pkColumnValue = "ARTICLE_SEQ", allocationSize = 30)
 public class Article extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE,generator = "ARTICLE_GENERATOR")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user")
     private User user;
     @Column(length = 500, nullable = false)
@@ -36,23 +32,10 @@ public class Article extends Timestamped {
     private Double latitude;
     private Double longitude;
 
-
-//    @Builder
-//    public Article(User user, String title,
-//                   String content, String image,
-//                   Double latitude, Double longitude) {
-//        this.user = user;
-//        this.title = title;
-//        this.content = content;
-//        this.image = image;
-//        this.latitude = latitude;
-//        this.longitude = longitude;
-//    }
-
     @Builder
     public Article(User user, String title,
                    String content, String imagePath,
-                   String imageName,Double latitude,
+                   String imageName, Double latitude,
                    Double longitude) {
         this.user = user;
         this.title = title;
@@ -61,5 +44,10 @@ public class Article extends Timestamped {
         this.imageName = imageName;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Article update(ArticleRequestDto requestDto) {
+        this.content = requestDto.getContent();
+        return this;
     }
 }

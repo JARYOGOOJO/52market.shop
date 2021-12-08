@@ -43,7 +43,7 @@ class ArticleTest {
                 .builder()
                 .title(title)
                 .content(content)
-                .image(image)
+                .imagePath(image)
                 .user(user1)
                 .latitude(38.592252158153975)
                 .longitude(128.08723572001708)

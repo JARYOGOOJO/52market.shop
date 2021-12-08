@@ -8,11 +8,11 @@ import com.sparta.cucumber.repository.ChatRoomRepository;
 import com.sparta.cucumber.repository.EnterRoomRepository;
 import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -22,6 +22,19 @@ public class ChatService {
     private final UserRepository userRepository;
     private final EnterRoomRepository enterRoomRepository;
 
+
+    @Transactional
+    public void exitRoom(ChatRequestDto chatRequestDto){
+        User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
+                () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
+        );
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRequestDto.getRoomId()).orElseThrow(
+                () -> new NullPointerException("해당 방이 존재하지 않습니다.")
+        );
+        Optional<EnterRoom> findEnterRoom = enterRoomRepository.findByUserAndRoom(user,chatRoom);
+        findEnterRoom.ifPresent(enterRoom -> enterRoomRepository.deleteById(enterRoom.getId()));
+    }
+
     @Transactional
     public EnterRoom enterRoom(ChatRequestDto chatRequestDto){
         User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
@@ -30,6 +43,12 @@ public class ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRequestDto.getRoomId()).orElseThrow(
                 () -> new NullPointerException("해당 방이 존재하지 않습니다.")
         );
+
+        // 중복검사
+        Optional<EnterRoom> findEnterRoom = enterRoomRepository.findByUserAndRoom(user,chatRoom);
+        if(findEnterRoom.isPresent()){
+            return null;
+        }
 
         EnterRoom enterRoom = EnterRoom
                 .builder()
@@ -41,10 +60,9 @@ public class ChatService {
 
     @Transactional(readOnly = true)
     public ChatRoom getRoom(Long id){
-        ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow(
+        return chatRoomRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당 방이 존재하지 않습니다.")
         );
-        return chatRoom;
     }
 
     @Transactional(readOnly = true)
