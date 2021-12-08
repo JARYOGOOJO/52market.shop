@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers("/login/kakao").permitAll()
                 .antMatchers("/signup").permitAll()
+                .antMatchers("/sub/**", "/pub/**", "/room/**", "/ws-stomp/**").permitAll() // login!!
                 .antMatchers("/").permitAll()
                 .antMatchers("/docs/**").permitAll()
                 .antMatchers("/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**").permitAll()

@@ -12,82 +12,96 @@ import './aba5c3ead0';
 
 
 let userId = null;
+let config = {};
 Kakao.init("e1289217c77f4f46dc511544f119d102");
 
-const genRandomName = length => {
-    let name = '';
-    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ"+"abcdefghijklmnopqrstuvwxyz"+"0123456789';
-    let charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-        let number = Math.random() * charactersLength;
-        let index = Math.floor(number);
-        name += characters.charAt(index);
-    }
-    return name;
+export const send = () => event.which === 13 ? sendMessage() : null;
+
+const genRandomLongNumber = length => {
+    if (length < 1) return;
+    return Math.floor(Math.random() * 10 ** (length - 1))
 }
 
-let stompClient;
+function extractParam(word) {
+    return parseInt(window.location.hash.split(word + "=").pop())
+}
 
-export function connect() {
-    let socket = new SockJS('http://localhost:8080/api/ws-stomp');
+export function create() {
+    let socket = new SockJS('http://localhost:8080/ws-stomp');
     stompClient = Stomp.over(socket);
+    console.log(socket)
     stompClient.connect({}, (frame) => {
+        let room = genRandomLongNumber(10);
         console.log("connected");
-        let room = genRandomName(10);
         roomName(room)
-        chatView();
-        location.hash = `chat?r=${room}`;
-        stompClient.subscribe(`http://localhost:8080/api/sub/${room}`, (msg) => {
+        stompClient.subscribe(`http://localhost:8080/sub/chat/${room}`, (msg) => {
+            console.log(msg)
             showMessage(JSON.parse(msg.body).content);
         })
     })
 }
 
-export function joinConnect(room) {
-    let socket = new SockJS('http://localhost:8080/api/ws-stomp');
+export function connect(room) {
+    let socket = new SockJS('http://localhost:8080/ws-stomp');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, (frame) => {
+    console.log(socket)
+    stompClient.connect({}, () => {
         console.log("connected");
-        chatView();
-        location.hash = `chat?r=${room}`;
-        stompClient.subscribe(`http://localhost:8080/api/sub/${room}`, (msg) => {
+        roomName(room)
+        stompClient.subscribe(`http://localhost:8080/sub/chat/${room}`, (msg) => {
+            console.log(msg)
             showMessage(JSON.parse(msg.body).content);
         })
     })
+}
+
+function roomName(roomSubscribeId) {
+    stompClient.send("/api/room", {},
+        JSON.stringify({roomSubscribeId}))
+}
+
+export const disconnect = () => {
+    if (stompClient !== null) {
+        stompClient.disconnect();
+    }
+}
+
+class Message {
+    constructor(arg) {
+        this.msg = arg.msg, this.message_side = arg.message_side;
+        this.draw = function (msg) {
+            return function () {
+                let $message = $($('.message_template').clone().html());
+                $message.addClass(msg.message_side).find('.text').html(msg.msg);
+                $('.messages').append($message);
+                return setTimeout(() => $message.addClass('appeared'), 0);
+            };
+        }(this);
+        return this;
+    }
 }
 
 export const sendMessage = () => {
-    let msg = $('.message_input').val().toString();
-    let roomId = location.hash.split("r=").pop()
+    let messageInput = $('.message_input')
+    let msg = messageInput.val().toString();
+    if (!msg.trim()) return;
+    let roomId = extractParam("r");
     userId = parseInt(localStorage.getItem("userId"));
     let message_side = 'right';
-    if (!msg.trim()) return;
-    $('.message_input').val('');
-    let message = new Message({ text: msg, message_side });
+    messageInput.val('');
+    let message = new Message({msg, message_side});
     message.draw();
-    stompClient.send(`http://localhost:8080/api/sub/${roomId}`, {},
-        JSON.stringify({ msg, roomId, userId }))
-    return $('.messages').animate({ scrollTop: $('.messages').prop('scrollHeight') }, 300);
+    stompClient.send(`http://localhost:8080/pub/chat/message`, {},
+        JSON.stringify({msg, roomId, userId}))
+    return $('.messages').animate({scrollTop: $('.messages').prop('scrollHeight')}, 300);
 };
 
 export const showMessage = (msg) => {
     let message_side = 'left';
-    let message = new Message({ text: msg, message_side });
+    let message = new Message({msg, message_side});
     message.draw();
     return $('.messages').animate({ scrollTop: $('.messages').prop('scrollHeight') }, 300);
 };
-
-function disconnect() {
-    if (stompClient !== null) {
-        stompClient.disconnect();
-    }
-    console.log("disconnected")
-}
-
-function roomName(roomSubscribeId, text) {
-    stompClient.send("/api/room", {},
-        JSON.stringify({ roomSubscribeId }))
-}
 
 export function loginWithKakao() {
     Kakao.Auth.login({
@@ -420,20 +434,6 @@ const getArticles = () => {
         });
 };
 
-export const send = () => event.which === 13 ? sendMessage() : null;
-const Message = function (arg) {
-    this.text = arg.text, this.message_side = arg.message_side;
-    this.draw = function (msg) {
-        return function () {
-            let $message = $($('.message_template').clone().html());
-            $message.addClass(msg.message_side).find('.text').html(msg.text);
-            $('.messages').append($message);
-            return setTimeout(() => $message.addClass('appeared'), 0);
-        };
-    }(this);
-    return this;
-};
-
 function setModal() {
     $("main").append(`
     <div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
@@ -567,10 +567,6 @@ function chatView() {
     </div>`
 }
 
-function extractParam(word) {
-    return window.location.hash.split(word + "=").pop()
-}
-
 const router = () => {
     let path = location.hash.replace("#", "")
     switch (path) {
@@ -591,9 +587,11 @@ const router = () => {
     }
     if (path.startsWith("chat")) {
         chatView();
+        connect(extractParam("r"))
     }
 }
 
 window.addEventListener('hashchange', router)
+
 
 router();
