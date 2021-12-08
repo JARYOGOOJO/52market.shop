@@ -17,7 +17,7 @@ import javax.persistence.*;
 public class Article extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "ARTICLE_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "ARTICLE_GENERATOR")
     private Long id;
 
     @ManyToOne
