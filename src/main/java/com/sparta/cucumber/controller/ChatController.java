@@ -66,8 +66,9 @@ public class ChatController {
     @MessageMapping("/chat/message")
     public void message(ChatRequestDto chatRequestDto) {
         log.debug("/chat/message");
+        System.out.println("chatRequestDto : "+chatRequestDto.toString());
         log.debug("chatRequestDto : " + chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/chat/room/" + chatRequestDto.getRoomSubscribeId(), chatRequestDto.getMsg());
+        messagingTemplate.convertAndSend("/api/sub/chat/room/" + chatRequestDto.getRoomSubscribeId(), chatRequestDto.getMsg());
     }
 
     @Operation(description = "전체 메세지 보내기",method = "MESSAGE")
@@ -75,7 +76,7 @@ public class ChatController {
     public void messageAll(ChatRequestDto chatRequestDto) {
         log.debug("/chat/message/All");
         log.debug("chatRequestDto : " + chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/chat/room", chatRequestDto.getMsg());
+        messagingTemplate.convertAndSend("/api/sub/chat/room", chatRequestDto.getMsg());
     }
 
     @Operation(description = "게시글 작성시 전체알림",method = "MESSAGE")
@@ -83,7 +84,7 @@ public class ChatController {
     public void articleNoticeAll(ChatRequestDto chatRequestDto) {
         log.debug("/article/notice/All");
         log.debug("chatRequestDto : " + chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/article/notice/All", chatRequestDto.getMsg());
+        messagingTemplate.convertAndSend("/api/sub/article/notice/All", chatRequestDto.getMsg());
     }
 
     @Operation(description = "댓글 작성시 전체알림")
@@ -91,6 +92,6 @@ public class ChatController {
     public void commentNoticeAll(ChatRequestDto chatRequestDto) {
         log.debug("/comment/notice/All");
         log.debug("chatRequestDto : " + chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/comment/notice/All", chatRequestDto.getMsg());
+        messagingTemplate.convertAndSend("/api/sub/comment/notice/All", chatRequestDto.getMsg());
     }
 }
