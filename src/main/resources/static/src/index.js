@@ -10,11 +10,13 @@ import './css/main.css'
 import './kakao'
 import './aba5c3ead0';
 
+
+let userId = null;
 Kakao.init("e1289217c77f4f46dc511544f119d102");
 
 const genRandomName = length => {
     let name = '';
-    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ"+"abcdefghijklmnopqrstuvwxyz"+"0123456789';
     let charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
         let number = Math.random() * charactersLength;
@@ -57,7 +59,7 @@ export function joinConnect(room) {
 export const sendMessage = () => {
     let msg = $('.message_input').val().toString();
     let roomId = location.hash.split("r=").pop()
-    const user = parseInt(localStorage.getItem("userId"));
+    userId = parseInt(localStorage.getItem("userId"));
     let message_side = 'right';
     if (!msg.trim()) return;
     $('.message_input').val('');
@@ -235,7 +237,7 @@ export const showWriteButton = () => {
 }
 
 export function writeComment(idx) {
-    const userId = localStorage.getItem("user");
+    userId = parseInt(localStorage.getItem("userId"));
     const content = $(`#commentWrite-${idx}`).val();
     console.log(content);
     const body = { articleId: idx, userId, content }
@@ -260,7 +262,7 @@ function callComments(idx) {
 }
 
 export function addComment(idx, data) {
-    const userId = parseInt(localStorage.getItem("userId"));
+    userId = parseInt(localStorage.getItem("userId"));
     let { id, content, createdAt, user } = data;
     console.log(userId)
     $(`#comment-list-${idx}`).append(`
@@ -312,7 +314,7 @@ export function editArticle(idx) {
 }
 
 export function deleteArticle(idx) {
-    const userId = parseInt(localStorage.getItem("userId"));
+    userId = parseInt(localStorage.getItem("userId"));
     axios
         .delete(`http://localhost:8080/api/article/${idx}/${userId}`, {})
         .then(function (response) {
@@ -328,7 +330,7 @@ export function deleteArticle(idx) {
 }
 
 export function Write() {
-    const User = parseInt(localStorage.getItem("userId"));
+    userId = parseInt(localStorage.getItem("userId"));
     const title = $("#exampleFormControlInput1").val();
     const content = $("#exampleFormControlTextarea1").val();
     const image = $("#formFile")[0].files[0];
@@ -361,14 +363,14 @@ const getArticles = () => {
     div.className = "card-deck";
     div.id = "articles-body"
     $("main > div").replaceWith(div);
-    const userId = parseInt(localStorage.getItem("userId"));
+    userId = parseInt(localStorage.getItem("userId"));
     axios
         .get("http://localhost:8080/api/articles")
         .then(function (response) {
-            const { data } = response;
+            const {data} = response;
             data.forEach((article) => {
-                const { id, title, content, user, imagePath, imageName } = article;
-                const { name } = user;
+                const {id, title, content, user, imagePath, imageName} = article;
+                const {name} = user;
                 let temp_html = `<!-- Card -->
                 <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
                     <div class="card" style="margin: 10px; min-width: 230px;">

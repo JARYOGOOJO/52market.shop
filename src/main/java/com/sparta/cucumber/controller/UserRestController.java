@@ -13,7 +13,6 @@ import com.sparta.cucumber.utils.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -34,7 +33,6 @@ public class UserRestController {
     private final UserDetailsServiceImpl userDetailsService;
     private final UserService userService;
     private final S3Uploader s3Uploader;
-    private final ModelMapper modelMapper;
 
     @Operation(description = "카카오 로그인",method = "POST")
     @PostMapping(value = "/login/kakao")
@@ -77,7 +75,7 @@ public class UserRestController {
     public ResponseEntity<UserResponseDto> updateProfileImage(UserRequestDto userDTO, @ModelAttribute MultipartFile profile) throws IOException {
         String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
         User user = userService.updateProfileImage(userDTO, profileImage);
-        UserResponseDto updateUser = modelMapper.map(user, UserResponseDto.class);
+        UserResponseDto updateUser = new UserResponseDto(user);
         return ResponseEntity.ok().body(updateUser);
     }
 
