@@ -37,24 +37,18 @@ public class UserRestController {
     @Operation(description = "카카오 로그인",method = "POST")
     @PostMapping(value = "/login/kakao")
     public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
-        System.out.println(socialLoginDto);
         String username = userService.kakaoLogin(socialLoginDto.getToken());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
         final String token = jwtTokenUtil.generateToken(userDetails);
-        System.out.println("token: " + token);
-        System.out.println("user:: " + userDetails.getUsername());
         JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId());
-        System.out.println(result);
         return ResponseEntity.ok(result);
     }
 
     @Operation(description = "회원가입",method = "POST")
     @PostMapping("/api/signup")
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) throws Exception {
-        System.out.println(userDTO.toString());
-        userService.signup(userDTO);
-        authenticate(userDTO.getName(), userDTO.getPassword());
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
+        authenticate(userDTO.getEmail(), userDTO.getPassword());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
     }
@@ -62,10 +56,8 @@ public class UserRestController {
     @Operation(description = "로그인",method = "POST")
     @PostMapping("/api/signin")
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) throws Exception {
-        System.out.println(userDTO.toString());
-        userService.signin(userDTO);
-        authenticate(userDTO.getName(), userDTO.getPassword());
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
+        authenticate(userDTO.getEmail(), userDTO.getPassword());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
     }
@@ -79,9 +71,9 @@ public class UserRestController {
         return ResponseEntity.ok().body(updateUser);
     }
 
-    private void authenticate(String username, String password) throws Exception {
+    private void authenticate(String email, String password) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
