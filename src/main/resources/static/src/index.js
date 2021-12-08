@@ -261,7 +261,7 @@ function callComments(idx) {
 
 export function addComment(idx, data) {
     const userId = parseInt(localStorage.getItem("userId"));
-    let {id, content, createdAt, user, article} = data;
+    let { id, content, createdAt, user } = data;
     console.log(userId)
     $(`#comment-list-${idx}`).append(`
     <li href="#" class="list-group-item list-group-item-action">
@@ -269,8 +269,8 @@ export function addComment(idx, data) {
       <small class="mb-1"><small class="mb-1 tit">${user.name}</small>
       ${moment(createdAt).fromNow()}</small>
       ${userId === user.id
-        ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${idx}, ${id})"></button>`
-        : `<button onclick="app.letsMeet(${article.id}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
+            ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${idx}, ${id})"></button>`
+            : `<button onclick="app.letsMeet(${idx}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
     </div>
     <p class="mb-1">${content}</small>
   </li>`);

@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@NamedEntityGraph(
+        name = "user"
+)
+
 @Getter
 @NoArgsConstructor
 @TableGenerator(

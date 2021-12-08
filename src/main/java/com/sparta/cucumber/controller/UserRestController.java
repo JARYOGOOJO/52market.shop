@@ -3,6 +3,7 @@ package com.sparta.cucumber.controller;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
+import com.sparta.cucumber.dto.UserResponseDto;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.UserDetailsServiceImpl;
@@ -12,6 +13,7 @@ import com.sparta.cucumber.utils.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,6 +34,7 @@ public class UserRestController {
     private final UserDetailsServiceImpl userDetailsService;
     private final UserService userService;
     private final S3Uploader s3Uploader;
+    private final ModelMapper modelMapper;
 
     @Operation(description = "카카오 로그인",method = "POST")
     @PostMapping(value = "/login/kakao")
@@ -69,6 +72,15 @@ public class UserRestController {
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
     }
 
+    @Operation(description = "유저 프로필사진 변경",method = "PUT")
+    @PutMapping("/api/users")
+    public ResponseEntity<UserResponseDto> updateProfileImage(UserRequestDto userDTO, @ModelAttribute MultipartFile profile) throws IOException {
+        String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
+        User user = userService.updateProfileImage(userDTO, profileImage);
+        UserResponseDto updateUser = modelMapper.map(user, UserResponseDto.class);
+        return ResponseEntity.ok().body(updateUser);
+    }
+
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -77,13 +89,5 @@ public class UserRestController {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
-    }
-
-    @Operation(description = "유저 프로필사진 변경",method = "PUT")
-    @PutMapping("/api/users")
-    public ResponseEntity<User> updateProfileImage(UserRequestDto userDTO, @ModelAttribute MultipartFile profile) throws IOException {
-        String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
-        User updateUser = userService.updateProfileImage(userDTO, profileImage);
-        return ResponseEntity.ok().body(updateUser);
     }
 }

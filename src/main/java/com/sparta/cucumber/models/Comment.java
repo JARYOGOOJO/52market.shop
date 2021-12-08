@@ -1,5 +1,6 @@
 package com.sparta.cucumber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Comment extends Timestamped {
     private User user;
     @ManyToOne
     @JoinColumn(name = "article")
+    @JsonIgnore
     private Article article;
 
     @Builder

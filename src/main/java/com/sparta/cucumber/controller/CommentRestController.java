@@ -25,14 +25,14 @@ public class CommentRestController {
         return ResponseEntity.ok().body(comments);
     }
 
-    @Operation(description = "게시글 작성",method = "POST")
+    @Operation(description = "댓글 작성",method = "POST")
     @PostMapping("/api/comment")
     public ResponseEntity<Comment> writeComment(@RequestBody CommentRequestDto requestDto) {
         Comment comment = commentService.uploadOrUpdate(requestDto);
         return ResponseEntity.ok().body(comment);
     }
 
-    @Operation(description = "게시글 삭제",method = "DELETE")
+    @Operation(description = "댓글 삭제",method = "DELETE")
     @DeleteMapping("/api/comment/{id}")
     public ResponseEntity<Long> removeComment(@PathVariable("id") Long commentId) {
         Long result = commentService.checkAndDelete(commentId);
