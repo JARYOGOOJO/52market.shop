@@ -83,8 +83,6 @@ public class UserService {
                 .orElseThrow(()
                         -> new NullPointerException("잘못된 접근입니다."));
         userDTO.setPicture(profileImage);
-        User updateUser = user.updateImage(userDTO);
-        return updateUser;
-
+        return user.updateImage(userDTO);
     }
 }

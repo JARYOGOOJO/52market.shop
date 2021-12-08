@@ -1,6 +1,7 @@
 package com.sparta.cucumber.security;
 
 import com.sparta.cucumber.models.User;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,14 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+@Getter
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    public final User user;
-
-    public User getUser() {
-        return user;
-    }
+    private final User user;
 
     @Override
     public String getPassword() {
