@@ -47,8 +47,10 @@ public class UserRestController {
     @Operation(description = "회원가입",method = "POST")
     @PostMapping("/api/signup")
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) throws Exception {
+        System.out.println(userDTO);
+        userService.signup(userDTO);
         authenticate(userDTO.getEmail(), userDTO.getPassword());
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getEmail());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
     }
@@ -56,15 +58,17 @@ public class UserRestController {
     @Operation(description = "로그인",method = "POST")
     @PostMapping("/api/signin")
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) throws Exception {
+        System.out.println(userDTO);
         authenticate(userDTO.getEmail(), userDTO.getPassword());
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getEmail());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
     }
 
-    @Operation(description = "유저 프로필사진 변경",method = "PUT")
+    @Operation(description = "유저 프로필사진 변경", method = "PUT")
     @PutMapping("/api/users")
-    public ResponseEntity<UserResponseDto> updateProfileImage(UserRequestDto userDTO, @ModelAttribute MultipartFile profile) throws IOException {
+    public ResponseEntity<UserResponseDto> updateProfileImage(UserRequestDto userDTO,
+                                                              @ModelAttribute MultipartFile profile) throws IOException {
         String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
         User user = userService.updateProfileImage(userDTO, profileImage);
         UserResponseDto updateUser = new UserResponseDto(user);

@@ -98,7 +98,7 @@ export function loginWithKakao() {
                     console.log(response)
                     localStorage.setItem("token", response.data['token']);
                     localStorage.setItem("userId", response.data['userId']);
-                    location.href = '/index.html';
+                    location.hash = '';
                 })
                 .catch((err) => console.log(err))
         },
@@ -122,15 +122,9 @@ export function login() {
             console.log(response);
             const { data } = response;
             if (data) {
-                const { id, email } = data;
-                console.log("id", id, "email", email);
-                localStorage.setItem(
-                    "user",
-                    JSON.stringify({ id: id, email: email })
-                );
-                const User = JSON.parse(localStorage.getItem("user"));
-                console.log("User", User);
-                window.location.href = "/";
+                localStorage.setItem("token", response.data['token']);
+                localStorage.setItem("userId", response.data['userId']);
+                location.hash = '';
             }
         })
         .catch(function (error) {
@@ -164,18 +158,9 @@ export function signup() {
     })
         .then(function (response) {
             console.log(response);
-            const { data } = response;
-            const { id, name } = data;
-            console.log(id, name)
-            //   console.log("id", id, "name", name);
-            //   localStorage.setItem(
-            //     "user",
-            //     JSON.stringify({ id: id, name: name })
-            //   );
-
-            //   const User = JSON.parse(localStorage.getItem("user"));
-            //   console.log("User", User);
-            window.location.href = "/login.html";
+            localStorage.setItem("token", response.data['token']);
+            localStorage.setItem("userId", response.data['userId']);
+            location.hash = '';
         })
         .catch(function (error) {
             console.log(error);
