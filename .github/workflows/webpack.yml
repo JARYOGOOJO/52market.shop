@@ -11,10 +11,6 @@ jobs:
     strategy:
       matrix:
         node-version: [ 12.x, 14.x, 16.x ]
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: 'ap-northeast-2'
 
     steps:
       - name: Checkout source code.
@@ -29,6 +25,16 @@ jobs:
         run: |
           cd src/main/resources/static
           npm install
-          npx webpack build
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION }} --paths "/*"
+          npx webpack build 
           aws s3 sync dist/ s3://52market.shop/ --acl public-read
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'ap-northeast-2'
+
+      - name: Invalidate cache CloudFront
+        uses: chetan/invalidate-cloudfront-action@master
+        env:
+          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
+          PATHS: '/index.html'
+          continue-on-error: true
