@@ -17,6 +17,21 @@ Kakao.init("e1289217c77f4f46dc511544f119d102");
     axios.defaults.headers.common = {Authorization: `Bearer ${token}`}
 })()
 
+const genRandomName = length => {
+    let name = '';
+    let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz" + "0123456789";
+    let charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        let number = Math.random() * charactersLength;
+        let index = Math.floor(number);
+        name += characters.charAt(index);
+    }
+    return name;
+}
+
+const genLongNumber = length => {
+
+}
 
 export function loginWithKakao() {
     Kakao.Auth.login({
