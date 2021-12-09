@@ -38,4 +38,4 @@ jobs:
         env:
           DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
           PATHS: '/index.html'
-        continue-on-error: true
+          continue-on-error: true
