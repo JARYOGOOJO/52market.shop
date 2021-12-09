@@ -33,6 +33,11 @@ jobs:
           format: YYYY-MM-DDTHH-mm-ss
           utcOffset: "+09:00"
 
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@887e1a09ab96ae944ca26e6f561f31e6ac5a5b49
+        with:
+          arguments: build
+
       - name: Generate deployment package
         run: |
           mkdir -p deploy
