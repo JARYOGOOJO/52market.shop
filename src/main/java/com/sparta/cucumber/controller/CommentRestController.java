@@ -25,8 +25,8 @@ public class CommentRestController {
         return ResponseEntity.ok().body(comments);
     }
 
-    @Operation(description = "댓글 작성",method = "POST")
-    @PostMapping("/api/comment")
+    @Operation(description = "댓글 작성", method = "POST")
+    @PostMapping("/api/comments")
     public ResponseEntity<Comment> writeComment(@RequestBody CommentRequestDto requestDto) {
         Comment comment = commentService.uploadOrUpdate(requestDto);
         return ResponseEntity.ok().body(comment);

@@ -21,14 +21,14 @@ public class ReviewRestController {
     private final ReviewRepository reviewRepository;
 
 
-    @Operation(description = "리뷰 id로 가져오기",method = "GET")
-    @GetMapping("/api/{id}/reviews")
+    @Operation(description = "리뷰 id로 가져오기", method = "GET")
+    @GetMapping("/api/reviews/{id}")
     public List<Review> getReviews(@PathVariable("id") Long reviewTargetId) {
         return reviewService.getReviews(reviewTargetId);
     }
 
-    @Operation(description = "리뷰 저장하기",method = "POST")
-    @PostMapping("/api/review")
+    @Operation(description = "리뷰 저장하기", method = "POST")
+    @PostMapping("/api/reviews")
     public ResponseEntity<Review> writeReview(@RequestBody ReviewRequestDto requestDto) {
         Review review = reviewService.uploadOrUpdate(requestDto);
         return ResponseEntity.ok().body(review);
@@ -43,8 +43,8 @@ public class ReviewRestController {
     }
 
     // delete 기능을 만들지 논의가 필요할 듯 합니다
-    @Operation(description = "리뷰 삭제하기",method = "DELETE")
-    @DeleteMapping("/api/review/{id}")
+    @Operation(description = "리뷰 삭제하기", method = "DELETE")
+    @DeleteMapping("/api/reviews/{id}")
     public ResponseEntity<Long> deleteReview(@PathVariable("id") Long reviewId) {
         reviewService.deleteReview(reviewId);
         return ResponseEntity.ok().body(reviewId);

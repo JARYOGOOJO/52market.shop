@@ -30,7 +30,9 @@ const genRandomName = length => {
 }
 
 const genLongNumber = length => {
-
+    if (length < 1) return;
+    let number = Math.random() * (10 ** (length));
+    return Math.floor(number);
 }
 
 export function loginWithKakao() {

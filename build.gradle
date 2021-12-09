@@ -45,6 +45,9 @@ dependencies {
     implementation 'org.webjars:stomp-websocket:2.3.4'
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     implementation 'org.springdoc:springdoc-openapi-ui:1.5.13'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    implementation 'io.springfox:springfox-swagger2:3.0.0'
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     implementation 'org.modelmapper:modelmapper:2.4.4'
 }

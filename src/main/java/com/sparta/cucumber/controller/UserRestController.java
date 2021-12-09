@@ -70,7 +70,7 @@ public class UserRestController {
     }
 
     @Operation(description = "유저 프로필사진 변경", method = "PUT")
-    @PutMapping("/user/update")
+    @PutMapping("/user/profile")
     public ResponseEntity<UserResponseDto> updateProfileImage(UserRequestDto userDTO,
                                                               @ModelAttribute MultipartFile profile) throws IOException {
         String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
