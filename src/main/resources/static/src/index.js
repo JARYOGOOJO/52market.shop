@@ -39,7 +39,7 @@ export function loginWithKakao() {
     Kakao.Auth.login({
         success: function (authObj) {
             console.log(authObj)
-            axios.post("http://localhost:8080/user/kakao", {'token': `${authObj['access_token']}`})
+            axios.post("http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/user/kakao", {'token': `${authObj['access_token']}`})
                 .then(response => {
                     console.log(response)
                     localStorage.setItem("token", response.data['token']);
@@ -61,7 +61,7 @@ export function login() {
     if (!(email && password)) {
         alert("올바른 아이디와 비밀번호를 입력해주세요.")
     }
-    axios.post("http://localhost:8080/user/signin", {
+    axios.post("http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/user/signin", {
         email: email,
         password: password,
     })
@@ -96,7 +96,7 @@ export function signup() {
     const password = $("#exampleInputPassword1").val();
     const repassword = $("#exampleInputPassword2").val();
     if (password !== repassword) return;
-    axios.post("http://localhost:8080/user/signup", {
+    axios.post("http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/user/signup", {
         email: email,
         name: name,
         phoneNumber: phone,
@@ -175,7 +175,7 @@ export function writeComment(idx) {
     const content = $(`#commentWrite-${idx}`).val();
     console.log(content);
     const body = { articleId: idx, userId, content }
-    axios.post(`http://localhost:8080/api/comment`, body)
+    axios.post(`http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/api/comment`, body)
         .then(({ data }) => addComment(idx, data))
         .catch(function (error) {
             // handle error
@@ -185,7 +185,7 @@ export function writeComment(idx) {
 
 function callComments(idx) {
     axios
-        .get(`http://localhost:8080/api/comments/${idx}`)
+        .get(`http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/api/comments/${idx}`)
         .then((response) => {
             let { data } = response
             console.log(data)
@@ -218,7 +218,7 @@ export function letsMeet(idx, userId) {
         articleId: idx,
         commenterId: userId
     }
-    axios.post(`http://localhost:8080/api/meet`, body)
+    axios.post(`http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/api/meet`, body)
         .then((response) => {
             console.log(response.data);
             location.hash = "chat";
@@ -226,7 +226,7 @@ export function letsMeet(idx, userId) {
 }
 
 export function removeComment(idx, id) {
-    axios.delete(`http://localhost:8080/api/comment/${id}`)
+    axios.delete(`http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/api/comment/${id}`)
         .then(({ data }) => console.log(data))
         .then(() => {
             $(`#comment-list-${idx}`).empty();
@@ -235,14 +235,14 @@ export function removeComment(idx, id) {
 }
 
 export function editArticle(idx) {
-    axios.get(`http://localhost:8080/api/article/${idx}`)
+    axios.get(`http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/api/article/${idx}`)
         .then(response => {
             let { id, title, content, user } = response.data;
             let answer = window.prompt("수정할 내용을 입력해주세요.", content)
             if (answer) {
                 let send = { id, title, content: answer, userId };
                 console.log(send)
-                axios.put(`http://localhost:8080/api/article/edit`, send).then(() => location.reload());
+                axios.put(`http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/api/article/edit`, send).then(() => location.reload());
             }
         })
 }
@@ -250,7 +250,7 @@ export function editArticle(idx) {
 export function deleteArticle(idx) {
     userId = parseInt(localStorage.getItem("userId"));
     axios
-        .delete(`http://localhost:8080/api/article/${idx}`)
+        .delete(`http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/api/article/${idx}`)
         .then(function (response) {
             console.log(response);
             location.reload();
@@ -273,7 +273,7 @@ export function Write() {
     formData.append('content', content)
 
     axios
-        .post("http://localhost:8080/api/article/write", formData)
+        .post("http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/api/article/write", formData)
         .then(function (response) {
             console.log(response);
             window.location.href = "/";
@@ -298,7 +298,7 @@ const getArticles = () => {
     $("main > div").replaceWith(div);
     userId = parseInt(localStorage.getItem("userId"));
     axios
-        .get("http://localhost:8080/api/articles")
+        .get("http://52market-env.eba-hqn3ny4e.ap-northeast-2.elasticbeanstalk.com/api/articles")
         .then(function (response) {
             const {data} = response;
             data.forEach((article) => {
