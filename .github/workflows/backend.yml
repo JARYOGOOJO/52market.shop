@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-java@master
         with:
           java-version: '8'
-          distribution: 'adopt'
+          distribution: 'zulu'
 
       - run: chmod +x ./gradlew
         shell: bash
