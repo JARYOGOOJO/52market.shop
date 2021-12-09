@@ -26,17 +26,18 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
 
+      - run: chmod +x ./gradlew
+        shell: bash
+
+      - run: ./gradlew clean build
+        shell: bash
+
       - name: Get current time
         uses: 1466587594/get-current-time@master
         id: current-time
         with:
           format: YYYY-MM-DDTHH-mm-ss
           utcOffset: "+09:00"
-
-      - name: Build with Gradle
-        uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
-        with:
-          arguments: build
 
       - name: Generate deployment package
         run: |
