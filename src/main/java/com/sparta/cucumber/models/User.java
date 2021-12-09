@@ -38,16 +38,17 @@ public class User extends Timestamped {
 
     @Builder
     public User(String name, String email,
-                String picture, String encodedPassword,
+                String picture, String password,
                 String phoneNumber, Double latitude, Double longitude) {
         this.name = name;
         this.email = email;
         this.picture = picture;
-        this.password = encodedPassword;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.latitude = latitude;
         this.longitude = longitude;
         this.star = 0.0;
+        this.role = Role.USER;
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
