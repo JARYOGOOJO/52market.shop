@@ -13,6 +13,12 @@ import './aba5c3ead0';
 
 let userId = null;
 Kakao.init("e1289217c77f4f46dc511544f119d102");
+let header = {};
+
+(function () {
+    let token = localStorage.getItem("token");
+    header = {Authorization: `Bearer ${token}`}
+})()
 
 const genRandomName = length => {
     let name = '';
@@ -117,7 +123,7 @@ export function login() {
     axios.post("http://localhost:8080/api/signin", {
         email: email,
         password: password,
-    })
+    }, header)
         .then(function (response) {
             console.log(response);
             const { data } = response;
@@ -155,7 +161,7 @@ export function signup() {
         password: password,
         latitude: latitude,
         longitude: longitude
-    })
+    }, header)
         .then(function (response) {
             console.log(response);
             localStorage.setItem("token", response.data['token']);
@@ -226,7 +232,7 @@ export function writeComment(idx) {
     const content = $(`#commentWrite-${idx}`).val();
     console.log(content);
     const body = { articleId: idx, userId, content }
-    axios.post(`http://localhost:8080/api/comment`, body)
+    axios.post(`http://localhost:8080/api/comment`, body, header)
         .then(({ data }) => addComment(idx, data))
         .catch(function (error) {
             // handle error
@@ -236,7 +242,7 @@ export function writeComment(idx) {
 
 function callComments(idx) {
     axios
-        .get(`http://localhost:8080/api/comments/${idx}`)
+        .get(`http://localhost:8080/api/comments/${idx}`, header)
         .then((response) => {
             let { data } = response
             console.log(data)
@@ -269,7 +275,7 @@ export function letsMeet(idx, userId) {
         articleId: idx,
         commenterId: userId
     }
-    axios.post(`http://localhost:8080/api/meet`, body)
+    axios.post(`http://localhost:8080/api/meet`, body, header)
         .then((response) => {
             console.log(response.data);
             location.hash = "chat";
@@ -277,7 +283,7 @@ export function letsMeet(idx, userId) {
 }
 
 export function removeComment(idx, id) {
-    axios.delete(`http://localhost:8080/api/comment/${id}`)
+    axios.delete(`http://localhost:8080/api/comment/${id}`, {}, header)
         .then(({ data }) => console.log(data))
         .then(() => {
             $(`#comment-list-${idx}`).empty();
@@ -286,7 +292,7 @@ export function removeComment(idx, id) {
 }
 
 export function editArticle(idx) {
-    axios.get(`http://localhost:8080/api/article/${idx}`)
+    axios.get(`http://localhost:8080/api/article/${idx}`, {}, header)
         .then(response => {
             let { id, title, content, user } = response.data;
             let answer = window.prompt("수정할 내용을 입력해주세요.", content)
@@ -301,7 +307,7 @@ export function editArticle(idx) {
 export function deleteArticle(idx) {
     userId = parseInt(localStorage.getItem("userId"));
     axios
-        .delete(`http://localhost:8080/api/article/${idx}/${userId}`, {})
+        .delete(`http://localhost:8080/api/article/${idx}/${userId}`, {}, header)
         .then(function (response) {
             console.log(response);
             window.location.href = "/";
@@ -326,7 +332,7 @@ export function Write() {
     formData.append('content', content)
 
     axios
-        .post("http://localhost:8080/api/article/write", formData)
+        .post("http://localhost:8080/api/article/write", formData, header)
         .then(function (response) {
             console.log(response);
             window.location.href = "/";
@@ -350,7 +356,7 @@ const getArticles = () => {
     $("main > div").replaceWith(div);
     userId = parseInt(localStorage.getItem("userId"));
     axios
-        .get("http://localhost:8080/api/articles")
+        .get("http://localhost:8080/api/articles", header)
         .then(function (response) {
             const {data} = response;
             data.forEach((article) => {
