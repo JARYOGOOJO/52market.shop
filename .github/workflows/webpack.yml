@@ -31,11 +31,4 @@ jobs:
           npm install
           npx webpack build
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION }} --paths "/*"
-          aws s3 sync dist/* s3://52market.shop/ --acl public-read
-
-      - name: Invalidate cache CloudFront
-        uses: chetan/invalidate-cloudfront-action@master
-        env:
-          DISTRIBUTION: ${{ secrets.DISTRIBUTION }}
-          PATHS: '/index.html'
-          continue-on-error: true
+          aws s3 sync dist/ s3://52market.shop/ --acl public-read
