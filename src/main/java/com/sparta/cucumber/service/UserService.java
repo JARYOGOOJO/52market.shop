@@ -29,7 +29,7 @@ public class UserService {
         User exists = userRepository
                 .findByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword()).orElse(null);
         if (exists != null) {
-            signin(userDTO);
+            throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
         } else {
             User user = User
                     .builder()

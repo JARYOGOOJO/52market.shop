@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,7 +50,8 @@ public class UserRestController {
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) throws Exception {
         System.out.println(userDTO);
         userService.signup(userDTO);
-        authenticate(userDTO.getEmail(), userDTO.getPassword());
+//        Authentication authentication = authenticate(userDTO.getEmail(), userDTO.getPassword());
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
@@ -59,7 +61,9 @@ public class UserRestController {
     @PostMapping("/api/signin")
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) throws Exception {
         System.out.println(userDTO);
-        authenticate(userDTO.getEmail(), userDTO.getPassword());
+        userService.signin(userDTO);
+//        Authentication authentication = authenticate(userDTO.getEmail(), userDTO.getPassword());
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
@@ -75,9 +79,9 @@ public class UserRestController {
         return ResponseEntity.ok().body(updateUser);
     }
 
-    private void authenticate(String email, String password) throws Exception {
+    private Authentication authenticate(String email, String password) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
