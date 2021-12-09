@@ -26,9 +26,8 @@ public class UserService {
 
     @Transactional
     public void signup(UserRequestDto userDTO) {
-        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
         User exists = userRepository
-                .findByEmailAndPassword(userDTO.getEmail(), encodedPassword).orElse(null);
+                .findByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword()).orElse(null);
         if (exists != null) {
             signin(userDTO);
         } else {
@@ -36,7 +35,7 @@ public class UserService {
                     .builder()
                     .name(userDTO.getName())
                     .email(userDTO.getEmail())
-                    .encodedPassword(encodedPassword)
+                    .password(userDTO.getPassword())
                     .latitude(userDTO.getLatitude())
                     .longitude(userDTO.getLongitude())
                     .phoneNumber(userDTO.getPhoneNumber())
@@ -47,8 +46,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public void signin(UserRequestDto userDTO) {
-        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
-        userRepository.findByEmailAndPassword(userDTO.getEmail(), encodedPassword);
+        userRepository.findByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
     }
 
     public String kakaoLogin(String token) {
