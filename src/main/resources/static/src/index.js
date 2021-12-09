@@ -311,14 +311,12 @@ export function deleteArticle(idx) {
         .delete(`http://localhost:8080/api/article/${idx}`)
         .then(function (response) {
             console.log(response);
-            window.location.href = "/";
+            location.reload();
         })
         .catch(function (error) {
             console.log(error);
+            console.log("글 삭제에 실패했습니다.")
         })
-        .then(function () {
-            // always executed
-        });
 }
 
 export function Write() {
@@ -340,6 +338,7 @@ export function Write() {
         })
         .catch(function (error) {
             console.log(error);
+            console.log("글 작성에 실패했습니다.")
         });
 }
 
