@@ -35,8 +35,8 @@ public class UserRestController {
     private final UserService userService;
     private final S3Uploader s3Uploader;
 
-    @Operation(description = "카카오 로그인",method = "POST")
-    @PostMapping(value = "/login/kakao")
+    @Operation(description = "카카오 로그인", method = "POST")
+    @PostMapping(value = "/user/kakao")
     public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
         String username = userService.kakaoLogin(socialLoginDto.getToken());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
@@ -45,8 +45,8 @@ public class UserRestController {
         return ResponseEntity.ok(result);
     }
 
-    @Operation(description = "회원가입",method = "POST")
-    @PostMapping("/api/signup")
+    @Operation(description = "회원가입", method = "POST")
+    @PostMapping("/user/signup")
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) throws Exception {
         System.out.println(userDTO);
         userService.signup(userDTO);
@@ -57,8 +57,8 @@ public class UserRestController {
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
     }
 
-    @Operation(description = "로그인",method = "POST")
-    @PostMapping("/api/signin")
+    @Operation(description = "로그인", method = "POST")
+    @PostMapping("/user/signin")
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) throws Exception {
         System.out.println(userDTO);
         userService.signin(userDTO);
@@ -70,7 +70,7 @@ public class UserRestController {
     }
 
     @Operation(description = "유저 프로필사진 변경", method = "PUT")
-    @PutMapping("/api/users")
+    @PutMapping("/user/update")
     public ResponseEntity<UserResponseDto> updateProfileImage(UserRequestDto userDTO,
                                                               @ModelAttribute MultipartFile profile) throws IOException {
         String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
