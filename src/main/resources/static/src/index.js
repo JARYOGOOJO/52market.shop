@@ -13,11 +13,9 @@ import './aba5c3ead0';
 
 let userId = null;
 Kakao.init("e1289217c77f4f46dc511544f119d102");
-let header = {};
-
-(function () {
+(function setHeader() {
     let token = localStorage.getItem("token");
-    header = {Authorization: `Bearer ${token}`}
+    axios.defaults.headers.common = {Authorization: `Bearer ${token}`}
 })()
 
 const genRandomName = length => {
@@ -105,6 +103,7 @@ export function loginWithKakao() {
                     localStorage.setItem("token", response.data['token']);
                     localStorage.setItem("userId", response.data['userId']);
                     location.hash = '';
+                    setHeader();
                 })
                 .catch((err) => console.log(err))
         },
@@ -123,7 +122,7 @@ export function login() {
     axios.post("http://localhost:8080/api/signin", {
         email: email,
         password: password,
-    }, header)
+    })
         .then(function (response) {
             console.log(response);
             const { data } = response;
@@ -131,6 +130,7 @@ export function login() {
                 localStorage.setItem("token", response.data['token']);
                 localStorage.setItem("userId", response.data['userId']);
                 location.hash = '';
+                setHeader();
             }
         })
         .catch(function (error) {
@@ -161,12 +161,13 @@ export function signup() {
         password: password,
         latitude: latitude,
         longitude: longitude
-    }, header)
+    })
         .then(function (response) {
             console.log(response);
             localStorage.setItem("token", response.data['token']);
             localStorage.setItem("userId", response.data['userId']);
             location.hash = '';
+            setHeader();
         })
         .catch(function (error) {
             console.log(error);
@@ -232,7 +233,7 @@ export function writeComment(idx) {
     const content = $(`#commentWrite-${idx}`).val();
     console.log(content);
     const body = { articleId: idx, userId, content }
-    axios.post(`http://localhost:8080/api/comment`, body, header)
+    axios.post(`http://localhost:8080/api/comment`, body)
         .then(({ data }) => addComment(idx, data))
         .catch(function (error) {
             // handle error
@@ -242,7 +243,7 @@ export function writeComment(idx) {
 
 function callComments(idx) {
     axios
-        .get(`http://localhost:8080/api/comments/${idx}`, header)
+        .get(`http://localhost:8080/api/comments/${idx}`)
         .then((response) => {
             let { data } = response
             console.log(data)
@@ -275,7 +276,7 @@ export function letsMeet(idx, userId) {
         articleId: idx,
         commenterId: userId
     }
-    axios.post(`http://localhost:8080/api/meet`, body, header)
+    axios.post(`http://localhost:8080/api/meet`, body)
         .then((response) => {
             console.log(response.data);
             location.hash = "chat";
@@ -283,7 +284,7 @@ export function letsMeet(idx, userId) {
 }
 
 export function removeComment(idx, id) {
-    axios.delete(`http://localhost:8080/api/comment/${id}`, {}, header)
+    axios.delete(`http://localhost:8080/api/comment/${id}`)
         .then(({ data }) => console.log(data))
         .then(() => {
             $(`#comment-list-${idx}`).empty();
@@ -292,7 +293,7 @@ export function removeComment(idx, id) {
 }
 
 export function editArticle(idx) {
-    axios.get(`http://localhost:8080/api/article/${idx}`, {}, header)
+    axios.get(`http://localhost:8080/api/article/${idx}`)
         .then(response => {
             let { id, title, content, user } = response.data;
             let answer = window.prompt("수정할 내용을 입력해주세요.", content)
@@ -307,7 +308,7 @@ export function editArticle(idx) {
 export function deleteArticle(idx) {
     userId = parseInt(localStorage.getItem("userId"));
     axios
-        .delete(`http://localhost:8080/api/article/${idx}/${userId}`, {}, header)
+        .delete(`http://localhost:8080/api/article/${idx}`)
         .then(function (response) {
             console.log(response);
             window.location.href = "/";
@@ -332,7 +333,7 @@ export function Write() {
     formData.append('content', content)
 
     axios
-        .post("http://localhost:8080/api/article/write", formData, header)
+        .post("http://localhost:8080/api/article/write", formData)
         .then(function (response) {
             console.log(response);
             window.location.href = "/";
@@ -356,7 +357,7 @@ const getArticles = () => {
     $("main > div").replaceWith(div);
     userId = parseInt(localStorage.getItem("userId"));
     axios
-        .get("http://localhost:8080/api/articles", header)
+        .get("http://localhost:8080/api/articles")
         .then(function (response) {
             const {data} = response;
             data.forEach((article) => {
@@ -412,18 +413,21 @@ const getArticles = () => {
 };
 
 export const send = () => event.which === 13 ? sendMessage() : null;
-const Message = function (arg) {
-    this.text = arg.text, this.message_side = arg.message_side;
-    this.draw = function (msg) {
-        return function () {
-            let $message = $($('.message_template').clone().html());
-            $message.addClass(msg.message_side).find('.text').html(msg.text);
-            $('.messages').append($message);
-            return setTimeout(() => $message.addClass('appeared'), 0);
-        };
-    }(this);
-    return this;
-};
+
+class Message {
+    constructor(arg) {
+        this.text = arg.text, this.message_side = arg.message_side;
+        this.draw = function (msg) {
+            return function () {
+                let $message = $($('.message_template').clone().html());
+                $message.addClass(msg.message_side).find('.text').html(msg.text);
+                $('.messages').append($message);
+                return setTimeout(() => $message.addClass('appeared'), 0);
+            };
+        }(this);
+        return this;
+    }
+}
 
 function setModal() {
     $("main").append(`

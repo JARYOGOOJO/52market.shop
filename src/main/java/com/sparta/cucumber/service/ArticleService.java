@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -78,14 +77,14 @@ public class ArticleService {
     }
 
 
-    public Long removeArticle(User user, Long articleId) {
+    public Long removeArticle(Long articleId) {
         Article article = articleRepository
                 .findById(articleId)
                 .orElseThrow(
                         () -> new NullPointerException("게시물이 존재하지 않습니다."));
-        if (Objects.equals(article.getUser(), user)) {
-            articleRepository.deleteById(articleId);
-        }
+//        if (Objects.equals(article.getUser(), user)) {
+        articleRepository.deleteById(articleId);
+//        }
         return articleId;
     }
 
