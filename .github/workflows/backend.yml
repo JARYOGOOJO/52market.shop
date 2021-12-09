@@ -42,7 +42,7 @@ jobs:
       - name: Generate deployment package
         run: |
           mkdir -p deploy
-          cp build/libs/*.jar deploy/application.jar
+          cp build/libs/*.jar deploy/
           cd deploy && zip -r deploy.zip .
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@master
