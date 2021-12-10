@@ -30,7 +30,7 @@ jobs:
           cd src/main/resources/static
           npm install
           npx webpack build 
-          aws s3 sync dist/ s3://52market.shop/ --acl public-read
+          aws s3 sync dist/ s3://52market.shop/ --acl public-read  
 
       - name: Invalidate cache CloudFront
         uses: chetan/invalidate-cloudfront-action@master

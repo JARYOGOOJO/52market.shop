@@ -1,6 +1,7 @@
 package com.sparta.cucumber.config;
 
 import com.sparta.cucumber.security.JwtAuthenticationEntryPoint;
+import com.sparta.cucumber.security.JwtAuthenticationFilter;
 import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-//    private final JwtAuthenticationFilter jwtRequestFilter;
+    private final JwtAuthenticationFilter jwtRequestFilter;
     private final UserDetailsServiceImpl userDetailsService;
 
     @Override
@@ -57,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .accessDeniedPage("/user/forbidden");
 
-//        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
