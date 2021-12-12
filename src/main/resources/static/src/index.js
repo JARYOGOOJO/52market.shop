@@ -39,7 +39,7 @@ export function loginWithKakao() {
     Kakao.Auth.login({
         success: function (authObj) {
             console.log(authObj)
-            axios.post("https://callmebyyourname.shop/user/kakao", {'token': `${authObj['access_token']}`})
+            axios.post(`${API_URL}/user/kakao`, {'token': `${authObj['access_token']}`})
                 .then(response => {
                     console.log(response)
                     localStorage.setItem("token", response.data['token']);
@@ -61,7 +61,7 @@ export function login() {
     if (!(email && password)) {
         alert("올바른 아이디와 비밀번호를 입력해주세요.")
     }
-    axios.post("https://callmebyyourname.shop/user/signin", {
+    axios.post(`${API_URL}/user/signin`, {
         email: email,
         password: password,
     })
@@ -96,7 +96,7 @@ export function signup() {
     const password = $("#exampleInputPassword1").val();
     const repassword = $("#exampleInputPassword2").val();
     if (password !== repassword) return;
-    axios.post("https://callmebyyourname.shop/user/signup", {
+    axios.post(`${API_URL}/user/signup`, {
         email: email,
         name: name,
         phoneNumber: phone,
@@ -175,7 +175,7 @@ export function writeComment(idx) {
     const content = $(`#commentWrite-${idx}`).val();
     console.log(content);
     const body = { articleId: idx, userId, content }
-    axios.post(`https://callmebyyourname.shop/api/comment`, body)
+    axios.post(`${API_URL}/api/comment`, body)
         .then(({ data }) => addComment(idx, data))
         .catch(function (error) {
             // handle error
@@ -185,7 +185,7 @@ export function writeComment(idx) {
 
 function callComments(idx) {
     axios
-        .get(`https://callmebyyourname.shop/api/comments/${idx}`)
+        .get(`${API_URL}/api/comments/${idx}`)
         .then((response) => {
             let { data } = response
             console.log(data)
@@ -218,7 +218,7 @@ export function letsMeet(idx, userId) {
         articleId: idx,
         commenterId: userId
     }
-    axios.post(`https://callmebyyourname.shop/api/meet`, body)
+    axios.post(`${API_URL}/api/meet`, body)
         .then((response) => {
             console.log(response.data);
             location.hash = "chat";
@@ -235,14 +235,14 @@ export function removeComment(idx, id) {
 }
 
 export function editArticle(idx) {
-    axios.get(`https://callmebyyourname.shop/api/article/${idx}`)
+    axios.get(`${API_URL}/api/article/${idx}`)
         .then(response => {
             let { id, title, content, user } = response.data;
             let answer = window.prompt("수정할 내용을 입력해주세요.", content)
             if (answer) {
                 let send = { id, title, content: answer, userId };
                 console.log(send)
-                axios.put(`https://callmebyyourname.shop/api/article/edit`, send).then(() => location.reload());
+                axios.put(`${API_URL}/api/article/edit`, send).then(() => location.reload());
             }
         })
 }
@@ -250,7 +250,7 @@ export function editArticle(idx) {
 export function deleteArticle(idx) {
     userId = parseInt(localStorage.getItem("userId"));
     axios
-        .delete(`https://callmebyyourname.shop/api/article/${idx}`)
+        .delete(`${API_URL}/api/article/${idx}`)
         .then(function (response) {
             console.log(response);
             location.reload();
@@ -273,7 +273,7 @@ export function Write() {
     formData.append('content', content)
 
     axios
-        .post("https://callmebyyourname.shop/api/article/write", formData)
+        .post(`${API_URL}/api/article/write`, formData)
         .then(function (response) {
             console.log(response);
             window.location.href = "/";
@@ -298,7 +298,7 @@ const getArticles = () => {
     $("main > div").replaceWith(div);
     userId = parseInt(localStorage.getItem("userId"));
     axios
-        .get("https://callmebyyourname.shop/api/articles")
+        .get(`${API_URL}/api/articles`)
         .then(function (response) {
             const {data} = response;
             data.forEach((article) => {
