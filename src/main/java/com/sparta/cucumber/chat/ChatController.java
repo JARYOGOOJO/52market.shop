@@ -1,8 +1,5 @@
-package com.sparta.cucumber.controller;
+package com.sparta.cucumber.chat;
 
-import com.sparta.cucumber.dto.ChatRequestDto;
-import com.sparta.cucumber.models.ChatRoom;
-import com.sparta.cucumber.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.sparta.cucumber.dto;
+package com.sparta.cucumber.chat;
 
 import lombok.Data;
 

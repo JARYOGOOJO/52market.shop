@@ -1,11 +1,6 @@
-package com.sparta.cucumber.service;
+package com.sparta.cucumber.chat;
 
-import com.sparta.cucumber.dto.ChatRequestDto;
-import com.sparta.cucumber.models.ChatRoom;
-import com.sparta.cucumber.models.EnterRoom;
 import com.sparta.cucumber.models.User;
-import com.sparta.cucumber.repository.ChatRoomRepository;
-import com.sparta.cucumber.repository.EnterRoomRepository;
 import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

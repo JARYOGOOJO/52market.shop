@@ -22,12 +22,12 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.0",
-    "@stomp/stompjs": "^6.1.2",
     "acorn": "^8.6.0",
     "axios": "^0.24.0",
     "bootstrap": "^5.1.3",
     "jquery": "^3.6.0",
     "moment": "^2.29.1",
-    "sockjs-client": "^1.5.2"
+    "sockjs-client": "^1.5.2",
+    "stompjs": "^2.3.3"
   }
 }

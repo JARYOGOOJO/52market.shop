@@ -1,4 +1,4 @@
-package com.sparta.cucumber.models;
+package com.sparta.cucumber.chat;
 
 import lombok.Builder;
 import lombok.Getter;

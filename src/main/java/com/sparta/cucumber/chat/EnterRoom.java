@@ -1,5 +1,6 @@
-package com.sparta.cucumber.models;
+package com.sparta.cucumber.chat;
 
+import com.sparta.cucumber.models.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
