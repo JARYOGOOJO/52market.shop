@@ -27,7 +27,7 @@ public class UserService {
     @Transactional
     public void signup(UserRequestDto userDTO) {
         User exists = userRepository
-                .findByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword()).orElse(null);
+                .findByEmail(userDTO.getEmail()).orElse(null);
         if (exists != null) {
             throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
         } else {
@@ -35,7 +35,7 @@ public class UserService {
                     .builder()
                     .name(userDTO.getName())
                     .email(userDTO.getEmail())
-                    .password(userDTO.getPassword())
+                    .encodedPassword(passwordEncoder.encode(userDTO.getPassword()))
                     .latitude(userDTO.getLatitude())
                     .longitude(userDTO.getLongitude())
                     .phoneNumber(userDTO.getPhoneNumber())
@@ -45,8 +45,13 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public void signin(UserRequestDto userDTO) {
-        userRepository.findByEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
+    public User signin(UserRequestDto userDTO) {
+        User user = userRepository.findByEmail(userDTO.getEmail()).orElseThrow(NullPointerException::new);
+        if (passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+            return user;
+        } else {
+            return null;
+        }
     }
 
     public String kakaoLogin(String token) {
