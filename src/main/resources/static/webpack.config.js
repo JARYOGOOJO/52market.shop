@@ -5,11 +5,11 @@ const webpack = require('webpack');
 
 module.exports = (env) => {
 
-    const {DEV} = env;
+    const { DEV } = env;
     if (DEV) {
-        dotenv.config({path: './dev.env'})
+        dotenv.config({ path: './dev.env' })
     } else {
-        dotenv.config({path: './.env'})
+        dotenv.config({ path: './.env' })
     }
 
     console.log("process.env.API_URL", process.env.API_URL)

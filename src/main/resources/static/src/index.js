@@ -1,4 +1,3 @@
-import moment from 'moment';
 import axios from 'axios';
 import $ from 'jquery'
 import '@popperjs/core'
@@ -8,8 +7,8 @@ import './css/main.css'
 import './kakao'
 import './aba5c3ead0';
 import SockJS from 'sockjs-client'
-import Stomp from 'stompjs'
-import {chatView, getArticles, logInView, registerView, setModal} from './view';
+import {Stomp} from '@stomp/stompjs'
+import {addComment, callComments, chatView, getArticles, logInView, registerView, setModal} from './view';
 
 let stompClient;
 let userId = null;
@@ -54,7 +53,7 @@ export function loginWithKakao() {
     Kakao.Auth.login({
         success: function (authObj) {
             console.log(authObj)
-            axios.post(`${API_URL}/user/kakao`, {'token': `${authObj['access_token']}`})
+            axios.post(`${API_URL}/user/kakao`, { 'token': `${authObj['access_token']}` })
                 .then(response => {
                     console.log(response)
                     localStorage.setItem("token", response.data['token']);
@@ -191,7 +190,7 @@ export function writeComment(idx) {
     console.log(content);
     const body = { articleId: idx, userId, content }
     axios.post(`${API_URL}/api/comment`, body)
-        .then(({data}) => {
+        .then(({ data }) => {
             $(`#commentWrite-${idx}`).val("");
             addComment(idx, data)
         })
@@ -200,35 +199,6 @@ export function writeComment(idx) {
             console.log(error);
         });
 }
-
-function callComments(idx) {
-    axios
-        .get(`${API_URL}/api/comments/${idx}`)
-        .then((response) => {
-            let { data } = response
-            data.forEach((comment) => {
-                addComment(idx, comment);
-            })
-        })
-}
-
-export function addComment(idx, data) {
-    userId = parseInt(localStorage.getItem("userId"));
-    let { id, content, createdAt, user } = data;
-    console.log(userId)
-    $(`#comment-list-${idx}`).append(`
-    <li href="#" class="list-group-item list-group-item-action">
-    <div class="d-flex w-100 justify-content-between">
-      <small class="mb-1"><small class="mb-1 tit">${user.name}</small>
-      ${moment(createdAt).fromNow()}</small>
-      ${userId === user.id
-            ? `<button type="button" class="btn-close small" aria-label="remove" onclick="app.removeComment(${idx}, ${id})"></button>`
-            : `<button onclick="app.letsMeet(${idx}, ${user.id})" class="badge bg-success rounded-pill">chat</button>`}
-    </div>
-    <p class="mb-1">${content}</small>
-  </li>`);
-}
-
 
 export function letsMeet(idx, userId) {
     const body = {

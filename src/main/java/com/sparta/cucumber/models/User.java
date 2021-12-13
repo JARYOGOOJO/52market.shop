@@ -38,12 +38,12 @@ public class User extends Timestamped {
 
     @Builder
     public User(String name, String email,
-                String picture, String password,
+                String picture, String encodedPassword,
                 String phoneNumber, Double latitude, Double longitude) {
         this.name = name;
         this.email = email;
         this.picture = picture;
-        this.password = password;
+        this.password = encodedPassword;
         this.phoneNumber = phoneNumber;
         this.latitude = latitude;
         this.longitude = longitude;
