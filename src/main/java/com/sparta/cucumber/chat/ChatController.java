@@ -35,7 +35,7 @@ public class ChatController {
 
     @Operation(description = "방나가기", method = "POST")
     @ResponseBody
-    @PostMapping("/api/room/exit")
+    @DeleteMapping("/api/room/exit")
     public ResponseEntity<?> exitRoom(@RequestBody ChatRequestDto chatRequestDto) {
         log.debug("exitRoom chatRequestDto : " + chatRequestDto.toString());
         chatService.exitRoom(chatRequestDto);
