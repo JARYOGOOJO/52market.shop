@@ -42,7 +42,7 @@ public class ChatController {
         return ResponseEntity.ok().body(null);
     }
 
-    @Operation(description = "방 id로 가져오기",method = "GET")
+    @Operation(description = "방 id로 가져오기", method = "GET")
     @ResponseBody
     @GetMapping("/api/room/{id}")
     public ResponseEntity<?> getRoom(@PathVariable("id") Long id){
@@ -50,7 +50,7 @@ public class ChatController {
         return ResponseEntity.ok().body(chatService.getRoom(id));
     }
 
-    @Operation(description = "방 전체목록 가져오기",method = "GET")
+    @Operation(description = "방 전체목록 가져오기", method = "GET")
     @ResponseBody
     @GetMapping("/api/rooms")
     public ResponseEntity<List<ChatRoom>> getRooms(){
