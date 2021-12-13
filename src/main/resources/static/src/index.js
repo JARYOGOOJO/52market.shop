@@ -14,10 +14,10 @@ let stompClient;
 let userId = null;
 Kakao.init("e1289217c77f4f46dc511544f119d102");
 
-(function setHeader() {
+function setHeader() {
     let token = localStorage.getItem("token");
     axios.defaults.headers.common = {Authorization: `Bearer ${token}`}
-})()
+}
 
 function connect() {
     var socket = new SockJS(`${API_URL}/ws-stomp`);
@@ -86,13 +86,13 @@ export function login() {
                 localStorage.setItem("token", response.data['token']);
                 localStorage.setItem("userId", response.data['userId']);
                 location.hash = '';
-                setHeader();
             }
         })
         .catch(function (error) {
             console.log(error);
             alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.")
         });
+    setHeader();
 }
 
 export function signup() {
@@ -123,11 +123,11 @@ export function signup() {
             localStorage.setItem("token", response.data['token']);
             localStorage.setItem("userId", response.data['userId']);
             location.hash = '';
-            setHeader();
         })
         .catch(function (error) {
             console.log(error);
         });
+    setHeader();
 }
 
 export const autoHyphen = (target) => {
@@ -303,6 +303,7 @@ const router = () => {
     if (path.startsWith("chat")) {
         chatView();
     }
+    setHeader();
 }
 
 window.addEventListener('hashchange', router)
