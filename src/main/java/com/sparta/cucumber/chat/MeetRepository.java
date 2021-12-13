@@ -1,7 +1,6 @@
-package com.sparta.cucumber.repository;
+package com.sparta.cucumber.chat;
 
 import com.sparta.cucumber.models.Article;
-import com.sparta.cucumber.models.Meet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
