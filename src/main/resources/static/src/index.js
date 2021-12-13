@@ -8,8 +8,8 @@ import './css/main.css'
 import './kakao'
 import './aba5c3ead0';
 import SockJS from 'sockjs-client'
-import Stomp from 'stompjs'
-import {chatView, getArticles, logInView, registerView, setModal} from './view';
+import { Stomp } from '@stomp/stompjs'
+import { chatView, getArticles, logInView, registerView, setModal } from './view';
 
 let stompClient;
 let userId = null;
@@ -17,7 +17,7 @@ Kakao.init("e1289217c77f4f46dc511544f119d102");
 
 (function setHeader() {
     let token = localStorage.getItem("token");
-    axios.defaults.headers.common = {Authorization: `Bearer ${token}`}
+    axios.defaults.headers.common = { Authorization: `Bearer ${token}` }
 })()
 
 function connect() {
@@ -54,7 +54,7 @@ export function loginWithKakao() {
     Kakao.Auth.login({
         success: function (authObj) {
             console.log(authObj)
-            axios.post(`${API_URL}/user/kakao`, {'token': `${authObj['access_token']}`})
+            axios.post(`${API_URL}/user/kakao`, { 'token': `${authObj['access_token']}` })
                 .then(response => {
                     console.log(response)
                     localStorage.setItem("token", response.data['token']);
@@ -191,7 +191,7 @@ export function writeComment(idx) {
     console.log(content);
     const body = { articleId: idx, userId, content }
     axios.post(`${API_URL}/api/comment`, body)
-        .then(({data}) => {
+        .then(({ data }) => {
             $(`#commentWrite-${idx}`).val("");
             addComment(idx, data)
         })
