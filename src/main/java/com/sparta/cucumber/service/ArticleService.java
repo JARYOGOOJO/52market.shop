@@ -29,8 +29,8 @@ public class ArticleService {
                 .findById(userId)
                 .orElseThrow(
                         () -> new NullPointerException("잘못된 접근입니다."));
-
-        String imageName = imagePath.split("/Article/")[1];
+        imagePath = imagePath.split("amazonaws.com")[1];
+        String imageName = imagePath.split("Article/")[1];
 
         Article article = Article.builder()
                 .user(user)
