@@ -37,20 +37,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.headers().frameOptions().disable();
 
         http.authorizeRequests()
-                // images 폴더 내의 파일 로그인 없이 허용
-                .antMatchers("/images/**").permitAll()
-                // css 폴더를 login 없이 허용
-                .antMatchers("/css/**").permitAll()
-                .antMatchers("/user/**").permitAll()
                 .antMatchers("/api/**").permitAll()
-                .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/basic.js").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/login/kakao").permitAll()
-                .antMatchers("/signup").permitAll()
+                .antMatchers("/user/**").permitAll()
+                .antMatchers("/ws-stomp/**", "/sub/**", "/pub/**", "/room/**").permitAll()
+                .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .antMatchers("/").permitAll()
-                .antMatchers("/docs/**").permitAll()
-                .antMatchers("/swagger-ui.html","/swagger-ui/**","/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

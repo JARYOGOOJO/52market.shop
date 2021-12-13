@@ -78,9 +78,8 @@ public class ArticleRestController {
 
     @Operation(description = "게시글 삭제", method = "DELETE")
     @DeleteMapping("/api/article/{id}")
-    public ResponseEntity<Long> removeArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                              @PathVariable("id") Long articleId) {
-        Long id = articleService.removeArticle(userDetails.getUser(), articleId);
+    public ResponseEntity<Long> removeArticle(@PathVariable("id") Long articleId) {
+        Long id = articleService.removeArticle(articleId);
         s3Uploader.deleteImage(articleId);
         return ResponseEntity.ok().body(id);
     }

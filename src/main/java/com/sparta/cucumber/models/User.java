@@ -48,6 +48,7 @@ public class User extends Timestamped {
         this.latitude = latitude;
         this.longitude = longitude;
         this.star = 0.0;
+        this.role = Role.USER;
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {

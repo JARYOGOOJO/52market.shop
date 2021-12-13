@@ -1,11 +1,8 @@
-package com.sparta.cucumber.service;
+package com.sparta.cucumber.chat;
 
-import com.sparta.cucumber.dto.MeetRequestDto;
 import com.sparta.cucumber.models.Article;
-import com.sparta.cucumber.models.Meet;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ArticleRepository;
-import com.sparta.cucumber.repository.MeetRepository;
 import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
