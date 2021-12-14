@@ -61,7 +61,7 @@ public class ArticleRestController {
     }
 
     @Operation(description = "게시글 작성", method = "POST")
-    @PostMapping("/api/article/write")
+    @PostMapping("/api/articles")
     public ResponseEntity<Article> writeArticle(@ModelAttribute ArticleRequestDto requestDto,
                                                 @ModelAttribute MultipartFile file) throws IOException {
         String imagePath = s3Uploader.upload(file, "Article");
@@ -70,7 +70,7 @@ public class ArticleRestController {
     }
 
     @Operation(description = "게시글 편집", method = "PUT")
-    @PutMapping("/api/article/edit")
+    @PutMapping("/api/article")
     public ResponseEntity<Article> editArticle(@RequestBody ArticleRequestDto requestDto) {
         Article article = articleService.update(requestDto);
         return ResponseEntity.ok().body(article);
