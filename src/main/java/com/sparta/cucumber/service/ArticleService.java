@@ -81,9 +81,7 @@ public class ArticleService {
                 .findById(articleId)
                 .orElseThrow(
                         () -> new NullPointerException("게시물이 존재하지 않습니다."));
-//        if (Objects.equals(article.getUser(), user)) {
-        articleRepository.deleteById(articleId);
-//        }
+        articleRepository.delete(article);
         return articleId;
     }
 
