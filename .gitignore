@@ -36,3 +36,7 @@ out/
 src/main/resources/application.yml
 /src/main/resources/static/node_modules/
 /src/main/resources/static/package-lock.json
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

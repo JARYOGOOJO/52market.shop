@@ -24,28 +24,28 @@ public class ArticleRestController {
     private final ArticleService articleService;
     private final S3Uploader s3Uploader;
     
-    @Operation(description = "게시글 검색",method = "GET")
+    @Operation(description = "게시글 검색", method = "GET")
     @GetMapping("/api/articles/{query}")
     public ResponseEntity<List<Article>> getArticles(@PathVariable("query") String query) {
         List<Article> articles = articleService.getArticles(query);
         return ResponseEntity.ok().body(articles);
     }
 
-    @Operation(description = "모든 게시글 가져오기",method = "GET")
+    @Operation(description = "모든 게시글 가져오기", method = "GET")
     @GetMapping("/api/articles")
     public ResponseEntity<List<Article>> getAllArticles() {
         List<Article> articles = articleService.getAllArticles();
         return ResponseEntity.ok().body(articles);
     }
 
-    @Operation(description = "게시글 id로 가져오기",method = "GET")
+    @Operation(description = "게시글 id로 가져오기", method = "GET")
     @GetMapping("/api/article/{id}")
     public ResponseEntity<Article> seeDetailOfArticle(@PathVariable("id") Long articleId) {
         Article article = articleService.seeDetailOfArticle(articleId);
         return ResponseEntity.ok().body(article);
     }
 
-    @Operation(description = "자신주변 게시글 가져오기",method = "GET")
+    @Operation(description = "자신주변 게시글 가져오기", method = "GET")
     @GetMapping("/api/articles/{lat}/{lng}")
     public ResponseEntity<List<Article>> getAroundArticle (@PathVariable("lat") Double lat,
                                                           @PathVariable("lng") Double lon) {
@@ -60,7 +60,7 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(articles);
     }
 
-    @Operation(description = "게시글 작성",method = "POST")
+    @Operation(description = "게시글 작성", method = "POST")
     @PostMapping("/api/article/write")
     public ResponseEntity<Article> writeArticle(@ModelAttribute ArticleRequestDto requestDto,
                                                 @ModelAttribute MultipartFile file) throws IOException {
@@ -69,7 +69,7 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(article);
     }
 
-    @Operation(description = "게시글 편집",method = "PUT")
+    @Operation(description = "게시글 편집", method = "PUT")
     @PutMapping("/api/article/edit")
     public ResponseEntity<Article> editArticle(@RequestBody ArticleRequestDto requestDto) {
         Article article = articleService.update(requestDto);
