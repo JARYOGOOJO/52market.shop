@@ -1,6 +1,8 @@
 package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.dto.ReviewRequestDto;
+import com.sparta.cucumber.dto.UserRequestDto;
+import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,26 +22,20 @@ public class Review extends Timestamped {
     @GeneratedValue(strategy = GenerationType.TABLE,generator = "REVIEW_GENERATOR")
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "review_user")
-    private User reviewUser;
-    @ManyToOne
-    @JoinColumn(name = "review_target")
-    private User reviewTargetUser;
-    private Integer score;
+    @JoinColumn(name = "user")
+    private User user;
+    private String title;
     private String content;
 
     @Builder
-    public Review(User from, User to, Integer star, String content) {
-        this.reviewUser = from;
-        this.reviewTargetUser = to;
-        this.score = star;
-        this.content = content;
+    public Review(ReviewRequestDto reviewRequestDto, User user) {
+        this.user = user;
+        this.title = reviewRequestDto.getTitle();
+        this.content = reviewRequestDto.getContent();
     }
 
-    public void update(ReviewRequestDto requestDto, User reviewUser, User reviewTargetUser) {
-        this.reviewUser = reviewUser;
-        this.reviewTargetUser = reviewTargetUser;
-        this.score = requestDto.getScore();
-        this.content = requestDto.getContent();
+    public void update(ReviewRequestDto reviewRequestDto) {
+        this.title = reviewRequestDto.getTitle();
+        this.content = reviewRequestDto.getContent();
     }
 }
