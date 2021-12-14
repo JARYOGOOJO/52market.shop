@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
-    List<Article> findAllByTitleContains(String query);
-    List<Article> findAllByUser_Id(Long userId);
+
+    List<Article> findAllByTitleContainsOrderByCreatedAtDesc(String query);
+
+    List<Article> findAllByUser_IdOrderByCreatedAtDesc(Long userId);
 }

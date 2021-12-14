@@ -64,7 +64,7 @@ public class ArticleRestController {
     @PostMapping("/api/articles")
     public ResponseEntity<Article> writeArticle(@ModelAttribute ArticleRequestDto requestDto,
                                                 @ModelAttribute MultipartFile file) throws IOException {
-        String imagePath = s3Uploader.upload(file, "Article");
+        String imagePath = s3Uploader.uploadFile(file);
         Article article = articleService.upload(requestDto, imagePath);
         return ResponseEntity.ok().body(article);
     }

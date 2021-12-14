@@ -29,7 +29,7 @@ public class ArticleService {
                 .findById(userId)
                 .orElseThrow(
                         () -> new NullPointerException("잘못된 접근입니다."));
-        String imageName = imagePath.split("/Article/")[1];
+        String imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
 
         Article article = Article.builder()
                 .user(user)
@@ -45,7 +45,7 @@ public class ArticleService {
     }
 
     public List<Article> getArticles(String query) {
-        return articleRepository.findAllByTitleContains(query);
+        return articleRepository.findAllByTitleContainsOrderByCreatedAtDesc(query);
     }
 
     public List<Article> getAllArticles() {
@@ -72,7 +72,7 @@ public class ArticleService {
     }
 
     public List<Article> getUsersArticles(@PathVariable("id") Long userId) {
-        return articleRepository.findAllByUser_Id(userId);
+        return articleRepository.findAllByUser_IdOrderByCreatedAtDesc(userId);
     }
 
 

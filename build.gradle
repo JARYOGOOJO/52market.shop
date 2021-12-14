@@ -47,6 +47,8 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-ui:1.5.13'
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     implementation 'org.modelmapper:modelmapper:2.4.4'
+    // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
+    implementation 'com.querydsl:querydsl-jpa:5.0.0'
 }
 
 test {
