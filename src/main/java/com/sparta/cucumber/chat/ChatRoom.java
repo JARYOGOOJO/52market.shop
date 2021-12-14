@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -22,8 +23,8 @@ public class ChatRoom {
     private boolean isActive;
 
     @Builder
-    public ChatRoom(String roomSubscribeId, String title, boolean isActive) {
-        this.roomSubscribeId = roomSubscribeId;
+    public ChatRoom(String title, boolean isActive) {
+        this.roomSubscribeId = UUID.randomUUID().toString();
         this.title = title;
         this.isActive = isActive;
     }

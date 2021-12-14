@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @NamedEntityGraph(
         name = "user"
@@ -33,6 +34,7 @@ public class User extends Timestamped {
     private Double latitude;
     private Double longitude;
     private Double star;
+    private String subscribeId;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -49,6 +51,7 @@ public class User extends Timestamped {
         this.longitude = longitude;
         this.star = 0.0;
         this.role = Role.USER;
+        this.subscribeId = UUID.randomUUID().toString();
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
@@ -58,6 +61,7 @@ public class User extends Timestamped {
         this.role = role;
         this.socialId = kakaoId;
         this.star = 0.0;
+        this.subscribeId = UUID.randomUUID().toString();
     }
 
     public User updateKakao(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
