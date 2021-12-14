@@ -3,8 +3,6 @@ package com.sparta.cucumber.controller;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
-import com.sparta.cucumber.dto.UserResponseDto;
-import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.S3Uploader;
@@ -19,10 +17,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -65,15 +62,15 @@ public class UserRestController {
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
     }
 
-    @Operation(description = "유저 프로필사진 변경", method = "PUT")
-    @PutMapping("/user/update")
-    public ResponseEntity<UserResponseDto> updateProfileImage(UserRequestDto userDTO,
-                                                              @ModelAttribute MultipartFile profile) throws IOException {
-        String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
-        User user = userService.updateProfileImage(userDTO, profileImage);
-        UserResponseDto updateUser = new UserResponseDto(user);
-        return ResponseEntity.ok().body(updateUser);
-    }
+//    @Operation(description = "유저 프로필사진 변경", method = "PUT")
+//    @PutMapping("/user/update")
+//    public ResponseEntity<UserResponseDto> updateProfileImage(UserRequestDto userDTO,
+//                                                              @ModelAttribute MultipartFile profile) throws IOException {
+//        String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
+//        User user = userService.updateProfileImage(userDTO, profileImage);
+//        UserResponseDto updateUser = new UserResponseDto(user);
+//        return ResponseEntity.ok().body(updateUser);
+//    }
 
     private Authentication authenticate(String email, String password) throws Exception {
         try {
