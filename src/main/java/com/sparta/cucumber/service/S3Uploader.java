@@ -11,7 +11,7 @@ import com.amazonaws.services.s3.transfer.Upload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
+@Service
 public class S3Uploader {
 
     @Value("${cloud.aws.s3.bucket}")
