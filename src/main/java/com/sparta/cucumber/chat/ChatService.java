@@ -70,7 +70,6 @@ public class ChatService {
         ChatRoom chatRoom =ChatRoom
                 .builder()
                 .title(chatRequestDto.getTitle())
-                .roomSubscribeId(chatRequestDto.getRoomSubscribeId())
                 .isActive(chatRequestDto.isActive())
                 .build();
 
