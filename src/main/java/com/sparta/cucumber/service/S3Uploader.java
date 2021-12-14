@@ -8,7 +8,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
-import com.sparta.cucumber.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,42 +18,47 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class S3Uploader {
 
-    private final AmazonS3Client amazonS3Client;
-    private final ArticleRepository articleRepository;
-
     @Value("${cloud.aws.s3.bucket}")
-    public String bucket;
+    private String bucket;
+
     @Value("${cloud.aws.s3.bucket.url}")
     private String defaultUrl;
 
-    public String upload(MultipartFile multipartFile) throws IOException {
-        String originName = multipartFile.getOriginalFilename();
+    private final AmazonS3Client amazonS3Client;
+
+    public String upload(MultipartFile uploadFile) throws IOException {
+        String origName = uploadFile.getOriginalFilename();
         String url;
         try {
-            if (originName == null) {
-                throw new AssertionError();
+            String ext = null;
+            if (origName != null) {
+                ext = origName.substring(origName.lastIndexOf('.'));
             }
-            String extension = originName.substring(originName.lastIndexOf("."));
-            String saveFileName = getName() + extension;
+            String saveFileName = getUuid() + ext;
 
             ObjectMetadata objectMetadata = new ObjectMetadata();
-            objectMetadata.setContentType(multipartFile.getContentType());
-            objectMetadata.setContentLength(multipartFile.getBytes().length);
+            objectMetadata.setContentType(uploadFile.getContentType());
+            objectMetadata.setContentLength(uploadFile.getBytes().length);
 
-            InputStream inputStream = multipartFile.getInputStream();
+            InputStream inputStream = uploadFile.getInputStream();
             uploadOnS3Bucket(saveFileName, inputStream, objectMetadata);
             url = defaultUrl + saveFileName;
+
         } catch (StringIndexOutOfBoundsException e) {
             url = null;
-            System.out.println(e.getMessage());
         }
         return url;
+    }
+
+    private static String getUuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     private void uploadOnS3Bucket(String fileName, InputStream stream, ObjectMetadata data) {
