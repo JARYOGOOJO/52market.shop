@@ -27,12 +27,13 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review upload(ReviewRequestDto reviewRequestDto, User user) {
-        User findUser = userRepository.findById(user.getId()).orElseThrow(
+    public Review upload(ReviewRequestDto reviewRequestDto) {
+        Long userId = reviewRequestDto.getUserId();
+        User user = userRepository.findById(userId).orElseThrow(
                 () -> new NullPointerException("해당 사용자가 존재하지 않습니다")
         );
         Review review = Review.builder()
-                .user(findUser)
+                .user(user)
                 .title(reviewRequestDto.getTitle())
                 .content(reviewRequestDto.getContent())
                 .build();
