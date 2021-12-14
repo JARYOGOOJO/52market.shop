@@ -24,26 +24,34 @@ public class MessageController {
     }
 
     @Operation(description = "전체 메세지 보내기", method = "MESSAGE")
-    @MessageMapping("/chat/message/All")
+    @MessageMapping("/chat/message/all")
     public void messageAll(ChatRequestDto chatRequestDto) {
         log.debug("/chat/message/All");
         log.debug("chatRequestDto : " + chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/chat/room", chatRequestDto.getMsg());
+        messagingTemplate.convertAndSend("/sub/chat/all", chatRequestDto.getMsg());
     }
 
     @Operation(description = "게시글 작성시 전체알림", method = "MESSAGE")
-    @MessageMapping("/article/notice/All")
+    @MessageMapping("/article/notice/all")
     public void articleNoticeAll(ChatRequestDto chatRequestDto) {
         log.debug("/article/notice/All");
         log.debug("chatRequestDto : " + chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/article/notice/All", chatRequestDto.getMsg());
+        messagingTemplate.convertAndSend("/sub/article/notice/all", chatRequestDto.getMsg());
     }
 
     @Operation(description = "댓글 작성시 전체알림")
-    @MessageMapping("/comment/notice/All")
+    @MessageMapping("/comment/notice/all")
     public void commentNoticeAll(ChatRequestDto chatRequestDto) {
         log.debug("/comment/notice/All");
         log.debug("chatRequestDto : " + chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/comment/notice/All", chatRequestDto.getMsg());
+        messagingTemplate.convertAndSend("/sub/comment/notice/all", chatRequestDto.getMsg());
+    }
+
+    @Operation(description = "유저에게 알림보내기")
+    @MessageMapping("/user/notice")
+    public void userNoticeComment(ChatRequestDto chatRequestDto){
+        log.debug("/user/notice");
+        log.debug("chatRequestDto : " + chatRequestDto.toString());
+        messagingTemplate.convertAndSend("/sub/user/notice/"+chatRequestDto.getUserSubscribeId(),chatRequestDto.getMsg());
     }
 }
