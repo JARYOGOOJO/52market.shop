@@ -63,14 +63,13 @@ public class S3Uploader {
 
     private void uploadOnS3Bucket(String fileName, InputStream stream, ObjectMetadata data) {
         TransferManager transferManager = TransferManagerBuilder.standard().withS3Client(amazonS3Client).build();
-        PutObjectRequest request = new PutObjectRequest(bucket, fileName, stream, data)
-                .withCannedAcl(CannedAccessControlList.PublicRead);
+        PutObjectRequest request = new PutObjectRequest(bucket, fileName, stream, data).withCannedAcl(CannedAccessControlList.PublicRead);
         Upload upload = transferManager.upload(request);
 
         try {
             upload.waitForCompletion();
-        } catch (AmazonClientException | InterruptedException amazonClientException) {
-            log.error(amazonClientException.getMessage());
+        } catch (AmazonClientException | InterruptedException amazonException) {
+            log.error(amazonException.getMessage());
         }
     }
 
