@@ -28,10 +28,11 @@ public class Review extends Timestamped {
     private String content;
 
     @Builder
-    public Review(ReviewRequestDto reviewRequestDto, User user) {
+    public Review(String title, String content, User user) {
+        this.title = title;
+        this.content = content;
         this.user = user;
-        this.title = reviewRequestDto.getTitle();
-        this.content = reviewRequestDto.getContent();
+
     }
 
     public void update(ReviewRequestDto reviewRequestDto) {
