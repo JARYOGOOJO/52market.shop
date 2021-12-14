@@ -33,7 +33,9 @@ public class S3Uploader {
     private final AmazonS3Client amazonS3Client;
 
     public String upload(MultipartFile uploadFile) throws IOException {
+        System.out.println(defaultUrl);
         String origName = uploadFile.getOriginalFilename();
+        System.out.println(origName);
         String url;
         try {
             String ext = null;
@@ -45,11 +47,11 @@ public class S3Uploader {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(uploadFile.getContentType());
             objectMetadata.setContentLength(uploadFile.getBytes().length);
-
+            System.out.println(objectMetadata);
             InputStream inputStream = uploadFile.getInputStream();
             uploadOnS3Bucket(saveFileName, inputStream, objectMetadata);
             url = defaultUrl + saveFileName;
-
+            System.out.println(url);
         } catch (StringIndexOutOfBoundsException e) {
             url = null;
         }
