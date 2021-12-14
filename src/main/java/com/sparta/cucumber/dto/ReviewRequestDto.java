@@ -4,8 +4,7 @@ import lombok.*;
 
 @Data
 public class ReviewRequestDto {
-    private Long reviewUserid;
-    private Long reviewTargetUserId;
-    private Integer score;
+    private Long userId;
+    private String title;
     private String content;
 }
