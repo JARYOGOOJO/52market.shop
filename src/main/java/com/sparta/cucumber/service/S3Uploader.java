@@ -27,13 +27,18 @@ public class S3Uploader {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-
     @Value("${cloud.aws.s3.bucket.url}")
     private String defaultUrl;
+    @Value("${cloud.aws.credentials.access-key}")
+    private String AccessKey;
+    @Value("${cloud.aws.credentials.secret-key}")
+    private String SecretKey;
 
     private final AmazonS3Client amazonS3Client;
 
     public String upload(MultipartFile uploadFile) throws IOException {
+        System.out.println(AccessKey);
+        System.out.println(SecretKey);
         String origName = uploadFile.getOriginalFilename();
         String url;
         try {
