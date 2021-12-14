@@ -50,8 +50,6 @@ public class UserRestController {
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) throws Exception {
         System.out.println(userDTO);
         userService.signup(userDTO);
-//        Authentication authentication = authenticate(userDTO.getEmail(), userDTO.getPassword());
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
@@ -62,8 +60,6 @@ public class UserRestController {
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) throws Exception {
         System.out.println(userDTO);
         userService.signin(userDTO);
-//        Authentication authentication = authenticate(userDTO.getEmail(), userDTO.getPassword());
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
