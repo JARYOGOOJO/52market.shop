@@ -44,8 +44,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     implementation 'org.modelmapper:modelmapper:2.4.4'
     // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
-    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-jpa"
+    implementation "com.querydsl:querydsl-apt"
 }
 
 test {
