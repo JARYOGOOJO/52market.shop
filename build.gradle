@@ -46,6 +46,13 @@ dependencies {
     // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
     implementation "com.querydsl:querydsl-jpa"
     implementation "com.querydsl:querydsl-apt"
+    // https://mvnrepository.com/artifact/org.springframework.restdocs/spring-restdocs-mockmvc
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.5.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.restdocs/spring-restdocs-asciidoctor
+    implementation 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.restdocs/spring-restdocs-core
+    implementation 'org.springframework.restdocs:spring-restdocs-core:2.0.5.RELEASE'
+
 }
 
 test {
