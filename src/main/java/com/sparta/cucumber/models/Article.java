@@ -20,8 +20,8 @@ public class Article extends Timestamped {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "ARTICLE_GENERATOR")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user")
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user", foreignKey = @ForeignKey(name = "fk_article_user_id"))
     private User user;
     @Column(length = 500, nullable = false)
     private String title;

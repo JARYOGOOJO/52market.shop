@@ -4,6 +4,7 @@ import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.models.Article;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ArticleRepository;
+import com.sparta.cucumber.repository.ArticleRepositorySupport;
 import com.sparta.cucumber.repository.UserRepository;
 import com.sparta.cucumber.utils.LocationDistance;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class ArticleService {
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
+    private final ArticleRepositorySupport articleRepositorySupport;
     private final LocationDistance location;
 
     // S3에 사진 업로드 가능한 메소드
@@ -45,11 +47,11 @@ public class ArticleService {
     }
 
     public List<Article> getArticles(String query) {
-        return articleRepository.findAllByTitleContainsOrderByCreatedAtDesc(query);
+        return articleRepositorySupport.findAllByTitleContainsOrderByCreatedAtDesc(query);
     }
 
     public List<Article> getAllArticles() {
-        return articleRepository.findAll();
+        return articleRepositorySupport.findAll();
     }
 
     public Article seeDetailOfArticle(Long articleId) {
@@ -72,7 +74,7 @@ public class ArticleService {
     }
 
     public List<Article> getUsersArticles(@PathVariable("id") Long userId) {
-        return articleRepository.findAllByUser_IdOrderByCreatedAtDesc(userId);
+        return articleRepositorySupport.findAllByUser_IdOrderByCreatedAtDesc(userId);
     }
 
 
