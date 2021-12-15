@@ -47,6 +47,7 @@ public class S3Uploader {
             ObjectMetadata objectMetadata = new ObjectMetadata();
             objectMetadata.setContentType(uploadFile.getContentType());
             objectMetadata.setContentLength(uploadFile.getBytes().length);
+
             System.out.println(objectMetadata);
             InputStream inputStream = uploadFile.getInputStream();
             uploadOnS3Bucket(saveFileName, inputStream, objectMetadata);
