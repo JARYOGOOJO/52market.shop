@@ -9,4 +9,5 @@ public class JwtResponseDto {
 
     private final String token;
     private final Long userId;
+    private final String userSubscribeId;
 }

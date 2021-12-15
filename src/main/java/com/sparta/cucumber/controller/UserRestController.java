@@ -38,7 +38,7 @@ public class UserRestController {
         String username = userService.kakaoLogin(socialLoginDto.getToken());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
         final String token = jwtTokenUtil.generateToken(userDetails);
-        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId());
+        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(),userDetails.getUser().getSubscribeId());
         return ResponseEntity.ok(result);
     }
 
@@ -49,7 +49,7 @@ public class UserRestController {
         userService.signup(userDTO);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
+        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(),userDetails.getUser().getSubscribeId()));
     }
 
     @Operation(description = "로그인", method = "POST")
@@ -59,7 +59,7 @@ public class UserRestController {
         userService.signin(userDTO);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
+        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(),userDetails.getUser().getSubscribeId()));
     }
 
 //    @Operation(description = "유저 프로필사진 변경", method = "PUT")
