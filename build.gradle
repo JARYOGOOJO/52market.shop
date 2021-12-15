@@ -21,11 +21,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.6'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.5.6'
-    implementation 'org.json:json:20210307'
     developmentOnly 'org.springframework.boot:spring-boot-devtools:2.5.6'
-    runtimeOnly 'com.h2database:h2:1.4.200'
     runtimeOnly 'mysql:mysql-connector-java:8.0.25'
-    compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     // 테스트 dependency
@@ -34,9 +31,8 @@ dependencies {
     // 시큐리티 관련 dependency
     implementation 'org.springframework.boot:spring-boot-starter-security:2.5.6'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.json:json:20210307'
     // 사진 업로드를 위한 dependency
-    implementation 'commons-io:commons-io:20030203.000550'
-    implementation 'commons-fileupload:commons-fileupload:1.4'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     // 소켓 구현을 위한 dependency
     implementation 'org.springframework.boot:spring-boot-starter-websocket:2.5.6'
