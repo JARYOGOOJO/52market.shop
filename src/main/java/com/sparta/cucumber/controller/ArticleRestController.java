@@ -33,8 +33,8 @@ public class ArticleRestController {
 
     @Operation(description = "모든 게시글 가져오기", method = "GET")
     @GetMapping("/api/articles")
-    public ResponseEntity<List<Article>> getAllArticles() {
-        List<Article> articles = articleService.getAllArticles();
+    public ResponseEntity<List<Article>> getAllArticles(@RequestParam("page") int page) {
+        List<Article> articles = articleService.getAllArticles(page);
         return ResponseEntity.ok().body(articles);
     }
 

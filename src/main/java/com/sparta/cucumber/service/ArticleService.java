@@ -51,13 +51,17 @@ public class ArticleService {
     }
 
     @Transactional
-    public List<Article> getAllArticles() {
+    public List<Article> getAllArticles(int page) {
+        int start = (page - 1) * 10;
+        int limit = page * 10;
         return articleRepository
                 .findAll()
                 .stream()
                 .sorted(Comparator
                         .comparing(Timestamped::getCreatedAt)
                         .reversed())
+                .skip(start)
+                .limit(limit)
                 .collect(Collectors.toList());
     }
 
