@@ -16,6 +16,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @RequiredArgsConstructor
 @Service
 public class ArticleService {
@@ -35,8 +37,8 @@ public class ArticleService {
 
         Article article = Article.builder()
                 .user(user)
-                .title(requestDto.getTitle())
-                .content(requestDto.getContent())
+                .title(htmlEscape(requestDto.getTitle()))
+                .content(htmlEscape(requestDto.getContent()))
                 .imagePath(imagePath)
                 .imageName(imageName)
                 .latitude(user.getLatitude())

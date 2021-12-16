@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @RequiredArgsConstructor
 @Service
 public class ReviewService {
@@ -34,8 +36,8 @@ public class ReviewService {
         );
         Review review = Review.builder()
                 .user(user)
-                .title(reviewRequestDto.getTitle())
-                .content(reviewRequestDto.getContent())
+                .title(htmlEscape(reviewRequestDto.getTitle()))
+                .content(htmlEscape(reviewRequestDto.getContent()))
                 .build();
 
         return reviewRepository.save(review);
