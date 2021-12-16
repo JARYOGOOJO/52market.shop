@@ -19,23 +19,23 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.6'
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.5.6'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.6.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.6.1'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools:2.6.1'
     runtimeOnly 'mysql:mysql-connector-java:8.0.25'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     // 테스트 dependency
     implementation 'junit:junit:4.13.2'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.6'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.6.1'
     // 시큐리티 관련 dependency
-    implementation 'org.springframework.boot:spring-boot-starter-security:2.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-security:2.6.1'
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     implementation 'org.json:json:20210307'
     // 사진 업로드를 위한 dependency
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     // 소켓 구현을 위한 dependency
-    implementation 'org.springframework.boot:spring-boot-starter-websocket:2.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket:2.6.1'
     implementation 'org.webjars:webjars-locator-core:0.48'
     implementation 'org.webjars:sockjs-client:1.5.1'
     implementation 'org.webjars:stomp-websocket:2.3.4'
@@ -44,7 +44,15 @@ dependencies {
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     implementation 'org.modelmapper:modelmapper:2.4.4'
     // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
-    implementation 'com.querydsl:querydsl-jpa:5.0.0'
+    implementation "com.querydsl:querydsl-jpa"
+    implementation "com.querydsl:querydsl-apt"
+    // https://mvnrepository.com/artifact/org.springframework.restdocs/spring-restdocs-mockmvc
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.5.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.restdocs/spring-restdocs-asciidoctor
+    implementation 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.5.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.restdocs/spring-restdocs-core
+    implementation 'org.springframework.restdocs:spring-restdocs-core:2.0.5.RELEASE'
+
 }
 
 test {

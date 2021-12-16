@@ -38,7 +38,8 @@ public class UserRestController {
         String username = userService.kakaoLogin(socialLoginDto.getToken());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
         final String token = jwtTokenUtil.generateToken(userDetails);
-        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId());
+        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(),userDetails.getUser().getSubscribeId());
+        System.out.println(userDetails.isEnabled());
         return ResponseEntity.ok(result);
     }
 
@@ -47,9 +48,11 @@ public class UserRestController {
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) throws Exception {
         System.out.println(userDTO);
         userService.signup(userDTO);
+        //        Authentication auth = authenticate(userDTO.getEmail(), userDTO.getPassword());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
+        //        System.out.println(auth.isAuthenticated());
+        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(),userDetails.getUser().getSubscribeId()));
     }
 
     @Operation(description = "로그인", method = "POST")
@@ -57,9 +60,12 @@ public class UserRestController {
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) throws Exception {
         System.out.println(userDTO);
         userService.signin(userDTO);
+        //        Authentication auth = authenticate(userDTO.getEmail(), userDTO.getPassword());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId()));
+        System.out.println(userDetails.isEnabled());
+        //        System.out.println(auth.isAuthenticated());
+        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
 //    @Operation(description = "유저 프로필사진 변경", method = "PUT")
@@ -74,7 +80,8 @@ public class UserRestController {
 
     private Authentication authenticate(String email, String password) throws Exception {
         try {
-            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            String username = email.split("@")[0];
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
