@@ -1,8 +1,6 @@
 package com.sparta.cucumber.models;
 
 import com.sparta.cucumber.dto.ReviewRequestDto;
-import com.sparta.cucumber.dto.UserRequestDto;
-import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +30,6 @@ public class Review extends Timestamped {
         this.title = title;
         this.content = content;
         this.user = user;
-
     }
 
     public void update(ReviewRequestDto reviewRequestDto) {

@@ -2,6 +2,7 @@ package com.sparta.cucumber.service;
 
 import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.models.Article;
+import com.sparta.cucumber.models.Timestamped;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,8 +50,19 @@ public class ArticleService {
         return articleRepository.findAllByTitleContainsOrderByCreatedAtDesc(query);
     }
 
-    public List<Article> getAllArticles() {
-        return articleRepository.findAll();
+    @Transactional
+    public List<Article> getAllArticles(int page) {
+        int start = (page - 1) * 10;
+        int limit = page * 10;
+        return articleRepository
+                .findAll()
+                .stream()
+                .sorted(Comparator
+                        .comparing(Timestamped::getCreatedAt)
+                        .reversed())
+                .skip(start)
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
     public Article seeDetailOfArticle(Long articleId) {
