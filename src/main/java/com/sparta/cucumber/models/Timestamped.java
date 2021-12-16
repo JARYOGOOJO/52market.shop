@@ -9,6 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 @Getter // get 함수를 자동 생성합니다.
 @MappedSuperclass // 멤버 변수가 컬럼이 되도록 합니다.
@@ -17,9 +19,9 @@ public abstract class Timestamped {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     @CreatedDate // 최초 생성 시점
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     @LastModifiedDate // 마지막 변경 시점
-    private LocalDateTime modifiedAt;
+    private LocalDateTime modifiedAt = ZonedDateTime.now(ZoneId.of("Asia/Seoul")).toLocalDateTime();
 }

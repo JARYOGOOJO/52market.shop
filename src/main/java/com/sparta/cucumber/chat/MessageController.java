@@ -21,7 +21,7 @@ public class MessageController {
     public void message(ChatRequestDto chatRequestDto) {
         log.debug("/chat/message");
         System.out.println("chatRequestDto : " + chatRequestDto.toString());
-        log.debug("chatRequestDto : " + chatRequestDto.toString());
+        log.debug("chatRequestDto : " + chatRequestDto);
         messagingTemplate.convertAndSend("/sub/chat/room/" + chatRequestDto.getRoomSubscribeId(), htmlEscape(chatRequestDto.getMsg()));
     }
 
