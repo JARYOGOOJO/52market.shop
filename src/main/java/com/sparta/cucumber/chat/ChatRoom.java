@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -22,8 +21,8 @@ public class ChatRoom {
     private boolean isActive;
 
     @Builder
-    public ChatRoom(String title, boolean isActive) {
-        this.roomSubscribeId = UUID.randomUUID().toString();
+    public ChatRoom(String roomSubscribeId, String title, boolean isActive) {
+        this.roomSubscribeId = roomSubscribeId;
         this.title = title;
         this.isActive = isActive;
     }
