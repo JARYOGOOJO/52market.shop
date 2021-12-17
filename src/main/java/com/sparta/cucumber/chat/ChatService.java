@@ -45,11 +45,7 @@ public class ChatService {
             return null;
         }
 
-        EnterRoom enterRoom = EnterRoom
-                .builder()
-                .user(user)
-                .room(chatRoom)
-                .build();
+        EnterRoom enterRoom = new EnterRoom(user, chatRoom);
         return enterRoomRepository.save(enterRoom);
     }
 

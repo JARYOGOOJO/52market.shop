@@ -1,7 +1,6 @@
 package com.sparta.cucumber.chat;
 
 import com.sparta.cucumber.models.User;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +18,6 @@ public class EnterRoom {
     @ManyToOne
     private ChatRoom room;
 
-    @Builder
     public EnterRoom(User user, ChatRoom room) {
         this.user = user;
         this.room = room;
