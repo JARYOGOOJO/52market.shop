@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @Getter
 @NoArgsConstructor
 @TableGenerator(
@@ -17,7 +19,7 @@ import javax.persistence.*;
 public class Review extends Timestamped {
     @Id
     @Column(name = "review_id")
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "REVIEW_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "REVIEW_GENERATOR")
     private Long id;
     @ManyToOne
     @JoinColumn(name = "user")
@@ -27,13 +29,13 @@ public class Review extends Timestamped {
 
     @Builder
     public Review(String title, String content, User user) {
-        this.title = title;
-        this.content = content;
+        this.title = htmlEscape(title);
+        this.content = htmlEscape(content);
         this.user = user;
     }
 
     public void update(ReviewRequestDto reviewRequestDto) {
-        this.title = reviewRequestDto.getTitle();
-        this.content = reviewRequestDto.getContent();
+        this.title = htmlEscape(reviewRequestDto.getTitle());
+        this.content = htmlEscape(reviewRequestDto.getContent());
     }
 }

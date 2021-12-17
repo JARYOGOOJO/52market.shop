@@ -15,11 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    private final UserRepository userRepository;
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
+    private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -33,8 +35,8 @@ public class UserService {
         } else {
             User user = User
                     .builder()
-                    .name(userDTO.getName())
-                    .email(userDTO.getEmail())
+                    .name(htmlEscape(userDTO.getName()))
+                    .email(htmlEscape(userDTO.getEmail()))
                     .encodedPassword(passwordEncoder.encode(userDTO.getPassword()))
                     .latitude(userDTO.getLatitude())
                     .longitude(userDTO.getLongitude())

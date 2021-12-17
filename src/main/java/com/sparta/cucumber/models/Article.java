@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @Getter
 @NoArgsConstructor
 @Entity(name = "article")
@@ -38,8 +40,8 @@ public class Article extends Timestamped {
                    String imageName, Double latitude,
                    Double longitude) {
         this.user = user;
-        this.title = title;
-        this.content = content;
+        this.title = htmlEscape(title);
+        this.content = htmlEscape(content);
         this.imagePath = imagePath;
         this.imageName = imageName;
         this.latitude = latitude;

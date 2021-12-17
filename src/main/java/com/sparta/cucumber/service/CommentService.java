@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -21,7 +23,7 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Comment uploadOrUpdate (CommentRequestDto requestDto) {
+    public Comment uploadOrUpdate(CommentRequestDto requestDto) {
         Article article = articleRepository
                 .findById(requestDto.getArticleId())
                 .orElseThrow(
@@ -32,7 +34,7 @@ public class CommentService {
                         () -> new NullPointerException("게시물 작성자가 올바르지 않습니다.."));
         Comment comment = Comment
                 .builder()
-                .content(requestDto.getContent())
+                .content(htmlEscape(requestDto.getContent()))
                 .user(user)
                 .article(article)
                 .build();
