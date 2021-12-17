@@ -19,7 +19,7 @@ import static org.springframework.web.util.HtmlUtils.htmlEscape;
 public class Review extends Timestamped {
     @Id
     @Column(name = "review_id")
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "REVIEW_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "REVIEW_GENERATOR")
     private Long id;
     @ManyToOne
     @JoinColumn(name = "user")

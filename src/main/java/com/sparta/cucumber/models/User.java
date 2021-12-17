@@ -23,7 +23,7 @@ import static org.springframework.web.util.HtmlUtils.htmlEscape;
 @Entity(name = "user")
 public class User extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "USER_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "USER_GENERATOR")
     private Long id;
     @Column(nullable = false)
     private String name;

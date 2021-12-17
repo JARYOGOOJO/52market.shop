@@ -19,7 +19,7 @@ public class ReviewRestController {
     private final ReviewService reviewService;
 
 
-//    @Operation(description = "리뷰 id로 가져오기", method = "GET")
+    //    @Operation(description = "리뷰 id로 가져오기", method = "GET")
 //    @GetMapping("/api/{id}/reviews")
 //    public List<Review> getReviews(@PathVariable("id") Long reviewTargetId) {
 //        return reviewService.getReviews(reviewTargetId);
@@ -27,7 +27,7 @@ public class ReviewRestController {
     @Operation(description = "모든 리뷰 가져오기", method = "GET")
     @GetMapping("/api/reviews")
     public ResponseEntity<List<Review>> getAllReviews() {
-        List<Review> reviews =  reviewService.getAllReviews();
+        List<Review> reviews = reviewService.getAllReviews();
         return ResponseEntity.ok().body(reviews);
     }
 

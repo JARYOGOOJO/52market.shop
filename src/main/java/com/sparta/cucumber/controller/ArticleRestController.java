@@ -23,7 +23,7 @@ public class ArticleRestController {
 
     private final ArticleService articleService;
     private final S3Uploader s3Uploader;
-    
+
     @Operation(description = "게시글 검색", method = "GET")
     @GetMapping("/api/articles/{query}")
     public ResponseEntity<List<Article>> getArticles(@PathVariable("query") String query) {
@@ -47,7 +47,7 @@ public class ArticleRestController {
 
     @Operation(description = "자신주변 게시글 가져오기", method = "GET")
     @GetMapping("/api/articles/{lat}/{lng}")
-    public ResponseEntity<List<Article>> getAroundArticle (@PathVariable("lat") Double lat,
+    public ResponseEntity<List<Article>> getAroundArticle(@PathVariable("lat") Double lat,
                                                           @PathVariable("lng") Double lon) {
         List<Article> articles = articleService.getAroundArticle(lat, lon);
         return ResponseEntity.ok().body(articles);

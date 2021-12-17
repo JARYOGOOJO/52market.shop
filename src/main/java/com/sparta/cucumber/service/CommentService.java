@@ -23,7 +23,7 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Comment uploadOrUpdate (CommentRequestDto requestDto) {
+    public Comment uploadOrUpdate(CommentRequestDto requestDto) {
         Article article = articleRepository
                 .findById(requestDto.getArticleId())
                 .orElseThrow(

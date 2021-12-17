@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class RedisPublisher {
-    private final RedisTemplate<String,Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public void publish(ChannelTopic topic, ChatRequestDto chatRequestDto) {
         redisTemplate.convertAndSend(topic.getTopic(), chatRequestDto);
