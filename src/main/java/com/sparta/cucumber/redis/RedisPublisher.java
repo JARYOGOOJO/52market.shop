@@ -1,5 +1,6 @@
-package com.sparta.cucumber.chat;
+package com.sparta.cucumber.redis;
 
+import com.sparta.cucumber.chat.ChatRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class RedisPublisher {
-    private final RedisTemplate<String,Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public void publish(ChannelTopic topic,ChatRequestDto chatRequestDto){
-        redisTemplate.convertAndSend(topic.getTopic(),chatRequestDto);
+    public void publish(ChannelTopic topic, ChatRequestDto chatRequestDto) {
+        redisTemplate.convertAndSend(topic.getTopic(), chatRequestDto);
     }
 }

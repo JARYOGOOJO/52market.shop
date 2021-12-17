@@ -25,12 +25,21 @@ import java.util.UUID;
 @Service
 public class S3Uploader {
 
+    private final AmazonS3Client amazonS3Client;
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
     @Value("${cloud.aws.s3.bucket.url}")
     private String defaultUrl;
 
-    private final AmazonS3Client amazonS3Client;
+    private static String getUuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    private static String getName() {
+        Date date = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        return simpleDateFormat.format(date);
+    }
 
     public String upload(MultipartFile uploadFile) throws IOException {
         System.out.println(defaultUrl);
@@ -59,10 +68,6 @@ public class S3Uploader {
         return url;
     }
 
-    private static String getUuid() {
-        return UUID.randomUUID().toString().replaceAll("-", "");
-    }
-
     private void uploadOnS3Bucket(String fileName, InputStream stream, ObjectMetadata data) {
         TransferManager transferManager = TransferManagerBuilder.standard().withS3Client(amazonS3Client).build();
         PutObjectRequest request = new PutObjectRequest(bucket, fileName, stream, data).withCannedAcl(CannedAccessControlList.PublicRead);
@@ -73,11 +78,5 @@ public class S3Uploader {
         } catch (AmazonClientException | InterruptedException amazonException) {
             log.error(amazonException.getMessage());
         }
-    }
-
-    private static String getName() {
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        return simpleDateFormat.format(date);
     }
 }

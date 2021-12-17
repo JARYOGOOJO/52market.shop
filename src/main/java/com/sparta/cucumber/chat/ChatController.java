@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +14,6 @@ import java.util.List;
 @Controller
 public class ChatController {
     private final ChatService chatService;
-    private final SimpMessageSendingOperations messagingTemplate;
 
     @Operation(description = "방만들기", method = "POST")
     @ResponseBody
@@ -45,15 +43,15 @@ public class ChatController {
     @Operation(description = "방 id로 가져오기", method = "GET")
     @ResponseBody
     @GetMapping("/api/room/{id}")
-    public ResponseEntity<?> getRoom(@PathVariable("id") Long id){
-        log.debug("getRoom : "+id);
+    public ResponseEntity<?> getRoom(@PathVariable("id") Long id) {
+        log.debug("getRoom : " + id);
         return ResponseEntity.ok().body(chatService.getRoom(id));
     }
 
     @Operation(description = "방 전체목록 가져오기", method = "GET")
     @ResponseBody
     @GetMapping("/api/rooms")
-    public ResponseEntity<List<ChatRoom>> getRooms(){
+    public ResponseEntity<List<ChatRoom>> getRooms() {
         return ResponseEntity.ok().body(chatService.getRooms());
     }
 }

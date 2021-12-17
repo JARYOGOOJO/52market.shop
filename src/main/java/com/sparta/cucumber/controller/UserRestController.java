@@ -38,7 +38,7 @@ public class UserRestController {
         String username = userService.kakaoLogin(socialLoginDto.getToken());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
         final String token = jwtTokenUtil.generateToken(userDetails);
-        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(),userDetails.getUser().getSubscribeId());
+        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
         System.out.println(userDetails.isEnabled());
         return ResponseEntity.ok(result);
     }
@@ -52,7 +52,7 @@ public class UserRestController {
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         //        System.out.println(auth.isAuthenticated());
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(),userDetails.getUser().getSubscribeId()));
+        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
     @Operation(description = "로그인", method = "POST")

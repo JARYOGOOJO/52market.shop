@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +21,7 @@ import javax.persistence.*;
 public class Comment extends Timestamped {
     @Id
     @Column(name = "comment_id")
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "COMMENT_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "COMMENT_GENERATOR")
     private Long id;
     private String content;
     @ManyToOne
@@ -31,9 +33,9 @@ public class Comment extends Timestamped {
     private Article article;
 
     @Builder
-    public Comment (User user, Article article, String content) {
-         this.user = user;
-         this.article = article;
-         this.content = content;
+    public Comment(User user, Article article, String content) {
+        this.user = user;
+        this.article = article;
+        this.content = htmlEscape(content);
     }
 }

@@ -21,7 +21,7 @@ public class MessageController {
     public void message(ChatRequestDto chatRequestDto) {
         log.debug("/chat/message");
         System.out.println("chatRequestDto : " + chatRequestDto.toString());
-        log.debug("chatRequestDto : " + chatRequestDto.toString());
+        log.debug("chatRequestDto : " + chatRequestDto);
         messagingTemplate.convertAndSend("/sub/chat/room/" + chatRequestDto.getRoomSubscribeId(), htmlEscape(chatRequestDto.getMsg()));
     }
 
@@ -51,7 +51,7 @@ public class MessageController {
 
     @Operation(description = "유저에게 알림보내기")
     @MessageMapping("/user/notice")
-    public void userNoticeComment(ChatRequestDto chatRequestDto){
+    public void userNoticeComment(ChatRequestDto chatRequestDto) {
         log.debug("/user/notice");
         log.debug("chatRequestDto : " + chatRequestDto.toString());
         messagingTemplate.convertAndSend("/sub/user/notice/" + chatRequestDto.getUserSubscribeId(), htmlEscape(chatRequestDto.getMsg()));

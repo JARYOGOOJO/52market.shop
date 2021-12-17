@@ -21,10 +21,12 @@ public class LocationDistance {
         }
         return dist;
     }
+
     // This function converts decimal degrees to radians
     public double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
+
     // This function converts radians to decimal degrees
     public double rad2deg(double rad) {
         return (rad * 180 / Math.PI);

@@ -20,8 +20,8 @@ import static org.springframework.web.util.HtmlUtils.htmlEscape;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    private final UserRepository userRepository;
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
+    private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
