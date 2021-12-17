@@ -19,19 +19,19 @@ public class ChatService {
 
 
     @Transactional
-    public void exitRoom(ChatRequestDto chatRequestDto){
+    public void exitRoom(ChatRequestDto chatRequestDto) {
         User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
         ChatRoom chatRoom = chatRoomRepository.findById(chatRequestDto.getRoomId()).orElseThrow(
                 () -> new NullPointerException("해당 방이 존재하지 않습니다.")
         );
-        Optional<EnterRoom> findEnterRoom = enterRoomRepository.findByUserAndRoom(user,chatRoom);
+        Optional<EnterRoom> findEnterRoom = enterRoomRepository.findByUserAndRoom(user, chatRoom);
         findEnterRoom.ifPresent(enterRoom -> enterRoomRepository.deleteById(enterRoom.getId()));
     }
 
     @Transactional
-    public EnterRoom enterRoom(ChatRequestDto chatRequestDto){
+    public EnterRoom enterRoom(ChatRequestDto chatRequestDto) {
         User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
@@ -40,8 +40,8 @@ public class ChatService {
         );
 
         // 중복검사
-        Optional<EnterRoom> findEnterRoom = enterRoomRepository.findByUserAndRoom(user,chatRoom);
-        if(findEnterRoom.isPresent()){
+        Optional<EnterRoom> findEnterRoom = enterRoomRepository.findByUserAndRoom(user, chatRoom);
+        if (findEnterRoom.isPresent()) {
             return null;
         }
 
@@ -54,20 +54,20 @@ public class ChatService {
     }
 
     @Transactional(readOnly = true)
-    public ChatRoom getRoom(Long id){
+    public ChatRoom getRoom(Long id) {
         return chatRoomRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당 방이 존재하지 않습니다.")
         );
     }
 
     @Transactional(readOnly = true)
-    public List<ChatRoom> getRooms(){
+    public List<ChatRoom> getRooms() {
         return chatRoomRepository.findAll();
     }
 
     @Transactional
-    public ChatRoom createRoom(ChatRequestDto chatRequestDto){
-        ChatRoom chatRoom =ChatRoom
+    public ChatRoom createRoom(ChatRequestDto chatRequestDto) {
+        ChatRoom chatRoom = ChatRoom
                 .builder()
                 .title(chatRequestDto.getTitle())
                 .isActive(chatRequestDto.isActive())

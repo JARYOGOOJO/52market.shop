@@ -51,7 +51,7 @@ public class MessageController {
 
     @Operation(description = "유저에게 알림보내기")
     @MessageMapping("/user/notice")
-    public void userNoticeComment(ChatRequestDto chatRequestDto){
+    public void userNoticeComment(ChatRequestDto chatRequestDto) {
         log.debug("/user/notice");
         log.debug("chatRequestDto : " + chatRequestDto.toString());
         messagingTemplate.convertAndSend("/sub/user/notice/" + chatRequestDto.getUserSubscribeId(), htmlEscape(chatRequestDto.getMsg()));

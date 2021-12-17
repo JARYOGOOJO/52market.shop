@@ -45,15 +45,15 @@ public class ChatController {
     @Operation(description = "방 id로 가져오기", method = "GET")
     @ResponseBody
     @GetMapping("/api/room/{id}")
-    public ResponseEntity<?> getRoom(@PathVariable("id") Long id){
-        log.debug("getRoom : "+id);
+    public ResponseEntity<?> getRoom(@PathVariable("id") Long id) {
+        log.debug("getRoom : " + id);
         return ResponseEntity.ok().body(chatService.getRoom(id));
     }
 
     @Operation(description = "방 전체목록 가져오기", method = "GET")
     @ResponseBody
     @GetMapping("/api/rooms")
-    public ResponseEntity<List<ChatRoom>> getRooms(){
+    public ResponseEntity<List<ChatRoom>> getRooms() {
         return ResponseEntity.ok().body(chatService.getRooms());
     }
 }
