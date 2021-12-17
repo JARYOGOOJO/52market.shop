@@ -73,8 +73,11 @@ public class User extends Timestamped {
         return this;
     }
 
-    public User updateImage(UserRequestDto userDTO) {
+
+    public void update(UserRequestDto userDTO) {
         this.picture = userDTO.getPicture();
-        return this;
+        this.name = userDTO.getName();
+        this.phoneNumber = userDTO.getPhoneNumber();
+        this.password = userDTO.getPassword();
     }
 }
