@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,7 +35,7 @@ public class Comment extends Timestamped {
     @Builder
     public Comment (User user, Article article, String content) {
          this.user = user;
-         this.article = article;
-         this.content = content;
+        this.article = article;
+        this.content = htmlEscape(content);
     }
 }

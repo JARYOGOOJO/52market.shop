@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.UUID;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @NamedEntityGraph(
         name = "user"
 )
@@ -42,7 +44,7 @@ public class User extends Timestamped {
     public User(String name, String email,
                 String picture, String encodedPassword,
                 String phoneNumber, Double latitude, Double longitude) {
-        this.name = name;
+        this.name = htmlEscape(name);
         this.email = email;
         this.picture = picture;
         this.password = encodedPassword;
@@ -55,7 +57,7 @@ public class User extends Timestamped {
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
-        this.name = nickname;
+        this.name = htmlEscape(nickname);
         this.email = email;
         this.password = encodedPassword;
         this.role = role;
