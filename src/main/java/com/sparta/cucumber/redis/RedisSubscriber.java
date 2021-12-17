@@ -1,6 +1,7 @@
-package com.sparta.cucumber.chat;
+package com.sparta.cucumber.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.cucumber.chat.ChatRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -19,10 +20,10 @@ public class RedisSubscriber implements MessageListener {
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        try{
-            String publicshMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
-            ChatRequestDto chatRequestDto = objectMapper.readValue(publicshMessage,ChatRequestDto.class);
-            log.debug("RedisSubscriber : "+chatRequestDto.toString());
+        try {
+            String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
+            ChatRequestDto chatRequestDto = objectMapper.readValue(publishMessage, ChatRequestDto.class);
+            log.debug("RedisSubscriber : " + chatRequestDto.toString());
 
         }catch(Exception e){
             log.error(e.getMessage());

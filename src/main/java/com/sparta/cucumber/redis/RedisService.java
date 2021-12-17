@@ -1,4 +1,4 @@
-package com.sparta.cucumber.chat;
+package com.sparta.cucumber.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
