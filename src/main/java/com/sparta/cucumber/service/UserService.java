@@ -1,19 +1,27 @@
 package com.sparta.cucumber.service;
 
+import com.sparta.cucumber.dto.JwtRequestDto;
+import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.UserRequestDto;
 import com.sparta.cucumber.models.Role;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
+import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.security.kakao.KakaoUserInfo;
+import com.sparta.cucumber.utils.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
@@ -25,6 +33,21 @@ public class UserService {
     private final KakaoOAuth2 kakaoOAuth2;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final UserDetailsServiceImpl userDetailsService;
+
+    @Transactional
+    public JwtResponseDto validate(JwtRequestDto requestDto) {
+        String token = requestDto.getToken();
+        User user1 = userRepository.findById(requestDto.getUserId()).orElseThrow(NullPointerException::new);
+        User user2 = userRepository.findByName(jwtTokenUtil.getUsernameFromToken(token)).orElseThrow(NullPointerException::new);
+        if (!Objects.equals(user1, user2)) {
+            throw new UsernameNotFoundException("잘못된 요청입니다.");
+        }
+        UserDetails userDetails = userDetailsService.loadUserByEmail(user1.getEmail());
+        String newToken = jwtTokenUtil.generateToken(userDetails);
+        return new JwtResponseDto(token, user1.getId(), user1.getSubscribeId());
+    }
 
     @Transactional
     public void signup(UserRequestDto userDTO) {

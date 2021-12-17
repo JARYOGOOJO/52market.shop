@@ -1,5 +1,6 @@
 package com.sparta.cucumber.controller;
 
+import com.sparta.cucumber.dto.JwtRequestDto;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
@@ -62,6 +63,14 @@ public class UserRestController {
         final String token = jwtTokenUtil.generateToken(userDetails);
         System.out.println(userDetails.isEnabled());
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
+    }
+
+    @Operation(description = "유저 확인", method = "POST")
+    @PostMapping("/user/validate")
+    public ResponseEntity<?> whoAmI(@RequestBody JwtRequestDto jwtDTO) {
+        System.out.println(jwtDTO);
+        JwtResponseDto jwtResponseDto = userService.validate(jwtDTO);
+        return ResponseEntity.ok(jwtResponseDto);
     }
 
     private Authentication authenticate(String email, String password) throws Exception {
