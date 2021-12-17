@@ -1,5 +1,6 @@
 package com.sparta.cucumber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sparta.cucumber.dto.UserRequestDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,7 @@ import static org.springframework.web.util.HtmlUtils.htmlEscape;
         table = "MY_SEQUENCES",
         pkColumnValue = "USER_SEQ", allocationSize = 30)
 @Entity(name = "user")
+@JsonIgnoreProperties({"socialId", "password", "phoneNumber", "latitude", "longitude", "star"})
 public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "USER_GENERATOR")
