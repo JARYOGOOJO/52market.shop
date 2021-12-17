@@ -1,10 +1,9 @@
 package com.sparta.cucumber.controller;
 
+import com.sparta.cucumber.dto.JwtRequestDto;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
-import com.sparta.cucumber.dto.UserResponseDto;
-import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.S3Uploader;
@@ -19,10 +18,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,8 +36,8 @@ public class UserRestController {
     @Operation(description = "카카오 로그인", method = "POST")
     @PostMapping(value = "/user/kakao")
     public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
-        String username = userService.kakaoLogin(socialLoginDto.getToken());
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
+        String email = userService.kakaoLogin(socialLoginDto.getToken());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(email);
         final String token = jwtTokenUtil.generateToken(userDetails);
         JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
         System.out.println(userDetails.isEnabled());
@@ -48,36 +46,31 @@ public class UserRestController {
 
     @Operation(description = "회원가입", method = "POST")
     @PostMapping("/user/signup")
-    public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) throws Exception {
+    public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
         userService.signup(userDTO);
-        //        Authentication auth = authenticate(userDTO.getEmail(), userDTO.getPassword());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        //        System.out.println(auth.isAuthenticated());
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
     @Operation(description = "로그인", method = "POST")
     @PostMapping("/user/signin")
-    public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) throws Exception {
+    public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
         userService.signin(userDTO);
-        //        Authentication auth = authenticate(userDTO.getEmail(), userDTO.getPassword());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         System.out.println(userDetails.isEnabled());
-        //        System.out.println(auth.isAuthenticated());
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
-    @Operation(description = "유저 정보 변경", method = "PUT")
-    @PutMapping("/user/update")
-    public ResponseEntity<?> updateProfileImage(@ModelAttribute UserRequestDto userDTO,
-                                                              @ModelAttribute MultipartFile profile) throws IOException {
-        String profileImage = s3Uploader.upload(profile);
-        User updateUser = userService.update(userDTO, profileImage);
-        return ResponseEntity.ok().body(updateUser);
+    @Operation(description = "유저 확인", method = "POST")
+    @PostMapping("/user/validate")
+    public ResponseEntity<?> whoAmI(@RequestBody JwtRequestDto jwtDTO) {
+        System.out.println(jwtDTO);
+        JwtResponseDto jwtResponseDto = userService.validate(jwtDTO);
+        return ResponseEntity.ok(jwtResponseDto);
     }
 
     private Authentication authenticate(String email, String password) throws Exception {
