@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RedisSubscriber implements MessageListener {
     private final ObjectMapper objectMapper;
-    private final RedisTemplate redisTemplate;
+    private final StringRedisTemplate redisTemplate;
     private final SimpMessageSendingOperations messagingTemplate;
 
     @Override
