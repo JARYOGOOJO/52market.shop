@@ -5,6 +5,7 @@ import com.sparta.cucumber.dto.UserRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
 import java.util.UUID;
@@ -65,7 +66,7 @@ public class User extends Timestamped {
         this.role = role;
         this.socialId = kakaoId;
         this.star = 0.0;
-        this.subscribeId = UUID.randomUUID().toString();
+        this.subscribeId = RandomStringUtils.random(8);
     }
 
     public User updateKakao(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {

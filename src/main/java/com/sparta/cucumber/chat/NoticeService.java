@@ -48,7 +48,6 @@ public class NoticeService {
 
     public Notice article(ChatRequestDto requestDto) {
         User sender = userRepository
-
                 .findById(requestDto.getUserId()).orElseThrow(
                         () -> new NullPointerException("잘못된 접근입니다."));
         return Notice

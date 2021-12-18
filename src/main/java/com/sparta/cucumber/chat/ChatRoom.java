@@ -5,6 +5,7 @@ import com.sparta.cucumber.models.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -29,8 +30,8 @@ public class ChatRoom extends Timestamped {
     private boolean isActive;
 
     @Builder
-    public ChatRoom(String roomSubscribeId, User host, String title) {
-        this.roomId = roomSubscribeId;
+    public ChatRoom(User host, String title) {
+        this.roomId = RandomStringUtils.random(8);
         this.title = title;
         this.host = host;
         this.messages = new ArrayList<>();
@@ -39,6 +40,7 @@ public class ChatRoom extends Timestamped {
 
     public ChatRoom enter(User user) {
         this.guest = user;
+        this.isActive = true;
         return this;
     }
 
