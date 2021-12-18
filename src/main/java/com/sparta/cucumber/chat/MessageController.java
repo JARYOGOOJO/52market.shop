@@ -22,7 +22,8 @@ public class MessageController {
         log.debug("/chat/message");
         System.out.println("chatRequestDto : " + chatRequestDto.toString());
         log.debug("chatRequestDto : " + chatRequestDto);
-        messagingTemplate.convertAndSend("/sub/chat/room/" + chatRequestDto.getRoomSubscribeId(), htmlEscape(chatRequestDto.getMsg()));
+        String roomSubscribeId = chatRequestDto.getRoomSubscribeId();
+        messagingTemplate.convertAndSend("/sub/chat/room/" + roomSubscribeId, htmlEscape(chatRequestDto.getMsg()));
     }
 
     @Operation(description = "전체 메세지 보내기", method = "MESSAGE")
@@ -54,6 +55,7 @@ public class MessageController {
     public void userNoticeComment(ChatRequestDto chatRequestDto) {
         log.debug("/user/notice");
         log.debug("chatRequestDto : " + chatRequestDto.toString());
-        messagingTemplate.convertAndSend("/sub/user/notice/" + chatRequestDto.getUserSubscribeId(), htmlEscape(chatRequestDto.getMsg()));
+        String userSubscribeId = chatRequestDto.getUserSubscribeId();
+        messagingTemplate.convertAndSend("/sub/user/notice/" + userSubscribeId, htmlEscape(chatRequestDto.getMsg()));
     }
 }
