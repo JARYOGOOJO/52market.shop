@@ -3,8 +3,10 @@ package com.sparta.cucumber.chat;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-
+@Service
 @RequiredArgsConstructor
 public class NoticeService {
 
@@ -12,6 +14,7 @@ public class NoticeService {
     private final ChatRoomRepository chatRoomRepository;
     private final MessageRepository messageRepository;
 
+    @Transactional
     public Notice message(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
@@ -34,6 +37,7 @@ public class NoticeService {
         return messageRepository.save(message);
     }
 
+    @Transactional
     public Notice invite(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
@@ -46,6 +50,7 @@ public class NoticeService {
                 .build();
     }
 
+    @Transactional
     public Notice article(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
@@ -58,6 +63,7 @@ public class NoticeService {
                 .build();
     }
 
+    @Transactional
     public Notice comment(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(

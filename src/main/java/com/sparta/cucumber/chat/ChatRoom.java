@@ -13,7 +13,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "chatroom")
+@Entity(name = "chat_room")
 public class ChatRoom extends Timestamped {
     @Id
     private String roomId;
@@ -24,9 +24,9 @@ public class ChatRoom extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "guest")
     private User guest;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "messages")
-    private List<Notice> messages;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn
+    private List<Notice> message_list;
     private boolean isActive;
 
     @Builder
@@ -34,7 +34,7 @@ public class ChatRoom extends Timestamped {
         this.roomId = RandomStringUtils.random(8);
         this.title = title;
         this.host = host;
-        this.messages = new ArrayList<>();
+        this.message_list = new ArrayList<>();
         this.isActive = true;
     }
 
@@ -44,13 +44,12 @@ public class ChatRoom extends Timestamped {
         return this;
     }
 
-    public ChatRoom exit(User user) {
-        this.messages.clear();
+    public void exit(User user) {
+        this.message_list.clear();
         this.isActive = false;
-        return this;
     }
 
     public void talk(Notice msg) {
-        this.messages.add(msg);
+        this.message_list.add(msg);
     }
 }

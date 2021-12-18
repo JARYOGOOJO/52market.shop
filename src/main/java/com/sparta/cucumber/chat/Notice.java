@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @Getter
-@Entity
+@Entity(name = "message")
 @NoArgsConstructor
 public class Notice extends Timestamped {
 
@@ -24,7 +24,7 @@ public class Notice extends Timestamped {
     private Long senderId;
     private Long subscriberId;
     private NoticeType type;
-    private boolean read;
+    private boolean isRead;
 
     @Builder
     public Notice(String content, Long senderId, Long subscriberId, NoticeType type) {
@@ -32,6 +32,6 @@ public class Notice extends Timestamped {
         this.senderId = senderId;
         this.subscriberId = subscriberId;
         this.type = type;
-        this.read = false;
+        this.isRead = false;
     }
 }
