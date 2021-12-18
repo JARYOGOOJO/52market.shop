@@ -1,31 +1,37 @@
 package com.sparta.cucumber.chat;
 
-import com.sparta.cucumber.models.User;
+import com.sparta.cucumber.models.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @Getter
 @Entity
 @NoArgsConstructor
-public class Notice {
+public class Notice extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String destination;
     private String content;
-    @ManyToOne
-    @JoinColumn(name = "writer_id")
-    private User writer;
+    private Long senderId;
+    private Long subscriberId;
     private NoticeType type;
+    private boolean read;
 
     @Builder
-    public Notice(String destination, String content, User writer, NoticeType type) {
-        this.content = content;
-        this.destination = destination;
-        this.writer = writer;
+    public Notice(String content, Long senderId, Long subscriberId, NoticeType type) {
+        this.content = htmlEscape(content);
+        this.senderId = senderId;
+        this.subscriberId = subscriberId;
         this.type = type;
+        this.read = false;
     }
 }
