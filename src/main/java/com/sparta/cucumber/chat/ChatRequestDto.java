@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class ChatRequestDto {
     private Long userId;
+    private Long targetId;
     private String userSubscribeId;
     private String roomSubscribeId;
     private String title;

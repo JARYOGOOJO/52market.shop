@@ -10,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import static org.springframework.web.util.HtmlUtils.htmlEscape;
-
 @Getter
 @Entity(name = "message")
 @NoArgsConstructor
@@ -20,15 +18,19 @@ public class Notice extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String title;
     private String content;
     private Long senderId;
+    private Long targetId;
     private Long subscriberId;
     private NoticeType type;
     private boolean isRead;
 
     @Builder
-    public Notice(String content, Long senderId, Long subscriberId, NoticeType type) {
-        this.content = htmlEscape(content);
+    public Notice(String title, String content, Long senderId, Long targetId, Long subscriberId, NoticeType type) {
+        this.targetId = targetId;
+        this.title = title;
+        this.content = content;
         this.senderId = senderId;
         this.subscriberId = subscriberId;
         this.type = type;

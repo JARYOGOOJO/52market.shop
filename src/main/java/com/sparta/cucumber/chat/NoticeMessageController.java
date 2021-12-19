@@ -33,6 +33,15 @@ public class NoticeMessageController {
         messagingTemplate.convertAndSend("/sub/notice/comment", notice);
     }
 
+    @Operation(description = "댓글 삭제 시 전체알림")
+    @MessageMapping("/del/comments")
+    public void deleteOneComment(ChatRequestDto requestDto) {
+        log.debug("/del/comments");
+        log.debug("chatRequestDto : " + requestDto);
+        Notice notice = service.uncomment(requestDto);
+        messagingTemplate.convertAndSend("/sub/notice/comment", notice);
+    }
+
     @Operation(description = "유저에게 알림보내기")
     @MessageMapping("/new/notices")
     public void userNoticeMessage(ChatRequestDto requestDto) {

@@ -3,9 +3,10 @@ package com.sparta.cucumber.chat;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class NoticeService {
                 .builder()
                 .senderId(sender.getId())
                 .subscriberId(subscribeUser.getId())
-                .content(requestDto.getContent())
+                .content(htmlEscape(requestDto.getContent()))
                 .type(NoticeType.MESSAGE)
                 .build();
         room.talk(message);
@@ -46,7 +47,7 @@ public class NoticeService {
         return Notice
                 .builder()
                 .senderId(sender.getId())
-                .content(requestDto.getContent())
+                .content(htmlEscape(requestDto.getContent()))
                 .type(NoticeType.CALLING)
                 .build();
     }
@@ -56,13 +57,13 @@ public class NoticeService {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
                         () -> new NullPointerException("잘못된 접근입니다."));
-        JSONObject content = new JSONObject();
-        content.append("content", requestDto.getContent());
-        content.append("username", sender.getName());
+        String title = requestDto.getTitle();
+        String content = requestDto.getContent();
         return Notice
                 .builder()
                 .senderId(sender.getId())
-                .content(content.toString())
+                .title(title)
+                .content(content)
                 .type(NoticeType.ARTICLE)
                 .build();
     }
@@ -75,8 +76,22 @@ public class NoticeService {
         return Notice
                 .builder()
                 .senderId(sender.getId())
+                .targetId(requestDto.getTargetId())
                 .content(requestDto.getContent())
                 .type(NoticeType.COMMENT)
+                .build();
+    }
+
+    @Transactional
+    public Notice uncomment(ChatRequestDto requestDto) {
+        User sender = userRepository
+                .findById(requestDto.getUserId()).orElseThrow(
+                        () -> new NullPointerException("잘못된 접근입니다."));
+        return Notice
+                .builder()
+                .senderId(sender.getId())
+                .targetId(requestDto.getTargetId())
+                .type(NoticeType.DEL_CMT)
                 .build();
     }
 }
