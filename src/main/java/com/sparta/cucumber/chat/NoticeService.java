@@ -21,17 +21,12 @@ public class NoticeService {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
                         () -> new NullPointerException("잘못된 유저입니다."));
-        User subscribeUser = userRepository
-                .findBySubscribeId(requestDto.getUserSubscribeId())
-                .orElseThrow(
-                        () -> new NullPointerException("잘못된 유저입니다."));
         ChatRoom room = chatRoomRepository
                 .findById(requestDto.getRoomSubscribeId()).orElseThrow(
                         () -> new NullPointerException("잘못된 대화방입니다."));
         Notice message = Notice
                 .builder()
                 .senderId(sender.getId())
-                .subscriberId(subscribeUser.getId())
                 .content(htmlEscape(requestDto.getContent()))
                 .type(NoticeType.MESSAGE)
                 .build();
