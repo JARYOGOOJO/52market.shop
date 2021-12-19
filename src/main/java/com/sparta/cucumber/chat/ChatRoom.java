@@ -31,7 +31,7 @@ public class ChatRoom extends Timestamped {
 
     @Builder
     public ChatRoom(User host, String title) {
-        this.roomId = RandomStringUtils.random(8);
+        this.roomId = RandomStringUtils.random(16, true, true);
         this.title = title;
         this.host = host;
         this.message_list = new ArrayList<>();

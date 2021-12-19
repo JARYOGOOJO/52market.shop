@@ -3,6 +3,7 @@ package com.sparta.cucumber.chat;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,10 +56,13 @@ public class NoticeService {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
                         () -> new NullPointerException("잘못된 접근입니다."));
+        JSONObject content = new JSONObject();
+        content.append("content", requestDto.getContent());
+        content.append("username", sender.getName());
         return Notice
                 .builder()
                 .senderId(sender.getId())
-                .content(requestDto.getContent())
+                .content(content.toString())
                 .type(NoticeType.ARTICLE)
                 .build();
     }
