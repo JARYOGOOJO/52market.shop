@@ -47,7 +47,7 @@ public class NoticeMessageController {
     public void userNoticeMessage(ChatRequestDto requestDto) {
         log.debug("/new/notices");
         log.debug("chatRequestDto : " + requestDto);
-        String userId = requestDto.getUserSubscribeId();
+        Long userId = requestDto.getTargetId();
         Notice notice = service.invite(requestDto);
         messagingTemplate.convertAndSend("/sub/notice/user/" + userId, notice);
     }

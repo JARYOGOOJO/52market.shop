@@ -15,11 +15,12 @@ public class ChatRoomService {
 
     @Transactional
     public ChatRoom createRoom(ChatRequestDto chatRequestDto) {
+        User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(NullPointerException::new);
         ChatRoom chatRoom = ChatRoom
                 .builder()
+                .host(user)
                 .title(chatRequestDto.getTitle())
                 .build();
-        User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(NullPointerException::new);
         return chatRoomRepository.save(chatRoom.enter(user));
     }
 

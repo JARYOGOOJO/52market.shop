@@ -47,7 +47,8 @@ public class NoticeService {
         return Notice
                 .builder()
                 .senderId(sender.getId())
-                .content(htmlEscape(requestDto.getContent()))
+                .subscriberId(requestDto.getTargetId())
+                .content(requestDto.getContent())
                 .type(NoticeType.CALLING)
                 .build();
     }
