@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ConstraintViolationException;
 
-import static com.sparta.cucumber.error.ErrorCode.DUPLICATE_RESOURCE;
+import static com.sparta.cucumber.error.ErrorCode.ALREADY_EXIST;
 
 @Slf4j
 @RestControllerAdvice
@@ -17,8 +17,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ConstraintViolationException.class, DataIntegrityViolationException.class})
     protected ResponseEntity<ErrorResponse> handleDataException() {
-        log.error("handleDataException throw Exception : {}", DUPLICATE_RESOURCE);
-        return ErrorResponse.toResponseEntity(DUPLICATE_RESOURCE);
+        log.error("handleDataException throw Exception : {}", ALREADY_EXIST);
+        return ErrorResponse.toResponseEntity(ALREADY_EXIST);
     }
 
     @ExceptionHandler(value = {CustomException.class})
