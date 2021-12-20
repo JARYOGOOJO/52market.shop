@@ -25,7 +25,11 @@ public class ChatRoomController {
     @PostMapping("/api/room")
     public ResponseEntity<ChatRoom> createRoom(@RequestBody ChatRequestDto chatRequestDto) {
         log.debug("chatRequestDto : " + chatRequestDto.toString());
-        return ResponseEntity.ok().body(chatService.createRoom(chatRequestDto));
+        ChatRoom createRoom = chatService.createRoom(chatRequestDto);
+        // redis 채팅방 입장시 방 subId로 구독하기
+        ChannelTopic topic = new ChannelTopic(createRoom.getRoomSubscribeId());
+        redisMessageListener.addMessageListener(redisSubscriber, topic);
+        return ResponseEntity.ok().body(createRoom);
     }
 
     @Operation(description = "방입장", method = "POST")
