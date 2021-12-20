@@ -48,7 +48,8 @@ public class UserRestController {
         System.out.println(userDetails.isEnabled());
 
         // redis 유저 subscribeId로 subscribe
-        ChannelTopic userTopic = new ChannelTopic(userDetails.getUser().getSubscribeId());
+//        ChannelTopic userTopic = new ChannelTopic(userDetails.getUser().getSubscribeId());
+        ChannelTopic userTopic = new ChannelTopic(String.valueOf(userDetails.getUser().getId()));
         redisMessageListener.addMessageListener(redisSubscriber, userTopic);
 
         // redis 전체메시지 보내기 구독
@@ -61,6 +62,10 @@ public class UserRestController {
 
         // redis 댓글 작성시 전체알림 구독
         ChannelTopic commentNoticeTopic = new ChannelTopic("commentNotice");
+        redisMessageListener.addMessageListener(redisSubscriber, commentNoticeTopic);
+
+        // redis 댓글 삭제시 전체알림 구독
+        ChannelTopic commentDeleteNoticeTopic = new ChannelTopic("commentDeleteNotice");
         redisMessageListener.addMessageListener(redisSubscriber, commentNoticeTopic);
 
         return ResponseEntity.ok(result);
@@ -86,8 +91,9 @@ public class UserRestController {
         System.out.println(userDetails.isEnabled());
         //        System.out.println(auth.isAuthenticated());
         // redis 유저subscribeId로 subscribe
-        ChannelTopic topic = new ChannelTopic(userDetails.getUser().getSubscribeId());
-        redisMessageListener.addMessageListener(redisSubscriber, topic);
+//        ChannelTopic topic = new ChannelTopic(userDetails.getUser().getSubscribeId());
+        ChannelTopic userTopic = new ChannelTopic(String.valueOf(userDetails.getUser().getId()));
+        redisMessageListener.addMessageListener(redisSubscriber, userTopic);
 
         // redis 전체메시지 보내기 구독
         ChannelTopic messageAllTopic = new ChannelTopic("messageAll");
@@ -100,6 +106,11 @@ public class UserRestController {
         // redis 댓글 작성시 전체알림 구독
         ChannelTopic commentNoticeTopic = new ChannelTopic("commentNotice");
         redisMessageListener.addMessageListener(redisSubscriber, commentNoticeTopic);
+
+        // redis 댓글 삭제시 전체알림 구독
+        ChannelTopic commentDeleteNoticeTopic = new ChannelTopic("commentDeleteNotice");
+        redisMessageListener.addMessageListener(redisSubscriber, commentNoticeTopic);
+
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
