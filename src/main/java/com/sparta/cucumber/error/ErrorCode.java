@@ -22,10 +22,13 @@ public enum ErrorCode {
     USER_NOT_FOUND(NOT_FOUND, "해당 유저 정보를 찾을 수 없습니다"),
     ARTICLE_NOT_FOUND(NOT_FOUND, "해당 게시물 정보를 찾을 수 없습니다"),
     COMMENT_NOT_FOUND(NOT_FOUND, "해당 댓글 정보를 찾을 수 없습니다"),
+    REVIEW_NOT_FOUND(NOT_FOUND, "해당 리뷰 정보를 찾을 수 없습니다"),
+    CHATROOM_NOT_FOUND(NOT_FOUND, "해당 대화방 정보를 찾을 수 없습니다"),
     REFRESH_TOKEN_NOT_FOUND(NOT_FOUND, "로그아웃 된 사용자입니다"),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_RESOURCE(CONFLICT, "데이터가 이미 존재합니다"),
+    USER_ALREADY_EXIST(CONFLICT, "유저가 이미 존재합니다"),
 
     /* 413 PAYLOAD_TOO_LARGE : 주고받을 데이터의 크기가 제한된 것보다 큼 */
     TOO_LARGE(PAYLOAD_TOO_LARGE, "파일의 크기가 너무 큽니다."),
