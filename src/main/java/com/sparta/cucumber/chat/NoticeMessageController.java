@@ -70,7 +70,7 @@ public class NoticeMessageController {
     @MessageMapping("/chat/messages")
     public void message(ChatRequestDto requestDto) {
         log.debug("/chat/messages");
-        System.out.println("/chat/messages chatRequestDto : " + requestDto.toString());
+        System.out.println("/chat/messages chatRequestDto : " + requestDto);
         log.debug("chatRequestDto : " + requestDto);
         String roomId = requestDto.getRoomSubscribeId();
         Notice msg = service.message(requestDto);
