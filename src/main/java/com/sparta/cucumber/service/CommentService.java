@@ -1,6 +1,7 @@
 package com.sparta.cucumber.service;
 
 import com.sparta.cucumber.dto.CommentRequestDto;
+import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.Article;
 import com.sparta.cucumber.models.Comment;
 import com.sparta.cucumber.models.User;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+
+import static com.sparta.cucumber.error.ErrorCode.ARTICLE_NOT_FOUND;
+import static com.sparta.cucumber.error.ErrorCode.USER_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
@@ -25,11 +29,11 @@ public class CommentService {
         Article article = articleRepository
                 .findById(requestDto.getArticleId())
                 .orElseThrow(
-                        () -> new NullPointerException("게시물이 존재하지 않습니다."));
+                        () -> new CustomException(ARTICLE_NOT_FOUND));
         User user = userRepository
                 .findById(requestDto.getUserId())
                 .orElseThrow(
-                        () -> new NullPointerException("게시물 작성자가 올바르지 않습니다.."));
+                        () -> new CustomException(USER_NOT_FOUND));
         Comment comment = Comment
                 .builder()
                 .content(requestDto.getContent())

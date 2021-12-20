@@ -1,6 +1,7 @@
 package com.sparta.cucumber.service;
 
 import com.sparta.cucumber.dto.ReviewRequestDto;
+import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.Review;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ReviewRepository;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static com.sparta.cucumber.error.ErrorCode.REVIEW_NOT_FOUND;
+import static com.sparta.cucumber.error.ErrorCode.USER_NOT_FOUND;
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class ReviewService {
     public Review upload(ReviewRequestDto reviewRequestDto) {
         Long userId = reviewRequestDto.getUserId();
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 사용자가 존재하지 않습니다")
+                () -> new CustomException(USER_NOT_FOUND)
         );
         Review review = Review.builder()
                 .user(user)
@@ -46,7 +49,7 @@ public class ReviewService {
     @Transactional
     public Review update(Long reviewId, ReviewRequestDto reviewRequestDto) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new NullPointerException("해당 게시글이 존재하지 않습니다")
+                () -> new CustomException(REVIEW_NOT_FOUND)
         );
         review.update(reviewRequestDto);
         return review;
@@ -55,7 +58,7 @@ public class ReviewService {
     @Transactional
     public void deleteReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
-                () -> new NullPointerException("해당 게시글이 존재하지 않습니다.")
+                () -> new CustomException(REVIEW_NOT_FOUND)
         );
         reviewRepository.deleteById(review.getId());
     }
