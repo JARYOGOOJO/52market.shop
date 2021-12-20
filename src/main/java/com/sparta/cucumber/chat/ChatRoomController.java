@@ -1,19 +1,24 @@
 package com.sparta.cucumber.chat;
 
+import com.sparta.cucumber.redis.RedisSubscriber;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-public class ChatController {
-    private final ChatService chatService;
+public class ChatRoomController {
+    private final ChatRoomService chatService;
+    private final RedisMessageListenerContainer redisMessageListener;
+    private final RedisSubscriber redisSubscriber;
 
     @Operation(description = "방만들기", method = "POST")
     @ResponseBody
@@ -28,7 +33,11 @@ public class ChatController {
     @PostMapping("/api/room/enter")
     public ResponseEntity<?> enterRoom(@RequestBody ChatRequestDto chatRequestDto) {
         log.debug("enterRoom chatRequestDto : " + chatRequestDto.toString());
-        return ResponseEntity.ok().body(chatService.enterRoom(chatRequestDto));
+        ChatRoom chatRoom = chatService.enterRoom(chatRequestDto);
+        // redis 채팅방 입장시 방 subId로 구독하기
+        ChannelTopic topic = new ChannelTopic(chatRoom.getRoomSubscribeId());
+        redisMessageListener.addMessageListener(redisSubscriber, topic);
+        return ResponseEntity.ok().body(chatRoom);
     }
 
     @Operation(description = "방나가기", method = "POST")
@@ -39,19 +48,5 @@ public class ChatController {
         chatService.exitRoom(chatRequestDto);
         return ResponseEntity.ok().body(null);
     }
-
-    @Operation(description = "방 id로 가져오기", method = "GET")
-    @ResponseBody
-    @GetMapping("/api/room/{id}")
-    public ResponseEntity<?> getRoom(@PathVariable("id") Long id) {
-        log.debug("getRoom : " + id);
-        return ResponseEntity.ok().body(chatService.getRoom(id));
-    }
-
-    @Operation(description = "방 전체목록 가져오기", method = "GET")
-    @ResponseBody
-    @GetMapping("/api/rooms")
-    public ResponseEntity<List<ChatRoom>> getRooms() {
-        return ResponseEntity.ok().body(chatService.getRooms());
-    }
 }
+

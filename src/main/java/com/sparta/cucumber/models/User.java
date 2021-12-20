@@ -1,12 +1,13 @@
 package com.sparta.cucumber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sparta.cucumber.dto.UserRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
@@ -21,6 +22,7 @@ import static org.springframework.web.util.HtmlUtils.htmlEscape;
         table = "MY_SEQUENCES",
         pkColumnValue = "USER_SEQ", allocationSize = 30)
 @Entity(name = "user")
+@JsonIgnoreProperties({"socialId", "password", "phoneNumber", "latitude", "longitude", "star"})
 public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "USER_GENERATOR")
@@ -53,7 +55,7 @@ public class User extends Timestamped {
         this.longitude = longitude;
         this.star = 0.0;
         this.role = Role.USER;
-        this.subscribeId = UUID.randomUUID().toString();
+        this.subscribeId = RandomStringUtils.random(16, true, true);
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
@@ -63,7 +65,7 @@ public class User extends Timestamped {
         this.role = role;
         this.socialId = kakaoId;
         this.star = 0.0;
-        this.subscribeId = UUID.randomUUID().toString();
+        this.subscribeId = RandomStringUtils.random(16, true, true);
     }
 
     public User updateKakao(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
