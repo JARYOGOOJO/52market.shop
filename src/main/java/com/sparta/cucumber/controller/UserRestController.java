@@ -1,5 +1,6 @@
 package com.sparta.cucumber.controller;
 
+import com.sparta.cucumber.dto.JwtRequestDto;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
@@ -40,8 +41,8 @@ public class UserRestController {
     @Operation(description = "카카오 로그인", method = "POST")
     @PostMapping(value = "/user/kakao")
     public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
-        String username = userService.kakaoLogin(socialLoginDto.getToken());
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
+        String email = userService.kakaoLogin(socialLoginDto.getToken());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(email);
         final String token = jwtTokenUtil.generateToken(userDetails);
         JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
         System.out.println(userDetails.isEnabled());
@@ -67,22 +68,19 @@ public class UserRestController {
 
     @Operation(description = "회원가입", method = "POST")
     @PostMapping("/user/signup")
-    public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) throws Exception {
+    public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
         userService.signup(userDTO);
-        //        Authentication auth = authenticate(userDTO.getEmail(), userDTO.getPassword());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        //        System.out.println(auth.isAuthenticated());
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
     @Operation(description = "로그인", method = "POST")
     @PostMapping("/user/signin")
-    public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) throws Exception {
+    public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
         userService.signin(userDTO);
-        //        Authentication auth = authenticate(userDTO.getEmail(), userDTO.getPassword());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         System.out.println(userDetails.isEnabled());
@@ -102,19 +100,16 @@ public class UserRestController {
         // redis 댓글 작성시 전체알림 구독
         ChannelTopic commentNoticeTopic = new ChannelTopic("commentNotice");
         redisMessageListener.addMessageListener(redisSubscriber,commentNoticeTopic);
-
         return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
-//    @Operation(description = "유저 프로필사진 변경", method = "PUT")
-//    @PutMapping("/user/update")
-//    public ResponseEntity<UserResponseDto> updateProfileImage(UserRequestDto userDTO,
-//                                                              @ModelAttribute MultipartFile profile) throws IOException {
-//        String profileImage = s3Uploader.upload(userDTO, profile, "Profile");
-//        User user = userService.updateProfileImage(userDTO, profileImage);
-//        UserResponseDto updateUser = new UserResponseDto(user);
-//        return ResponseEntity.ok().body(updateUser);
-//    }
+    @Operation(description = "유저 확인", method = "POST")
+    @PostMapping("/user/validate")
+    public ResponseEntity<?> whoAmI(@RequestBody JwtRequestDto jwtDTO) {
+        System.out.println(jwtDTO);
+        JwtResponseDto jwtResponseDto = userService.validate(jwtDTO);
+        return ResponseEntity.ok(jwtResponseDto);
+    }
 
     private Authentication authenticate(String email, String password) throws Exception {
         try {
