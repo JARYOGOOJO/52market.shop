@@ -2,6 +2,7 @@ package com.sparta.cucumber.service;
 
 import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.models.Article;
+import com.sparta.cucumber.models.Timestamped;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ArticleRepository;
 import com.sparta.cucumber.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,8 +31,7 @@ public class ArticleService {
                 .findById(userId)
                 .orElseThrow(
                         () -> new NullPointerException("잘못된 접근입니다."));
-        imagePath = imagePath.split("amazonaws.com")[1];
-        String imageName = imagePath.split("Article/")[1];
+        String imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
 
         Article article = Article.builder()
                 .user(user)
@@ -46,11 +47,22 @@ public class ArticleService {
     }
 
     public List<Article> getArticles(String query) {
-        return articleRepository.findAllByTitleContains(query);
+        return articleRepository.findAllByTitleContainsOrderByCreatedAtDesc(query);
     }
 
-    public List<Article> getAllArticles() {
-        return articleRepository.findAll();
+    @Transactional
+    public List<Article> getAllArticles(int page) {
+        int start = (page - 1) * 10;
+        int limit = page * 10;
+        return articleRepository
+                .findAll()
+                .stream()
+                .sorted(Comparator
+                        .comparing(Timestamped::getCreatedAt)
+                        .reversed())
+                .skip(start)
+                .limit(limit)
+                .collect(Collectors.toList());
     }
 
     public Article seeDetailOfArticle(Long articleId) {
@@ -73,7 +85,7 @@ public class ArticleService {
     }
 
     public List<Article> getUsersArticles(@PathVariable("id") Long userId) {
-        return articleRepository.findAllByUser_Id(userId);
+        return articleRepository.findAllByUser_IdOrderByCreatedAtDesc(userId);
     }
 
 
@@ -82,9 +94,7 @@ public class ArticleService {
                 .findById(articleId)
                 .orElseThrow(
                         () -> new NullPointerException("게시물이 존재하지 않습니다."));
-//        if (Objects.equals(article.getUser(), user)) {
-        articleRepository.deleteById(articleId);
-//        }
+        articleRepository.delete(article);
         return articleId;
     }
 

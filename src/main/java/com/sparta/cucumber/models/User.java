@@ -1,11 +1,15 @@
 package com.sparta.cucumber.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sparta.cucumber.dto.UserRequestDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
+
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @NamedEntityGraph(
         name = "user"
@@ -18,9 +22,10 @@ import javax.persistence.*;
         table = "MY_SEQUENCES",
         pkColumnValue = "USER_SEQ", allocationSize = 30)
 @Entity(name = "user")
+@JsonIgnoreProperties({"socialId", "password", "phoneNumber", "latitude", "longitude", "star"})
 public class User extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "USER_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "USER_GENERATOR")
     private Long id;
     @Column(nullable = false)
     private String name;
@@ -33,6 +38,7 @@ public class User extends Timestamped {
     private Double latitude;
     private Double longitude;
     private Double star;
+    private String subscribeId;
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -40,7 +46,7 @@ public class User extends Timestamped {
     public User(String name, String email,
                 String picture, String encodedPassword,
                 String phoneNumber, Double latitude, Double longitude) {
-        this.name = name;
+        this.name = htmlEscape(name);
         this.email = email;
         this.picture = picture;
         this.password = encodedPassword;
@@ -49,15 +55,17 @@ public class User extends Timestamped {
         this.longitude = longitude;
         this.star = 0.0;
         this.role = Role.USER;
+        this.subscribeId = RandomStringUtils.random(16, true, true);
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
-        this.name = nickname;
+        this.name = htmlEscape(nickname);
         this.email = email;
         this.password = encodedPassword;
         this.role = role;
         this.socialId = kakaoId;
         this.star = 0.0;
+        this.subscribeId = RandomStringUtils.random(16, true, true);
     }
 
     public User updateKakao(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {

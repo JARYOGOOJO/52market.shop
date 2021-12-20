@@ -1,6 +1,6 @@
 package com.sparta.cucumber.dto;
 
-import lombok.*;
+import lombok.Data;
 
 @Data
 public class CommentRequestDto {

@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import static org.springframework.web.util.HtmlUtils.htmlEscape;
+
 @Getter
 @NoArgsConstructor
 @TableGenerator(
@@ -17,29 +19,23 @@ import javax.persistence.*;
 public class Review extends Timestamped {
     @Id
     @Column(name = "review_id")
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "REVIEW_GENERATOR")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "REVIEW_GENERATOR")
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "review_user")
-    private User reviewUser;
-    @ManyToOne
-    @JoinColumn(name = "review_target")
-    private User reviewTargetUser;
-    private Integer score;
+    @JoinColumn(name = "user")
+    private User user;
+    private String title;
     private String content;
 
     @Builder
-    public Review(User from, User to, Integer star, String content) {
-        this.reviewUser = from;
-        this.reviewTargetUser = to;
-        this.score = star;
-        this.content = content;
+    public Review(String title, String content, User user) {
+        this.title = htmlEscape(title);
+        this.content = htmlEscape(content);
+        this.user = user;
     }
 
-    public void update(ReviewRequestDto requestDto, User reviewUser, User reviewTargetUser) {
-        this.reviewUser = reviewUser;
-        this.reviewTargetUser = reviewTargetUser;
-        this.score = requestDto.getScore();
-        this.content = requestDto.getContent();
+    public void update(ReviewRequestDto reviewRequestDto) {
+        this.title = htmlEscape(reviewRequestDto.getTitle());
+        this.content = htmlEscape(reviewRequestDto.getContent());
     }
 }

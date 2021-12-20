@@ -1,30 +1,61 @@
 package com.sparta.cucumber.chat;
 
+import com.sparta.cucumber.models.Timestamped;
+import com.sparta.cucumber.models.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
-@Entity(name = "chatroom")
-@TableGenerator(
-        name = "CHATROOM_GENERATOR",
-        table = "MY_SEQUENCES",
-        pkColumnValue = "CHATROOM_SEQ", allocationSize = 30)
-public class ChatRoom {
+@Entity(name = "chat_room")
+public class ChatRoom extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE,generator = "CHATROOM_GENERATOR")
-    private Long id;
+    @Column(name = "room_subscribe_id")
     private String roomSubscribeId;
     private String title;
+    @ManyToOne
+    @JoinColumn(name = "host")
+    private User host;
+    @ManyToOne
+    @JoinColumn(name = "guest")
+    private User guest;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn
+    private List<Notice> message_list;
     private boolean isActive;
 
     @Builder
-    public ChatRoom(String roomSubscribeId, String title, boolean isActive) {
-        this.roomSubscribeId = roomSubscribeId;
+    public ChatRoom(User host, String title) {
+        this.roomSubscribeId = RandomStringUtils.random(16, true, true);
         this.title = title;
-        this.isActive = isActive;
+        this.host = host;
+        this.message_list = new ArrayList<>();
+        this.isActive = true;
+    }
+
+    public ChatRoom enter(User user) {
+        this.guest = user;
+        this.isActive = true;
+        return this;
+    }
+
+    public void exit(User user) {
+        this.message_list.clear();
+        this.isActive = false;
+        if (user == this.host) {
+            this.host = null;
+        } else if (user == this.guest) {
+            this.guest = null;
+        }
+    }
+
+    public void talk(Notice msg) {
+        this.message_list.add(msg);
     }
 }

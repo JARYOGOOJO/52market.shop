@@ -23,31 +23,31 @@ public class ArticleRestController {
 
     private final ArticleService articleService;
     private final S3Uploader s3Uploader;
-    
-    @Operation(description = "게시글 검색",method = "GET")
+
+    @Operation(description = "게시글 검색", method = "GET")
     @GetMapping("/api/articles/{query}")
     public ResponseEntity<List<Article>> getArticles(@PathVariable("query") String query) {
         List<Article> articles = articleService.getArticles(query);
         return ResponseEntity.ok().body(articles);
     }
 
-    @Operation(description = "모든 게시글 가져오기",method = "GET")
+    @Operation(description = "모든 게시글 가져오기", method = "GET")
     @GetMapping("/api/articles")
-    public ResponseEntity<List<Article>> getAllArticles() {
-        List<Article> articles = articleService.getAllArticles();
+    public ResponseEntity<List<Article>> getAllArticles(@RequestParam("page") int page) {
+        List<Article> articles = articleService.getAllArticles(page);
         return ResponseEntity.ok().body(articles);
     }
 
-    @Operation(description = "게시글 id로 가져오기",method = "GET")
+    @Operation(description = "게시글 id로 가져오기", method = "GET")
     @GetMapping("/api/article/{id}")
     public ResponseEntity<Article> seeDetailOfArticle(@PathVariable("id") Long articleId) {
         Article article = articleService.seeDetailOfArticle(articleId);
         return ResponseEntity.ok().body(article);
     }
 
-    @Operation(description = "자신주변 게시글 가져오기",method = "GET")
+    @Operation(description = "자신주변 게시글 가져오기", method = "GET")
     @GetMapping("/api/articles/{lat}/{lng}")
-    public ResponseEntity<List<Article>> getAroundArticle (@PathVariable("lat") Double lat,
+    public ResponseEntity<List<Article>> getAroundArticle(@PathVariable("lat") Double lat,
                                                           @PathVariable("lng") Double lon) {
         List<Article> articles = articleService.getAroundArticle(lat, lon);
         return ResponseEntity.ok().body(articles);
@@ -60,17 +60,17 @@ public class ArticleRestController {
         return ResponseEntity.ok().body(articles);
     }
 
-    @Operation(description = "게시글 작성",method = "POST")
-    @PostMapping("/api/article/write")
+    @Operation(description = "게시글 작성", method = "POST")
+    @PostMapping("/api/articles")
     public ResponseEntity<Article> writeArticle(@ModelAttribute ArticleRequestDto requestDto,
                                                 @ModelAttribute MultipartFile file) throws IOException {
-        String imagePath = s3Uploader.upload(file, "Article");
+        String imagePath = s3Uploader.upload(file);
         Article article = articleService.upload(requestDto, imagePath);
         return ResponseEntity.ok().body(article);
     }
 
-    @Operation(description = "게시글 편집",method = "PUT")
-    @PutMapping("/api/article/edit")
+    @Operation(description = "게시글 편집", method = "PUT")
+    @PutMapping("/api/article")
     public ResponseEntity<Article> editArticle(@RequestBody ArticleRequestDto requestDto) {
         Article article = articleService.update(requestDto);
         return ResponseEntity.ok().body(article);
@@ -80,8 +80,6 @@ public class ArticleRestController {
     @DeleteMapping("/api/article/{id}")
     public ResponseEntity<Long> removeArticle(@PathVariable("id") Long articleId) {
         Long id = articleService.removeArticle(articleId);
-        s3Uploader.deleteImage(articleId);
         return ResponseEntity.ok().body(id);
     }
-
 }
