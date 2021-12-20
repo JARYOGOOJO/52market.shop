@@ -4,6 +4,7 @@ import com.sparta.cucumber.dto.JwtRequestDto;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
+import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.S3Uploader;
@@ -18,9 +19,11 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -71,6 +74,18 @@ public class UserRestController {
         System.out.println(jwtDTO);
         JwtResponseDto jwtResponseDto = userService.validate(jwtDTO);
         return ResponseEntity.ok(jwtResponseDto);
+    }
+
+    @PutMapping("/user/update")
+    public ResponseEntity<?> updateUser(HttpServletRequest httpServletRequest, @RequestBody UserRequestDto userDTO,
+                                        @ModelAttribute MultipartFile profile) throws IOException {
+        String token = jwtTokenUtil.resolveToken(httpServletRequest);
+        System.out.println(token);
+
+        String profileImage = s3Uploader.upload(profile);
+        User updateUser = userService.update(userDTO, profileImage);
+        return ResponseEntity.ok().body(updateUser);
+
     }
 
     private Authentication authenticate(String email, String password) throws Exception {
