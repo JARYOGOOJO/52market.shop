@@ -27,7 +27,6 @@ public class MessageController {
         chatRequestDto.setMsgType("chat");
         ChannelTopic topic = new ChannelTopic(chatRequestDto.getRoomSubscribeId());
         redisPublisher.publish(topic, chatRequestDto);
-//        messagingTemplate.convertAndSend("/sub/chat/room/" + chatRequestDto.getRoomSubscribeId(), htmlEscape(chatRequestDto.getMsg()));
     }
 
     @Operation(description = "전체 메세지 보내기", method = "MESSAGE")
@@ -39,7 +38,6 @@ public class MessageController {
         chatRequestDto.setMsgType("messageAll");
         ChannelTopic topic = new ChannelTopic("messageAll");
         redisPublisher.publish(topic, chatRequestDto);
-//        messagingTemplate.convertAndSend("/sub/chat/all", htmlEscape(chatRequestDto.getMsg()));
     }
 
     @Operation(description = "게시글 작성시 전체알림", method = "MESSAGE")
@@ -52,7 +50,6 @@ public class MessageController {
         chatRequestDto.setMsgType("articleNotice");
         ChannelTopic topic = new ChannelTopic("articleNotice");
         redisPublisher.publish(topic, chatRequestDto);
-//        messagingTemplate.convertAndSend("/sub/article/notice/all", htmlEscape(chatRequestDto.getMsg()));
     }
 
     @Operation(description = "댓글 작성시 전체알림")
@@ -65,7 +62,6 @@ public class MessageController {
         chatRequestDto.setMsgType("commentNotice");
         ChannelTopic topic = new ChannelTopic("commentNotice");
         redisPublisher.publish(topic, chatRequestDto);
-//        messagingTemplate.convertAndSend("/sub/comment/notice/all", htmlEscape(chatRequestDto.getMsg()));
     }
 
     @Operation(description = "유저에게 알림보내기")
@@ -78,6 +74,5 @@ public class MessageController {
         chatRequestDto.setMsgType("userNotice");
         ChannelTopic topic = new ChannelTopic(chatRequestDto.getUserSubscribeId());
         redisPublisher.publish(topic, chatRequestDto);
-//        messagingTemplate.convertAndSend("/sub/user/notice/" + chatRequestDto.getUserSubscribeId(), htmlEscape(chatRequestDto.getMsg()));
     }
 }
