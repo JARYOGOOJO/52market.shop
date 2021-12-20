@@ -11,5 +11,6 @@ public class ChatRequestDto {
     private String title;
     private String msg;
     private String userSubscribeId;
+    private String msgType;
     private boolean isActive;
 }
