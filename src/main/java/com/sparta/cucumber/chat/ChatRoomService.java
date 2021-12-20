@@ -19,7 +19,8 @@ public class ChatRoomService {
 
     @Transactional
     public ChatRoom createRoom(ChatRequestDto chatRequestDto) {
-        User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
+                () -> new CustomException(USER_NOT_FOUND));
         ChatRoom chatRoom = ChatRoom
                 .builder()
                 .host(user)

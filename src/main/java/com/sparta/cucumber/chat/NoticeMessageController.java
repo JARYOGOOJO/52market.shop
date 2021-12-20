@@ -30,7 +30,6 @@ public class NoticeMessageController {
         Notice notice = service.article(requestDto);
         ChannelTopic topic = new ChannelTopic("articleNotice");
         redisPublisher.publish(topic, notice);
-//        messagingTemplate.convertAndSend("/sub/notice/article", notice);
     }
 
     @Operation(description = "댓글 작성시 전체알림")
@@ -41,7 +40,6 @@ public class NoticeMessageController {
         Notice notice = service.comment(requestDto);
         ChannelTopic topic = new ChannelTopic("commentNotice");
         redisPublisher.publish(topic, notice);
-//        messagingTemplate.convertAndSend("/sub/notice/comment", notice);
     }
 
     @Operation(description = "댓글 삭제 시 전체알림")
@@ -52,7 +50,6 @@ public class NoticeMessageController {
         Notice notice = service.uncomment(requestDto);
         ChannelTopic topic = new ChannelTopic("commentDeleteNotice");
         redisPublisher.publish(topic, notice);
-//        messagingTemplate.convertAndSend("/sub/notice/comment", notice);
     }
 
     @Operation(description = "유저에게 알림보내기")
@@ -67,25 +64,17 @@ public class NoticeMessageController {
         // redis 에게 구독한 사람한테 전달하라고 전송
         ChannelTopic topic = new ChannelTopic(String.valueOf(userId));
         redisPublisher.publish(topic, notice);
-//        messagingTemplate.convertAndSend("/sub/notice/user/" + userId, notice);
     }
 
     @Operation(description = "채팅방 메세지 보내기", method = "MESSAGE")
     @MessageMapping("/chat/messages")
     public void message(ChatRequestDto requestDto) {
-//        log.debug("/chat/messages");
+        log.debug("/chat/messages");
         System.out.println("/chat/messages chatRequestDto : " + requestDto.toString());
-//        log.debug("chatRequestDto : " + requestDto);
+        log.debug("chatRequestDto : " + requestDto);
         String roomId = requestDto.getRoomSubscribeId();
         Notice msg = service.message(requestDto);
-
-        // redis 채팅방 입장시 방 subId로 구독하기
-//        ChannelTopic topic = new ChannelTopic(roomId);
-//        redisMessageListener.addMessageListener(redisSubscriber, topic);
-
-        // redis 에게 구독한 사람한테 전달하라고 전송
         ChannelTopic topic = new ChannelTopic(roomId);
         redisPublisher.publish(topic, msg);
-//        messagingTemplate.convertAndSend("/sub/chat/" + roomId, msg);
     }
 }
