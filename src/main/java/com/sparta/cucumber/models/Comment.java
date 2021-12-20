@@ -24,10 +24,10 @@ public class Comment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "COMMENT_GENERATOR")
     private Long id;
     private String content;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user")
     private User user;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "article")
     @JsonIgnore
     private Article article;

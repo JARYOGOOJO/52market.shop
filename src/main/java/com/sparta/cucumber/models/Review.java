@@ -21,7 +21,7 @@ public class Review extends Timestamped {
     @Column(name = "review_id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "REVIEW_GENERATOR")
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "user")
     private User user;
     private String title;

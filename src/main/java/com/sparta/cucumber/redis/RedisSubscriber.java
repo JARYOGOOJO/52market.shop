@@ -1,7 +1,8 @@
 package com.sparta.cucumber.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.cucumber.chat.ChatRequestDto;
+import com.sparta.cucumber.chat.Notice;
+import com.sparta.cucumber.chat.NoticeType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -23,22 +24,17 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
-            ChatRequestDto chatRequestDto = objectMapper.readValue(publishMessage, ChatRequestDto.class);
-            log.debug("RedisSubscriber : " + chatRequestDto.toString());
-
-            switch (chatRequestDto.getMsgType()) {
-                case "chat":
-                    messagingTemplate.convertAndSend("/sub/chat/" + chatRequestDto.getRoomSubscribeId(), chatRequestDto.getContent());
-                    break;
-                case "userNotice":
-                    messagingTemplate.convertAndSend("/sub/notice/user/" + chatRequestDto.getUserSubscribeId(), chatRequestDto.getContent());
-                    break;
-                case "articleNotice":
-                    messagingTemplate.convertAndSend("/sub/notice/article", chatRequestDto.getContent());
-                    break;
-                case "commentNotice":
-                    messagingTemplate.convertAndSend("/sub/notice/comment", chatRequestDto.getContent());
-                    break;
+            Notice msg = objectMapper.readValue(publishMessage,Notice.class);
+            if(msg.getType() == NoticeType.MESSAGE){
+                messagingTemplate.convertAndSend("/sub/chat/" + msg.getSubscriberId(), msg);
+            }else if(msg.getType() == NoticeType.CALLING){
+                messagingTemplate.convertAndSend("/sub/notice/user/" + msg.getSubscriberId(), msg);
+            }else if(msg.getType() == NoticeType.DEL_CMT){
+                messagingTemplate.convertAndSend("/sub/notice/delete/comment", msg);
+            }else if(msg.getType() == NoticeType.COMMENT){
+                messagingTemplate.convertAndSend("/sub/notice/comment", msg);
+            }else if(msg.getType() == NoticeType.ARTICLE){
+                messagingTemplate.convertAndSend("/sub/notice/article", msg);
             }
         } catch (Exception e) {
             log.error(e.getMessage());

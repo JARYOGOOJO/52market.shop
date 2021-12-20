@@ -3,6 +3,7 @@ package com.sparta.cucumber.service;
 import com.sparta.cucumber.dto.JwtRequestDto;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.UserRequestDto;
+import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.Role;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
@@ -23,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
+import static com.sparta.cucumber.error.ErrorCode.USER_ALREADY_EXIST;
+import static com.sparta.cucumber.error.ErrorCode.USER_NOT_FOUND;
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @RequiredArgsConstructor
@@ -39,8 +42,8 @@ public class UserService {
     @Transactional
     public JwtResponseDto validate(JwtRequestDto requestDto) {
         String token = requestDto.getToken();
-        User user1 = userRepository.findById(requestDto.getUserId()).orElseThrow(NullPointerException::new);
-        User user2 = userRepository.findByName(jwtTokenUtil.getUsernameFromToken(token)).orElseThrow(NullPointerException::new);
+        User user1 = userRepository.findById(requestDto.getUserId()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        User user2 = userRepository.findByName(jwtTokenUtil.getUsernameFromToken(token)).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         if (!Objects.equals(user1, user2)) {
             throw new UsernameNotFoundException("잘못된 요청입니다.");
         }
@@ -54,7 +57,7 @@ public class UserService {
         User exists = userRepository
                 .findByEmail(userDTO.getEmail()).orElse(null);
         if (exists != null) {
-            throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
+            throw new CustomException(USER_ALREADY_EXIST);
         } else {
             User user = User
                     .builder()
@@ -71,11 +74,11 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User signin(UserRequestDto userDTO) {
-        User user = userRepository.findByEmail(userDTO.getEmail()).orElseThrow(NullPointerException::new);
+        User user = userRepository.findByEmail(userDTO.getEmail()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         if (passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
             return user;
         } else {
-            return null;
+            throw new CustomException(USER_NOT_FOUND);
         }
     }
 
@@ -109,7 +112,7 @@ public class UserService {
         User findUser = userRepository
                 .findByEmail(userDTO.getEmail())
                 .orElseThrow(()
-                        -> new NullPointerException("잘못된 접근입니다."));
+                        -> new CustomException(USER_NOT_FOUND));
         userDTO.setPicture(profileImage);
         findUser.update(userDTO);
         return findUser;
