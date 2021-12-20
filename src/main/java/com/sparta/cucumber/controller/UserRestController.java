@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,6 +41,7 @@ public class UserRestController {
     private final S3Uploader s3Uploader;
     private final RedisMessageListenerContainer redisMessageListener;
     private final RedisSubscriber redisSubscriber;
+    private final HttpServletRequest httpServletRequest;
 
     @Operation(description = "카카오 로그인", method = "POST")
     @PostMapping(value = "/user/kakao")
@@ -115,11 +117,13 @@ public class UserRestController {
     }
 
     @PutMapping("/user/update")
-    public ResponseEntity<?> updateUser(HttpServletRequest httpServletRequest, @RequestBody UserRequestDto userDTO,
-                                        @ModelAttribute MultipartFile profile) throws IOException {
+    public ResponseEntity<?> updateUser(UserRequestDto userDTO,
+                                        @ModelAttribute MultipartFile profile, JwtRequestDto jwtDTO) throws IOException {
         String token = jwtTokenUtil.resolveToken(httpServletRequest);
-        System.out.println(token);
+        jwtDTO.setToken(token);
+        System.out.println(jwtDTO.getToken());
 
+//        System.out.println(jwtDTO);
         String profileImage = s3Uploader.upload(profile);
         User updateUser = userService.update(userDTO, profileImage);
         return ResponseEntity.ok().body(updateUser);

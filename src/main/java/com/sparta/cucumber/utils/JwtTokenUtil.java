@@ -77,11 +77,4 @@ public class JwtTokenUtil implements Serializable {
         return request.getHeader("Authorization");
     }
 
-    public String getSubject(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(secret))
-                .parseClaimsJws(token).getBody();
-
-        return claims.getSubject();
-    }
 }
