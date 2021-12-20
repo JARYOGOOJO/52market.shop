@@ -1,6 +1,5 @@
-package com.sparta.cucumber.controller;
+package com.sparta.cucumber.error;
 
-import com.sparta.cucumber.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.validation.ConstraintViolationException;
 
-import static com.sparta.cucumber.models.ErrorCode.DUPLICATE_RESOURCE;
+import static com.sparta.cucumber.error.ErrorCode.DUPLICATE_RESOURCE;
 
 @Slf4j
 @RestControllerAdvice

@@ -1,4 +1,4 @@
-package com.sparta.cucumber.models;
+package com.sparta.cucumber.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

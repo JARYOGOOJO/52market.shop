@@ -1,6 +1,5 @@
-package com.sparta.cucumber.dto;
+package com.sparta.cucumber.error;
 
-import com.sparta.cucumber.models.ErrorCode;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
