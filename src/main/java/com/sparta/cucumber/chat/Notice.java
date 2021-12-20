@@ -34,4 +34,8 @@ public class Notice extends Timestamped {
         this.type = type;
         this.isRead = false;
     }
+
+    public void read() {
+        this.isRead = true;
+    }
 }
