@@ -29,11 +29,11 @@ public class NoticeService {
                         () -> new CustomException(CHATROOM_NOT_FOUND));
         Notice message = Notice
                 .builder()
+                .chatRoom(room)
                 .senderId(sender.getId())
                 .content(htmlEscape(requestDto.getContent()))
                 .type(NoticeType.MESSAGE)
                 .build();
-        room.talk(message);
         return messageRepository.save(message);
     }
 
