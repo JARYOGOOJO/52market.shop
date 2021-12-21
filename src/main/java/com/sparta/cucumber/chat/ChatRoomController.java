@@ -17,7 +17,7 @@ public class ChatRoomController {
 
     @Operation(description = "방만들기", method = "POST")
     @ResponseBody
-    @PostMapping("/api/room")
+    @PostMapping("/new/room")
     public ResponseEntity<ChatRoom> createRoom(@RequestBody ChatRequestDto chatRequestDto) {
         log.debug("chatRequestDto : " + chatRequestDto.toString());
         return ResponseEntity.ok().body(chatService.createRoom(chatRequestDto));
@@ -25,7 +25,7 @@ public class ChatRoomController {
 
     @Operation(description = "방입장", method = "POST")
     @ResponseBody
-    @PostMapping("/api/room/enter")
+    @PostMapping("/room/enter")
     public ResponseEntity<?> enterRoom(@RequestBody ChatRequestDto chatRequestDto) {
         log.debug("enterRoom chatRequestDto : " + chatRequestDto.toString());
         return ResponseEntity.ok().body(chatService.enterRoom(chatRequestDto));
@@ -33,7 +33,7 @@ public class ChatRoomController {
 
     @Operation(description = "방나가기", method = "POST")
     @ResponseBody
-    @PostMapping("/api/room/exit")
+    @PostMapping("/room/exit")
     public ResponseEntity<?> exitRoom(@RequestBody ChatRequestDto chatRequestDto) {
         log.debug("exitRoom chatRequestDto : " + chatRequestDto.toString());
         chatService.exitRoom(chatRequestDto);

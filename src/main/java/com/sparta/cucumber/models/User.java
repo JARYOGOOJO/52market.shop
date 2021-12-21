@@ -22,7 +22,7 @@ import static org.springframework.web.util.HtmlUtils.htmlEscape;
         table = "MY_SEQUENCES",
         pkColumnValue = "USER_SEQ", allocationSize = 30)
 @Entity(name = "user")
-@JsonIgnoreProperties({"socialId", "password", "phoneNumber", "latitude", "longitude", "star"})
+@JsonIgnoreProperties({"socialId", "password", "phoneNumber", "latitude", "longitude", "star", "refreshToken"})
 public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "USER_GENERATOR")
@@ -41,11 +41,12 @@ public class User extends Timestamped {
     private String subscribeId;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String refreshToken;
 
     @Builder
     public User(String name, String email,
                 String picture, String encodedPassword,
-                String phoneNumber, Double latitude, Double longitude) {
+                String phoneNumber, Double latitude, Long kakaoId, Double longitude, String refreshToken) {
         this.name = htmlEscape(name);
         this.email = email;
         this.picture = picture;
@@ -55,7 +56,9 @@ public class User extends Timestamped {
         this.longitude = longitude;
         this.star = 0.0;
         this.role = Role.USER;
+        this.socialId = kakaoId;
         this.subscribeId = RandomStringUtils.random(16, true, true);
+        this.refreshToken = refreshToken;
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {

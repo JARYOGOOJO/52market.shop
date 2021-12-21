@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtResponseDto {
 
     private final String token;
+    private final String refreshToken;
     private final Long userId;
     private final String userSubscribeId;
 }
