@@ -21,23 +21,22 @@ public class ChatRoomService {
     public ChatRoom createRoom(ChatRequestDto chatRequestDto) {
         User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
                 () -> new CustomException(USER_NOT_FOUND));
-        ChatRoom chatRoom = ChatRoom
+        return ChatRoom
                 .builder()
                 .host(user)
                 .title(chatRequestDto.getTitle())
                 .build();
-        return chatRoomRepository.save(chatRoom.enter(user));
     }
 
     @Transactional
     public ChatRoom enterRoom(ChatRequestDto chatRequestDto) {
-        User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
+        User guest = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
                 () -> new CustomException(USER_NOT_FOUND)
         );
         ChatRoom chatRoom = chatRoomRepository.findById(chatRequestDto.getRoomSubscribeId()).orElseThrow(
                 () -> new CustomException(CHATROOM_NOT_FOUND)
         );
-        return chatRoomRepository.save(chatRoom.enter(user));
+        return chatRoomRepository.save(chatRoom.enter(guest));
     }
 
     @Transactional

@@ -33,8 +33,8 @@ public class ChatRoom extends Timestamped {
         this.isActive = true;
     }
 
-    public ChatRoom enter(User user) {
-        this.guest = user;
+    public ChatRoom enter(User guest) {
+        this.guest = guest;
         this.isActive = true;
         return this;
     }
