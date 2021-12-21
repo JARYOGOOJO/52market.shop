@@ -48,6 +48,14 @@ public class Article extends Timestamped {
         this.longitude = longitude;
     }
 
+    public void addComment(Comment comment) {
+        this.commentList.add(comment);
+        comment = Comment.builder()
+                .article(this)
+                .build();
+    }
+
+
     public Article update(ArticleRequestDto requestDto) {
         this.content = requestDto.getContent();
         return this;
