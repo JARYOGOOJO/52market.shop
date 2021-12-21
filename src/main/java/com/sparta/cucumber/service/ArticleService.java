@@ -47,7 +47,6 @@ public class ArticleService {
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
                 .build();
-        article.addComment(Comment comment);
         return articleRepository.save(article);
     }
 

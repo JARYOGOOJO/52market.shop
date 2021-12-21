@@ -50,9 +50,6 @@ public class Article extends Timestamped {
 
     public void addComment(Comment comment) {
         this.commentList.add(comment);
-        comment = Comment.builder()
-                .article(this)
-                .build();
     }
 
 
