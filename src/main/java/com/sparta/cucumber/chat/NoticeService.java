@@ -29,11 +29,11 @@ public class NoticeService {
                         () -> new CustomException(CHATROOM_NOT_FOUND));
         Notice message = Notice
                 .builder()
+                .chatRoom(room)
                 .senderId(sender.getId())
                 .content(htmlEscape(requestDto.getContent()))
                 .type(NoticeType.MESSAGE)
                 .build();
-        room.talk(message);
         return messageRepository.save(message);
     }
 
@@ -41,7 +41,7 @@ public class NoticeService {
     public Notice invite(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         return Notice
                 .builder()
                 .senderId(sender.getId())
@@ -55,7 +55,7 @@ public class NoticeService {
     public Notice article(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         String title = requestDto.getTitle();
         String content = requestDto.getContent();
         return Notice
@@ -71,7 +71,7 @@ public class NoticeService {
     public Notice comment(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         return Notice
                 .builder()
                 .senderId(sender.getId())
@@ -85,7 +85,7 @@ public class NoticeService {
     public Notice uncomment(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         return Notice
                 .builder()
                 .senderId(sender.getId())
