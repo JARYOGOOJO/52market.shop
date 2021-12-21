@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @Getter
@@ -33,6 +36,8 @@ public class Article extends Timestamped {
     private String imageName;
     private Double latitude;
     private Double longitude;
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Comment> commentList = new ArrayList<>();
 
     @Builder
     public Article(User user, String title,
