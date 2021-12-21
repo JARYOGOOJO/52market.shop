@@ -34,6 +34,9 @@ public class ChatRoom extends Timestamped {
     }
 
     public ChatRoom enter(User guest) {
+        if (this.host == guest) {
+            return this;
+        }
         this.guest = guest;
         this.isActive = true;
         return this;

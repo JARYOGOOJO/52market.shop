@@ -21,11 +21,12 @@ public class ChatRoomService {
     public ChatRoom createRoom(ChatRequestDto chatRequestDto) {
         User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
                 () -> new CustomException(USER_NOT_FOUND));
-        return ChatRoom
+        ChatRoom chatRoom = ChatRoom
                 .builder()
                 .host(user)
                 .title(chatRequestDto.getTitle())
                 .build();
+        return chatRoomRepository.save(chatRoom);
     }
 
     @Transactional
