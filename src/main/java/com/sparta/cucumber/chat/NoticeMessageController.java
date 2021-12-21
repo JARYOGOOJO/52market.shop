@@ -66,9 +66,9 @@ public class NoticeMessageController {
         System.out.println("chatRequestDto : " + requestDto.toString());
         log.debug("chatRequestDto : " + requestDto);
         String roomId = requestDto.getRoomSubscribeId();
-        Notice msg = service.message(requestDto);
+        Notice message = service.message(requestDto);
         ChannelTopic topic = ChannelTopic.of(String.valueOf(roomId));
-        redisPublisher.publish(topic, msg);
-//        messagingTemplate.convertAndSend("/sub/chat/" + roomId, msg);
+        redisPublisher.publish(topic, message);
+//        messagingTemplate.convertAndSend("/sub/chat/" + roomId, message);
     }
 }

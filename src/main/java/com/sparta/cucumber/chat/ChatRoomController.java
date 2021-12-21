@@ -39,7 +39,7 @@ public class ChatRoomController {
         log.debug("enterRoom chatRequestDto : " + chatRequestDto.toString());
         ChatRoom enteredRoom = chatService.enterRoom(chatRequestDto);
         // redis 방입장 구독
-        ChannelTopic topic = new ChannelTopic(enteredRoom.getRoomSubscribeId());
+        ChannelTopic topic = ChannelTopic.of(enteredRoom.getRoomSubscribeId());
         redisMessageListener.addMessageListener(redisSubscriber, topic);
         return ResponseEntity.ok().body(enteredRoom);
     }
