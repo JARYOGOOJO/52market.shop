@@ -33,7 +33,7 @@ public class ChatRoomService {
         User guest = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
                 () -> new CustomException(USER_NOT_FOUND)
         );
-        ChatRoom chatRoom = chatRoomRepository.findById(chatRequestDto.getRoomSubscribeId()).orElseThrow(
+        ChatRoom chatRoom = chatRoomRepository.findByRoomSubscribeId(chatRequestDto.getRoomSubscribeId()).orElseThrow(
                 () -> new CustomException(CHATROOM_NOT_FOUND)
         );
         return chatRoomRepository.save(chatRoom.enter(guest));
