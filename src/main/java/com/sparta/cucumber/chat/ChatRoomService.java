@@ -41,7 +41,7 @@ public class ChatRoomService {
     }
 
     @Transactional
-    public void exitRoom(ChatRequestDto chatRequestDto) {
+    public ChatRoom exitRoom(ChatRequestDto chatRequestDto) {
         User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
                 () -> new CustomException(USER_NOT_FOUND)
         );
@@ -54,5 +54,6 @@ public class ChatRoomService {
         } else {
             chatRoomRepository.save(chatRoom);
         }
+        return chatRoom;
     }
 }

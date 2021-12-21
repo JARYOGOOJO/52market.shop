@@ -40,8 +40,9 @@ public class CommentService {
                 .user(user)
                 .article(article)
                 .build();
-        List<Comment> articleComments = commentRepository.findAllByArticle(article);
-        articleComments.add(comment);
+//        List<Comment> articleComments = commentRepository.findAllByArticle(article);
+//        articleComments.add(comment);
+        article.addComment(comment);
         return commentRepository.save(comment);
     }
 
