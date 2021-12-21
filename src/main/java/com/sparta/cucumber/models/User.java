@@ -55,7 +55,9 @@ public class User extends Timestamped {
         this.longitude = longitude;
         this.star = 0.0;
         this.role = Role.USER;
+        this.socialId = kakaoId;
         this.subscribeId = RandomStringUtils.random(16, true, true);
+        this.refreshToken = refreshToken;
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
