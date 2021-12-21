@@ -39,7 +39,8 @@ public class UserRestController {
         String email = userService.kakaoLogin(socialLoginDto.getToken());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(email);
         final String token = jwtTokenUtil.generateToken(userDetails);
-        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
+        final String refresh = userDetails.getUser().getRefreshToken();
+        JwtResponseDto result = new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
         System.out.println(userDetails.isEnabled());
         return ResponseEntity.ok(result);
     }
@@ -51,7 +52,8 @@ public class UserRestController {
         userService.signup(userDTO);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
+        final String refresh = userDetails.getUser().getRefreshToken();
+        return ResponseEntity.ok(new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
     @Operation(description = "로그인", method = "POST")
@@ -61,8 +63,9 @@ public class UserRestController {
         userService.signin(userDTO);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
+        final String refresh = userDetails.getUser().getRefreshToken();
         System.out.println(userDetails.isEnabled());
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
+        return ResponseEntity.ok(new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
     @Operation(description = "유저 확인", method = "POST")

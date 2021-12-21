@@ -16,7 +16,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -42,14 +41,13 @@ public class UserService {
     @Transactional
     public JwtResponseDto validate(JwtRequestDto requestDto) {
         String token = requestDto.getToken();
+        String refresh = requestDto.getRefreshToken();
         User user1 = userRepository.findById(requestDto.getUserId()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         User user2 = userRepository.findByName(jwtTokenUtil.getUsernameFromToken(token)).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         if (!Objects.equals(user1, user2)) {
             throw new UsernameNotFoundException("잘못된 요청입니다.");
         }
-        UserDetails userDetails = userDetailsService.loadUserByEmail(user1.getEmail());
-        String newToken = jwtTokenUtil.generateToken(userDetails);
-        return new JwtResponseDto(token, user1.getId(), user1.getSubscribeId());
+        return new JwtResponseDto(token, refresh, user1.getId(), user1.getSubscribeId());
     }
 
     @Transactional
@@ -59,6 +57,7 @@ public class UserService {
         if (exists != null) {
             throw new CustomException(USER_ALREADY_EXIST);
         } else {
+            String refresh = jwtTokenUtil.genRefreshToken();
             User user = User
                     .builder()
                     .name(htmlEscape(userDTO.getName()))
@@ -67,6 +66,7 @@ public class UserService {
                     .latitude(userDTO.getLatitude())
                     .longitude(userDTO.getLongitude())
                     .phoneNumber(userDTO.getPhoneNumber())
+                    .refreshToken(refresh)
                     .build();
             userRepository.save(user);
         }
@@ -97,7 +97,15 @@ public class UserService {
             if (existsUser != null) {
                 kakaoUser = existsUser.updateKakao(nickname, encodedPassword, email, role, kakaoId);
             } else {
-                kakaoUser = new User(nickname, encodedPassword, email, role, kakaoId);
+                String refresh = jwtTokenUtil.genRefreshToken();
+                kakaoUser = User
+                        .builder()
+                        .name(nickname)
+                        .email(email)
+                        .encodedPassword(encodedPassword)
+                        .kakaoId(kakaoId)
+                        .refreshToken(refresh)
+                        .build();
             }
             userRepository.save(kakaoUser);
         }
