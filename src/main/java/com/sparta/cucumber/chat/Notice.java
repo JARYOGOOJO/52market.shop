@@ -1,6 +1,5 @@
 package com.sparta.cucumber.chat;
 
-import com.sparta.cucumber.models.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Entity(name = "message")
 @NoArgsConstructor
-public class Notice extends Timestamped {
+public class Notice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
