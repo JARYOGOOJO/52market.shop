@@ -1,8 +1,12 @@
 package com.sparta.cucumber.chat;
 
+import com.sparta.cucumber.redis.RedisPublisher;
+import com.sparta.cucumber.redis.RedisSubscriber;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
@@ -14,6 +18,9 @@ public class NoticeMessageController {
 
     private final SimpMessageSendingOperations messagingTemplate;
     private final NoticeService service;
+    private final RedisMessageListenerContainer redisMessageListener;
+    private final RedisSubscriber redisSubscriber;
+    private final RedisPublisher redisPublisher;
 
     @Operation(description = "게시글 작성시 전체알림", method = "MESSAGE")
     @MessageMapping("/new/articles")
@@ -60,6 +67,8 @@ public class NoticeMessageController {
         log.debug("chatRequestDto : " + requestDto);
         String roomId = requestDto.getRoomSubscribeId();
         Notice msg = service.message(requestDto);
-        messagingTemplate.convertAndSend("/sub/chat/" + roomId, msg);
+        ChannelTopic topic = ChannelTopic.of(String.valueOf(roomId));
+        redisPublisher.publish(topic, msg);
+//        messagingTemplate.convertAndSend("/sub/chat/" + roomId, msg);
     }
 }
