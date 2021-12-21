@@ -12,4 +12,5 @@ public class ChatRequestDto {
     private String content;
     private String msgType;
     private boolean isActive;
+    private NoticeType type;
 }
