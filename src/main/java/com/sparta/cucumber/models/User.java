@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
@@ -31,6 +32,7 @@ public class User extends Timestamped {
     private String name;
     private Long socialId;
     @Column(nullable = false)
+    @Email
     private String email;
     private String picture;
     private String password;
@@ -46,14 +48,12 @@ public class User extends Timestamped {
     @Builder
     public User(String name, String email,
                 String picture, String encodedPassword,
-                String phoneNumber, Double latitude, Long kakaoId, Double longitude, String refreshToken) {
+                String phoneNumber, Long kakaoId, String refreshToken) {
         this.name = htmlEscape(name);
         this.email = email;
         this.picture = picture;
         this.password = encodedPassword;
         this.phoneNumber = phoneNumber;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.star = 0.0;
         this.role = Role.USER;
         this.socialId = kakaoId;
@@ -80,11 +80,16 @@ public class User extends Timestamped {
         return this;
     }
 
-
-    public void update(UserRequestDto userDTO) {
+    public void updateMyPage(UserRequestDto userDTO) {
         this.picture = userDTO.getPicture();
         this.name = userDTO.getName();
         this.phoneNumber = userDTO.getPhoneNumber();
         this.password = userDTO.getPassword();
+    }
+
+    public User updateLocation(UserRequestDto userDTO) {
+        this.latitude = userDTO.getLatitude();
+        this.longitude = userDTO.getLongitude();
+        return this;
     }
 }

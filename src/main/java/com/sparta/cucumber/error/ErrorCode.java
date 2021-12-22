@@ -13,6 +13,10 @@ public enum ErrorCode {
     /* 400 BAD_REQUEST : 잘못된 요청 */
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다."),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다."),
+    WRONG_INPUT_EMAIL(BAD_REQUEST, "올바른 이메일을 입력해야 합니다."),
+    WRONG_INPUT_PASSWORD(BAD_REQUEST, "올바른 비밀번호를 입력해야 합니다."),
+    WRONG_INPUT_PHONE_NUMBER(BAD_REQUEST, "올바른 전화번호를 입력해야 합니다."),
+    WRONG_INPUT_URL(BAD_REQUEST, "올바른 주소를 입력해야 합니다."),
 
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자 */
     INVALID_AUTH_TOKEN(UNAUTHORIZED, "권한 정보가 없는 토큰입니다."),

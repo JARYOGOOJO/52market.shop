@@ -11,6 +11,7 @@ import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.security.kakao.KakaoUserInfo;
 import com.sparta.cucumber.utils.JwtTokenUtil;
+import com.sparta.cucumber.utils.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,8 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-import static com.sparta.cucumber.error.ErrorCode.USER_ALREADY_EXIST;
-import static com.sparta.cucumber.error.ErrorCode.USER_NOT_FOUND;
+import static com.sparta.cucumber.error.ErrorCode.*;
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @RequiredArgsConstructor
@@ -37,6 +37,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final ValidationUtil validationUtil;
 
     @Transactional
     public JwtResponseDto validate(JwtRequestDto requestDto) {
@@ -51,21 +52,26 @@ public class UserService {
     }
 
     @Transactional
-    public void signup(UserRequestDto userDTO) {
+    public void signup(UserRequestDto userRequestDto) {
+        String email = userRequestDto.getEmail();
+        String phoneNumber = userRequestDto.getPhoneNumber();
+        if (validationUtil.invalidEmail(email)) {
+            throw new CustomException(WRONG_INPUT_EMAIL);
+        } else if (!validationUtil.validPhoneNumber(phoneNumber)) {
+            throw new CustomException(WRONG_INPUT_PHONE_NUMBER);
+        }
         User exists = userRepository
-                .findByEmail(userDTO.getEmail()).orElse(null);
+                .findByEmail(userRequestDto.getEmail()).orElse(null);
         if (exists != null) {
             throw new CustomException(USER_ALREADY_EXIST);
         } else {
             String refresh = jwtTokenUtil.genRefreshToken();
             User user = User
                     .builder()
-                    .name(htmlEscape(userDTO.getName()))
-                    .email(htmlEscape(userDTO.getEmail()))
-                    .encodedPassword(passwordEncoder.encode(userDTO.getPassword()))
-                    .latitude(userDTO.getLatitude())
-                    .longitude(userDTO.getLongitude())
-                    .phoneNumber(userDTO.getPhoneNumber())
+                    .name(htmlEscape(userRequestDto.getName()))
+                    .email(htmlEscape(email))
+                    .encodedPassword(passwordEncoder.encode(userRequestDto.getPassword()))
+                    .phoneNumber(phoneNumber)
                     .refreshToken(refresh)
                     .build();
             userRepository.save(user);
@@ -73,9 +79,12 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User signin(UserRequestDto userDTO) {
-        User user = userRepository.findByEmail(userDTO.getEmail()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-        if (passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+    public User signIn(UserRequestDto userRequestDto) {
+        if (validationUtil.invalidEmail(userRequestDto.getEmail())) {
+            throw new CustomException(WRONG_INPUT_EMAIL);
+        }
+        User user = userRepository.findByEmail(userRequestDto.getEmail()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        if (passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())) {
             return user;
         } else {
             throw new CustomException(USER_NOT_FOUND);
@@ -116,13 +125,21 @@ public class UserService {
     }
 
     @Transactional
-    public User update(UserRequestDto userDTO, String profileImage) {
+    public User updateProfile(UserRequestDto userRequestDto, String profileImage) {
         User findUser = userRepository
-                .findByEmail(userDTO.getEmail())
+                .findByEmail(userRequestDto.getEmail())
                 .orElseThrow(()
                         -> new CustomException(USER_NOT_FOUND));
-        userDTO.setPicture(profileImage);
-        findUser.update(userDTO);
+        userRequestDto.setPicture(profileImage);
+        findUser.updateMyPage(userRequestDto);
         return findUser;
+    }
+
+    public User updateLocation(UserRequestDto userRequestDto) {
+        User findUser = userRepository
+                .findByEmail(userRequestDto.getEmail())
+                .orElseThrow(()
+                        -> new CustomException(USER_NOT_FOUND));
+        return findUser.updateLocation(userRequestDto);
     }
 }
