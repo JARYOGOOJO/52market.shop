@@ -51,21 +51,19 @@ public class UserService {
     }
 
     @Transactional
-    public void signup(UserRequestDto userDTO) {
+    public void signup(UserRequestDto userRequestDto) {
         User exists = userRepository
-                .findByEmail(userDTO.getEmail()).orElse(null);
+                .findByEmail(userRequestDto.getEmail()).orElse(null);
         if (exists != null) {
             throw new CustomException(USER_ALREADY_EXIST);
         } else {
             String refresh = jwtTokenUtil.genRefreshToken();
             User user = User
                     .builder()
-                    .name(htmlEscape(userDTO.getName()))
-                    .email(htmlEscape(userDTO.getEmail()))
-                    .encodedPassword(passwordEncoder.encode(userDTO.getPassword()))
-                    .latitude(userDTO.getLatitude())
-                    .longitude(userDTO.getLongitude())
-                    .phoneNumber(userDTO.getPhoneNumber())
+                    .name(htmlEscape(userRequestDto.getName()))
+                    .email(htmlEscape(userRequestDto.getEmail()))
+                    .encodedPassword(passwordEncoder.encode(userRequestDto.getPassword()))
+                    .phoneNumber(userRequestDto.getPhoneNumber())
                     .refreshToken(refresh)
                     .build();
             userRepository.save(user);
@@ -73,9 +71,9 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User signin(UserRequestDto userDTO) {
-        User user = userRepository.findByEmail(userDTO.getEmail()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-        if (passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+    public User signIn(UserRequestDto userRequestDto) {
+        User user = userRepository.findByEmail(userRequestDto.getEmail()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        if (passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())) {
             return user;
         } else {
             throw new CustomException(USER_NOT_FOUND);
@@ -116,13 +114,21 @@ public class UserService {
     }
 
     @Transactional
-    public User update(UserRequestDto userDTO, String profileImage) {
+    public User updateLocation(UserRequestDto userRequestDto, String profileImage) {
         User findUser = userRepository
-                .findByEmail(userDTO.getEmail())
+                .findByEmail(userRequestDto.getEmail())
                 .orElseThrow(()
                         -> new CustomException(USER_NOT_FOUND));
-        userDTO.setPicture(profileImage);
-        findUser.update(userDTO);
+        userRequestDto.setPicture(profileImage);
+        findUser.updateMyPage(userRequestDto);
         return findUser;
+    }
+
+    public User updateLocation(UserRequestDto userRequestDto) {
+        User findUser = userRepository
+                .findByEmail(userRequestDto.getEmail())
+                .orElseThrow(()
+                        -> new CustomException(USER_NOT_FOUND));
+        return findUser.updateLocation(userRequestDto);
     }
 }

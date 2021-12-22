@@ -4,6 +4,7 @@ import com.sparta.cucumber.dto.JwtRequestDto;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
+import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.S3Uploader;
@@ -60,8 +61,8 @@ public class UserRestController {
     @PostMapping("/user/signin")
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
-        userService.signin(userDTO);
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
+        User user = userService.signIn(userDTO);
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(user.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
         final String refresh = userDetails.getUser().getRefreshToken();
         System.out.println(userDetails.isEnabled());
@@ -74,6 +75,14 @@ public class UserRestController {
         System.out.println(jwtDTO);
         JwtResponseDto jwtResponseDto = userService.validate(jwtDTO);
         return ResponseEntity.ok(jwtResponseDto);
+    }
+
+    @Operation(description = "유저 위치 확인", method = "POST")
+    @PostMapping("/user/location")
+    public ResponseEntity<?> whereAmI(@RequestBody UserRequestDto userRequestDto) {
+        System.out.println(userRequestDto);
+        User updatedUser = userService.updateLocation(userRequestDto);
+        return ResponseEntity.ok(updatedUser);
     }
 
     private Authentication authenticate(String email, String password) throws Exception {
