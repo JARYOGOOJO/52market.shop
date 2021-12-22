@@ -37,8 +37,8 @@ public class UserRestController {
     @Operation(description = "카카오 로그인", method = "POST")
     @PostMapping(value = "/user/kakao")
     public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
-        String email = userService.kakaoLogin(socialLoginDto.getToken());
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(email);
+        String nickname = userService.kakaoLogin(socialLoginDto.getToken());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(nickname);
         final String token = jwtTokenUtil.generateToken(userDetails);
         final String refresh = userDetails.getUser().getRefreshToken();
         JwtResponseDto result = new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
@@ -51,7 +51,7 @@ public class UserRestController {
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
         userService.signup(userDTO);
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
         final String refresh = userDetails.getUser().getRefreshToken();
         return ResponseEntity.ok(new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
@@ -62,7 +62,7 @@ public class UserRestController {
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
         User user = userService.signIn(userDTO);
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(user.getEmail());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(user.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
         final String refresh = userDetails.getUser().getRefreshToken();
         System.out.println(userDetails.isEnabled());
@@ -85,9 +85,8 @@ public class UserRestController {
         return ResponseEntity.ok(updatedUser);
     }
 
-    private Authentication authenticate(String email, String password) throws Exception {
+    private Authentication authenticate(String username, String password) throws Exception {
         try {
-            String username = email.split("@")[0];
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
