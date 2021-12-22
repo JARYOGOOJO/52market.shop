@@ -55,7 +55,7 @@ public class UserService {
     public void signup(UserRequestDto userRequestDto) {
         String email = userRequestDto.getEmail();
         String phoneNumber = userRequestDto.getPhoneNumber();
-        if (!validationUtil.correctEmail(email)) {
+        if (validationUtil.invalidEmail(email)) {
             throw new CustomException(WRONG_INPUT_EMAIL);
         } else if (!validationUtil.validPhoneNumber(phoneNumber)) {
             throw new CustomException(WRONG_INPUT_PHONE_NUMBER);
@@ -80,7 +80,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User signIn(UserRequestDto userRequestDto) {
-        if (!validationUtil.correctEmail(userRequestDto.getEmail())) {
+        if (validationUtil.invalidEmail(userRequestDto.getEmail())) {
             throw new CustomException(WRONG_INPUT_EMAIL);
         }
         User user = userRepository.findByEmail(userRequestDto.getEmail()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
