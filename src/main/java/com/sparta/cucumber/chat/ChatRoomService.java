@@ -64,9 +64,8 @@ public class ChatRoomService {
         User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
                 () -> new CustomException(USER_NOT_FOUND)
         );
-        List<ChatRoom> invitedList = chatRoomRepository.findByGuest(user).orElseThrow(
+        return chatRoomRepository.findByGuest(user).orElseThrow(
                 () -> new CustomException(CHATROOM_NOT_FOUND)
         );
-        return invitedList;
     }
 }
