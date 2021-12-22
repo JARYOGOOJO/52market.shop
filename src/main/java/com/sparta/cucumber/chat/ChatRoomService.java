@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.sparta.cucumber.error.ErrorCode.CHATROOM_NOT_FOUND;
 import static com.sparta.cucumber.error.ErrorCode.USER_NOT_FOUND;
 
@@ -55,5 +57,16 @@ public class ChatRoomService {
             chatRoomRepository.save(chatRoom);
         }
         return chatRoom;
+    }
+
+    @Transactional
+    public List<ChatRoom> isInvited(ChatRequestDto chatRequestDto){
+        User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
+                () -> new CustomException(USER_NOT_FOUND)
+        );
+        List<ChatRoom> invitedList = chatRoomRepository.findByGuest(user).orElseThrow(
+                () -> new CustomException(CHATROOM_NOT_FOUND)
+        );
+        return invitedList;
     }
 }

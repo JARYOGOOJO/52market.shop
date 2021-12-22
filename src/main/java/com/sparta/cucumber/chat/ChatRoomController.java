@@ -54,5 +54,10 @@ public class ChatRoomController {
         redisMessageListener.removeMessageListener(redisSubscriber, topic);
         return ResponseEntity.ok().body(null);
     }
+
+    @PostMapping("/room/invited")
+    public ResponseEntity<?> isInvited(@RequestBody ChatRequestDto chatRequestDto){
+        return ResponseEntity.ok().body(chatService.isInvited(chatRequestDto));
+    }
 }
 
