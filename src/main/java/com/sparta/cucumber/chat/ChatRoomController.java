@@ -55,7 +55,7 @@ public class ChatRoomController {
         return ResponseEntity.ok().body(null);
     }
 
-    @PostMapping("/invited/room")
+    @PostMapping("/room/invited")
     public ResponseEntity<?> isInvited(@RequestBody ChatRequestDto chatRequestDto){
         return ResponseEntity.ok().body(chatService.isInvited(chatRequestDto));
     }
