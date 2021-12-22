@@ -50,7 +50,7 @@ public class UserService {
     }
 
     @Transactional
-    public void signup(UserRequestDto userRequestDto) {
+    public User signup(UserRequestDto userRequestDto) {
         String email = userRequestDto.getEmail();
         String phoneNumber = userRequestDto.getPhoneNumber();
         if (validationUtil.invalidEmail(email)) {
@@ -72,7 +72,7 @@ public class UserService {
                     .phoneNumber(phoneNumber)
                     .refreshToken(refresh)
                     .build();
-            userRepository.save(user);
+            return userRepository.save(user);
         }
     }
 
@@ -101,9 +101,7 @@ public class UserService {
             String encodedPassword = passwordEncoder.encode(password);
             Role role = Role.USER;
             User existsUser = userRepository.findByEmail(email).orElse(null);
-            if (existsUser != null) {
-                kakaoUser = existsUser.updateKakao(nickname, encodedPassword, email, role, kakaoId);
-            } else {
+            if (existsUser == null) {
                 String refresh = jwtTokenUtil.genRefreshToken();
                 kakaoUser = User
                         .builder()
@@ -113,6 +111,8 @@ public class UserService {
                         .kakaoId(kakaoId)
                         .refreshToken(refresh)
                         .build();
+            } else {
+                kakaoUser = existsUser.updateKakao(nickname, encodedPassword, email, role, kakaoId);
             }
             userRepository.save(kakaoUser);
         }

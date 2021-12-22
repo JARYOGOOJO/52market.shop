@@ -2,6 +2,7 @@ HELP.md
 .gradle
 build/
 /src/main/resources/*.properties
+/src/test/resources/*.properties
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/**/**/build/
 
