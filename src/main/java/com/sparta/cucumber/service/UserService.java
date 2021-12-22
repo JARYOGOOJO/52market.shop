@@ -7,7 +7,6 @@ import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.Role;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
-import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.security.kakao.KakaoUserInfo;
 import com.sparta.cucumber.utils.JwtTokenUtil;
@@ -36,7 +35,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    private final UserDetailsServiceImpl userDetailsService;
     private final ValidationUtil validationUtil;
 
     @Transactional
@@ -141,5 +139,9 @@ public class UserService {
                 .orElseThrow(()
                         -> new CustomException(USER_NOT_FOUND));
         return findUser.updateLocation(userRequestDto);
+    }
+
+    public boolean askIfExists(UserRequestDto userRequestDto) {
+        return userRepository.existsByName(userRequestDto.getName());
     }
 }

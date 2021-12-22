@@ -69,6 +69,14 @@ public class UserRestController {
         return ResponseEntity.ok(new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
     }
 
+    @Operation(description = "이름 중복 확인", method = "POST")
+    @PostMapping("/user/exists")
+    public ResponseEntity<?> checkIfExists(@RequestBody UserRequestDto userRequestDto) {
+        System.out.println("중복 확인: " + userRequestDto);
+        boolean exists = userService.askIfExists(userRequestDto);
+        return ResponseEntity.ok().body(exists);
+    }
+
     @Operation(description = "유저 확인", method = "POST")
     @PostMapping("/user/validate")
     public ResponseEntity<?> whoAmI(@RequestBody JwtRequestDto jwtDTO) {
