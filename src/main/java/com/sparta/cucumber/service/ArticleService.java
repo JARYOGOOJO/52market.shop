@@ -3,6 +3,7 @@ package com.sparta.cucumber.service;
 import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.Article;
+import com.sparta.cucumber.models.Comment;
 import com.sparta.cucumber.models.Timestamped;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ArticleRepository;
@@ -46,7 +47,6 @@ public class ArticleService {
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
                 .build();
-
         return articleRepository.save(article);
     }
 

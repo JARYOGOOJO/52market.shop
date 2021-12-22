@@ -116,12 +116,13 @@ public class UserService {
     }
 
     @Transactional
-    public User updateProfileImage(UserRequestDto userDTO, String profileImage) {
-        User user = userRepository
+    public User update(UserRequestDto userDTO, String profileImage) {
+        User findUser = userRepository
                 .findByEmail(userDTO.getEmail())
                 .orElseThrow(()
                         -> new CustomException(USER_NOT_FOUND));
         userDTO.setPicture(profileImage);
-        return user.updateImage(userDTO);
+        findUser.update(userDTO);
+        return findUser;
     }
 }
