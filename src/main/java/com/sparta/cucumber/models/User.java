@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
@@ -31,6 +32,7 @@ public class User extends Timestamped {
     private String name;
     private Long socialId;
     @Column(nullable = false)
+    @Email
     private String email;
     private String picture;
     private String password;
