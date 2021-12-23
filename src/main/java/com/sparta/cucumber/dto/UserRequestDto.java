@@ -1,8 +1,10 @@
 package com.sparta.cucumber.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class UserRequestDto {
     private String name;
     private String password;
@@ -11,4 +13,5 @@ public class UserRequestDto {
     private Double latitude;
     private Double longitude;
     private String picture;
+
 }

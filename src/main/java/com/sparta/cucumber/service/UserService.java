@@ -7,7 +7,6 @@ import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.Role;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
-import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.security.kakao.KakaoUserInfo;
 import com.sparta.cucumber.utils.JwtTokenUtil;
@@ -36,7 +35,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtTokenUtil;
-    private final UserDetailsServiceImpl userDetailsService;
     private final ValidationUtil validationUtil;
 
     @Transactional
@@ -52,7 +50,7 @@ public class UserService {
     }
 
     @Transactional
-    public void signup(UserRequestDto userRequestDto) {
+    public User signup(UserRequestDto userRequestDto) {
         String email = userRequestDto.getEmail();
         String phoneNumber = userRequestDto.getPhoneNumber();
         if (validationUtil.invalidEmail(email)) {
@@ -74,7 +72,7 @@ public class UserService {
                     .phoneNumber(phoneNumber)
                     .refreshToken(refresh)
                     .build();
-            userRepository.save(user);
+            return userRepository.save(user);
         }
     }
 
@@ -83,7 +81,10 @@ public class UserService {
         if (validationUtil.invalidEmail(userRequestDto.getEmail())) {
             throw new CustomException(WRONG_INPUT_EMAIL);
         }
-        User user = userRepository.findByEmail(userRequestDto.getEmail()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        User user = userRepository
+                .findByEmail(userRequestDto.getEmail())
+                .orElseThrow(
+                        () -> new CustomException(USER_NOT_FOUND));
         if (passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())) {
             return user;
         } else {
@@ -103,9 +104,7 @@ public class UserService {
             String encodedPassword = passwordEncoder.encode(password);
             Role role = Role.USER;
             User existsUser = userRepository.findByEmail(email).orElse(null);
-            if (existsUser != null) {
-                kakaoUser = existsUser.updateKakao(nickname, encodedPassword, email, role, kakaoId);
-            } else {
+            if (existsUser == null) {
                 String refresh = jwtTokenUtil.genRefreshToken();
                 kakaoUser = User
                         .builder()
@@ -115,13 +114,15 @@ public class UserService {
                         .kakaoId(kakaoId)
                         .refreshToken(refresh)
                         .build();
+            } else {
+                kakaoUser = existsUser.updateKakao(nickname, encodedPassword, email, role, kakaoId);
             }
             userRepository.save(kakaoUser);
         }
         Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(nickname, password);
         Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return email;
+        return nickname;
     }
 
     @Transactional
@@ -141,5 +142,9 @@ public class UserService {
                 .orElseThrow(()
                         -> new CustomException(USER_NOT_FOUND));
         return findUser.updateLocation(userRequestDto);
+    }
+
+    public boolean askIfExists(UserRequestDto userRequestDto) {
+        return userRepository.existsByName(userRequestDto.getName());
     }
 }

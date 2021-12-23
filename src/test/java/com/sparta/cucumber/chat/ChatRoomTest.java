@@ -56,12 +56,10 @@ class ChatRoomTest {
     @DisplayName("대화방 대화하기")
     void talk() {
         chatRoom.enter(guest);
-        Notice msg1 = Notice.builder().senderId(host.getId()).content("안녕하세요.").build();
-        chatRoom.talk(msg1);
+        Notice msg1 = Notice.builder().chatRoom(chatRoom).senderId(host.getId()).content("안녕하세요.").build();
         System.out.println(msg1);
-        Notice msg2 = Notice.builder().senderId(guest.getId()).content("안녕하세요.").build();
+        Notice msg2 = Notice.builder().chatRoom(chatRoom).senderId(guest.getId()).content("안녕하세요.").build();
         System.out.println(msg2);
-        chatRoom.talk(msg2);
         assertEquals(chatRoom.getHost(), host);
         assertEquals(chatRoom.getGuest(), guest);
         assertTrue(chatRoom.isActive());
