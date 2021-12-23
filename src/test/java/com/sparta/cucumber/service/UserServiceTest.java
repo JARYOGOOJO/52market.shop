@@ -9,10 +9,7 @@ import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.utils.JwtTokenUtil;
 import com.sparta.cucumber.utils.ValidationUtil;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.runner.OrderWith;
 import org.junit.runner.manipulation.Ordering;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +21,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @OrderWith(value = Ordering.Factory.class)
 @SpringBootTest
@@ -45,6 +43,16 @@ public class UserServiceTest {
     private ValidationUtil validationUtil;
     @Autowired
     private UserService userService;
+
+    @BeforeAll
+    static void setUp() {
+        String name = "유동민";
+        String password = "rrr999999";
+        String phoneNumber = "010-9999-1111";
+        String email = "ydm2790@nate.com";
+        Double latitude = 126.1;
+        Double longitude = 38.0;
+    }
 
     @Test
     @Order(1)
@@ -78,7 +86,9 @@ public class UserServiceTest {
         String name = "유동민";
         String password = "rrr999999";
         String phoneNumber = "010-9999-1111";
+        assertTrue(validationUtil.validPhoneNumber(phoneNumber));
         String email = "dddd123@nate.com";
+        Assertions.assertFalse(validationUtil.invalidEmail(email));
         Double latitude = 126.1;
         Double longitude = 38.0;
         UserRequestDto userRequestDto = new UserRequestDto(
@@ -97,7 +107,7 @@ public class UserServiceTest {
     @Order(3)
     @Rollback
     @Transactional
-    @DisplayName(value = "테스트")
+    @DisplayName(value = "로그인 기능 테스트")
     void signIn() {
         System.out.println("Test3");
     }
