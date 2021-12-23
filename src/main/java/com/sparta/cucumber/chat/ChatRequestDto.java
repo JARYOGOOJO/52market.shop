@@ -1,11 +1,13 @@
 package com.sparta.cucumber.chat;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 @Data
+@NoArgsConstructor
 public class ChatRequestDto {
     private Long userId;
     private Long targetId;

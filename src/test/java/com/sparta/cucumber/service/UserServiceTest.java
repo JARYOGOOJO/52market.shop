@@ -11,12 +11,14 @@ import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.security.kakao.KakaoUserInfo;
 import com.sparta.cucumber.utils.JwtTokenUtil;
 import com.sparta.cucumber.utils.ValidationUtil;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.OrderWith;
 import org.junit.runner.manipulation.Ordering;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -38,17 +40,11 @@ public class UserServiceTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private ValidationUtil validationUtil;
     @Autowired
     private UserService userService;
-
-    @BeforeAll
-    static void setUp() {
-    }
 
     @Test
     @Order(1)
