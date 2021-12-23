@@ -43,9 +43,9 @@ public class ChatRoom extends Timestamped {
     }
 
     public void exit(User user) {
-        this.isActive = false;
         if (user == this.host) {
             this.host = null;
+            this.isActive = false;
         } else if (user == this.guest) {
             this.guest = null;
         }

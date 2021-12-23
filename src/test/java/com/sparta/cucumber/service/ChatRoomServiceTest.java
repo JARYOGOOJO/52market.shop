@@ -7,14 +7,14 @@ import com.sparta.cucumber.chat.ChatRoomService;
 import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
-import org.junit.Rule;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.*;
-import org.junit.rules.ExpectedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 import static org.junit.Assert.assertThrows;
 
@@ -27,8 +27,6 @@ class ChatRoomServiceTest {
     private UserRepository userRepository;
     @Autowired
     private ChatRoomService chatRoomService;
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
 
     @BeforeEach
     void setUp() {
@@ -67,12 +65,17 @@ class ChatRoomServiceTest {
         @Order(2)
         @Rollback
         @Transactional
-        void CreateFailCase() {
+        void CreateExceptionCase() {
             ChatRequestDto chatRequestDto = new ChatRequestDto();
             chatRequestDto.setTitle(null);
             chatRequestDto.setUserId(999L);
             System.out.println(chatRequestDto);
-            assertThrows(CustomException.class, () -> chatRoomService.createRoom(chatRequestDto));
+            CustomException exception = assertThrows(
+                    CustomException.class,
+                    () -> chatRoomService.createRoom(chatRequestDto));
+            String exceptionMessage = exception.getErrorCode().getDetail();
+            String expectedMessage = "해당 유저 정보를 찾을 수 없습니다.";
+            Assertions.assertTrue(exceptionMessage.contains(expectedMessage));
         }
     }
 
@@ -86,16 +89,64 @@ class ChatRoomServiceTest {
         @Transactional
         void EnterSuccess() {
             ChatRequestDto chatRequestDto = new ChatRequestDto();
-
+            User host = User.builder()
+                    .name("테스트용계정")
+                    .email("account@test.test")
+                    .build();
+            System.out.println(host);
+            userRepository.save(host);
+            chatRequestDto.setUserId(host.getId());
+            chatRequestDto.setTitle("대화방 입장하기 테스트");
+            System.out.println(chatRequestDto);
+            ChatRoom chatRoom = ChatRoom
+                    .builder()
+                    .host(host)
+                    .title(chatRequestDto.getTitle())
+                    .build();
+            chatRoomRepository.save(chatRoom);
+            System.out.println(chatRoom);
+            User guest = User.builder()
+                    .name("<이름>🥒🥒")
+                    .email("email@address.com")
+                    .build();
+            userRepository.save(guest);
+            System.out.println(guest);
+            chatRoomRepository.save(chatRoom.enter(guest));
+            System.out.println(chatRoom);
+            List<ChatRoom> guestHouses = chatRoomRepository.findByGuest(guest).orElse(null);
+            List<ChatRoom> hostRooms = chatRoomRepository.findByHost(host).orElse(null);
+            assert hostRooms != null;
+            Assertions.assertTrue(hostRooms.contains(chatRoom));
+            assert guestHouses != null;
+            Assertions.assertTrue(guestHouses.contains(chatRoom));
         }
 
         @Test
         @Order(4)
         @Rollback
         @Transactional
-        void EnterFailCase() {
+        void EnterExceptionCase() {
             ChatRequestDto chatRequestDto = new ChatRequestDto();
-
+            User host = User.builder()
+                    .name("<이름>🥒🥒")
+                    .email("email@address.com")
+                    .build();
+            userRepository.save(host);
+            System.out.println(host);
+            chatRequestDto.setUserId(host.getId());
+            chatRequestDto.setTitle("새로운 대화방 입장 테스트");
+            String subscribeId = RandomStringUtils.random(16, true, true);
+            chatRequestDto.setRoomSubscribeId(subscribeId);
+            System.out.println(chatRequestDto);
+            ChatRoom chatRoom = chatRoomService.createRoom(chatRequestDto);
+            CustomException exception = assertThrows(
+                    CustomException.class,
+                    () -> chatRoomService.enterRoom(chatRequestDto));
+            System.out.println(exception.getErrorCode().getDetail());
+            System.out.println(exception.getErrorCode().getHttpStatus());
+            chatRoomRepository.save(chatRoom.enter(host));
+            Assertions.assertNotEquals(chatRoom.getRoomSubscribeId(), subscribeId);
+            Assertions.assertNull(chatRoom.getGuest());
         }
     }
 
@@ -109,16 +160,59 @@ class ChatRoomServiceTest {
         @Transactional
         void ExitSuccess() {
             ChatRequestDto chatRequestDto = new ChatRequestDto();
-
+            User host = User.builder()
+                    .name("<이름>🥒🥒")
+                    .email("email@address.com")
+                    .build();
+            userRepository.save(host);
+            System.out.println(host);
+            chatRequestDto.setUserId(host.getId());
+            chatRequestDto.setTitle("새로운 대화방 입장 테스트");
+            System.out.println(chatRequestDto);
+            ChatRoom chatRoom = chatRoomService.createRoom(chatRequestDto);
+            User guest = User.builder()
+                    .name("<이름>🥒🥒")
+                    .email("email@address.com")
+                    .build();
+            userRepository.save(guest);
+            System.out.println(guest);
+            chatRoomRepository.save(chatRoom.enter(guest));
+            String subscribeId = chatRoom.getRoomSubscribeId();
+            chatRequestDto.setRoomSubscribeId(subscribeId);
+            chatRoomService.exitRoom(chatRequestDto);
+            Assertions.assertNull(chatRoom.getHost());
         }
 
         @Test
         @Order(6)
         @Rollback
         @Transactional
-        void ExitFailCase() {
+        void ExitExceptionCase() {
             ChatRequestDto chatRequestDto = new ChatRequestDto();
-
+            User host = User.builder()
+                    .name("<이름>🥒🥒")
+                    .email("email@address.com")
+                    .build();
+            userRepository.save(host);
+            System.out.println(host);
+            chatRequestDto.setUserId(host.getId());
+            chatRequestDto.setTitle("새로운 대화방 입장 테스트");
+            System.out.println(chatRequestDto);
+            ChatRoom chatRoom = chatRoomService.createRoom(chatRequestDto);
+            User guest = User.builder()
+                    .name("<이름>🥒🥒")
+                    .email("email@address.com")
+                    .build();
+            userRepository.save(guest);
+            System.out.println(guest);
+            chatRoomRepository.save(chatRoom.enter(guest));
+            String subscribeId = chatRoom.getRoomSubscribeId();
+            chatRequestDto.setRoomSubscribeId(subscribeId);
+            chatRoomService.exitRoom(chatRequestDto);
+            Assertions.assertNull(chatRoom.getHost());
+            Assertions.assertFalse(chatRoom.isActive());
+            Assertions.assertThrows(CustomException.class,
+                    () -> chatRoomRepository.findByRoomSubscribeId(subscribeId));
         }
     }
 }
