@@ -98,12 +98,7 @@ class ChatRoomServiceTest {
             chatRequestDto.setUserId(host.getId());
             chatRequestDto.setTitle("대화방 입장하기 테스트");
             System.out.println(chatRequestDto);
-            ChatRoom chatRoom = ChatRoom
-                    .builder()
-                    .host(host)
-                    .title(chatRequestDto.getTitle())
-                    .build();
-            chatRoomRepository.save(chatRoom);
+            ChatRoom chatRoom = chatRoomService.createRoom(chatRequestDto);
             System.out.println(chatRoom);
             User guest = User.builder()
                     .name("<이름>🥒🥒")
@@ -208,11 +203,11 @@ class ChatRoomServiceTest {
             chatRoomRepository.save(chatRoom.enter(guest));
             String subscribeId = chatRoom.getRoomSubscribeId();
             chatRequestDto.setRoomSubscribeId(subscribeId);
-            chatRoomService.exitRoom(chatRequestDto);
+            chatRoom = chatRoomService.exitRoom(chatRequestDto);
             Assertions.assertNull(chatRoom.getHost());
             Assertions.assertFalse(chatRoom.isActive());
             Assertions.assertThrows(CustomException.class,
-                    () -> chatRoomRepository.findByRoomSubscribeId(subscribeId));
+                    () -> chatRoomService.exitRoom(chatRequestDto));
         }
     }
 }
