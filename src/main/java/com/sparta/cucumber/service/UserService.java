@@ -81,7 +81,10 @@ public class UserService {
         if (validationUtil.invalidEmail(userRequestDto.getEmail())) {
             throw new CustomException(WRONG_INPUT_EMAIL);
         }
-        User user = userRepository.findByEmail(userRequestDto.getEmail()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        User user = userRepository
+                .findByEmail(userRequestDto.getEmail())
+                .orElseThrow(
+                        () -> new CustomException(USER_NOT_FOUND));
         if (passwordEncoder.matches(userRequestDto.getPassword(), user.getPassword())) {
             return user;
         } else {
