@@ -59,7 +59,7 @@ public class ChatRoomService {
         return chatRoom;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ChatRoom> isInvited(ChatRequestDto chatRequestDto){
         User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
                 () -> new CustomException(USER_NOT_FOUND)
@@ -68,4 +68,26 @@ public class ChatRoomService {
                 () -> new CustomException(CHATROOM_NOT_FOUND)
         );
     }
+
+    @Transactional(readOnly = true)
+    public List<ChatRoom> isInvite(ChatRequestDto chatRequestDto){
+        User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
+                () -> new CustomException(USER_NOT_FOUND)
+        );
+        return chatRoomRepository.findByHost(user).orElseThrow(
+                () -> new CustomException(CHATROOM_NOT_FOUND)
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public List<ChatRoom> isRoomCreated(ChatRequestDto chatRequestDto){
+        User user = userRepository.findById(chatRequestDto.getUserId()).orElseThrow(
+                () -> new CustomException(USER_NOT_FOUND)
+        );
+        return chatRoomRepository.findByGuestOrHost(user,user).orElseThrow(
+                () -> new CustomException(CHATROOM_NOT_FOUND)
+        );
+    }
+
+
 }
