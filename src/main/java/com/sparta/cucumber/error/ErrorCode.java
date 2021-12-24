@@ -12,6 +12,7 @@ public enum ErrorCode {
 
     /* 400 BAD_REQUEST : 잘못된 요청 */
     INVALID_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰이 유효하지 않습니다."),
+    INVALID_CHAT_REQUEST(BAD_REQUEST, "유효하지 않은 대화 요청입니다."),
     MISMATCH_REFRESH_TOKEN(BAD_REQUEST, "리프레시 토큰의 유저 정보가 일치하지 않습니다."),
     WRONG_INPUT_EMAIL(BAD_REQUEST, "올바른 이메일을 입력해야 합니다."),
     WRONG_INPUT_PASSWORD(BAD_REQUEST, "올바른 비밀번호를 입력해야 합니다."),

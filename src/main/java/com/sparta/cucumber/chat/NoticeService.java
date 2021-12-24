@@ -7,8 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.sparta.cucumber.error.ErrorCode.CHATROOM_NOT_FOUND;
-import static com.sparta.cucumber.error.ErrorCode.USER_NOT_FOUND;
+import static com.sparta.cucumber.error.ErrorCode.*;
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @Service
@@ -42,13 +41,20 @@ public class NoticeService {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
                         () -> new CustomException(USER_NOT_FOUND));
-        return Notice
-                .builder()
-                .senderId(sender.getId())
-                .subscriberId(requestDto.getTargetId())
-                .content(requestDto.getContent())
-                .type(NoticeType.CALLING)
-                .build();
+        User subscriber = userRepository
+                .findById(requestDto.getTargetId()).orElseThrow(
+                        () -> new CustomException(USER_NOT_FOUND));
+        if (sender == subscriber) {
+            throw new CustomException(INVALID_CHAT_REQUEST);
+        } else {
+            return Notice
+                    .builder()
+                    .senderId(sender.getId())
+                    .subscriberId(subscriber.getId())
+                    .content(requestDto.getContent())
+                    .type(NoticeType.CALLING)
+                    .build();
+        }
     }
 
     @Transactional
