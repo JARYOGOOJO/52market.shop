@@ -158,7 +158,8 @@ class UserRestControllerTest {
     }
 
     @Test
-    @DisplayName("유저 토큰 유효 확인 및 갱신 ")
+    @Order(5)
+    @DisplayName("유저 토큰 유효 확인 및 갱신")
     void whoAmI() throws Exception {
         ResultActions result = mockMvc.perform(
                 get("/user/validate")
@@ -183,11 +184,13 @@ class UserRestControllerTest {
                 .andExpect(jsonPath("$.userSubscribeId").exists())
                 .andExpect(jsonPath("$.userSubscribeId").isString())
                 .andExpect(jsonPath("$.userId").exists())
-                .andExpect(jsonPath("$.userId").isNumber())
+                .andExpect(jsonPath("$.userId", is(1532)))
         ;
     }
 
     @Test
+    @Order(6)
+    @DisplayName("유저 토큰 위치 확인 및 갱신 ")
     void whereAmI() throws Exception {
         ResultActions result = mockMvc.perform(
                 get("/user/location")
