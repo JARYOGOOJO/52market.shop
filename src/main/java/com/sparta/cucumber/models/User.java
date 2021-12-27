@@ -92,4 +92,9 @@ public class User extends Timestamped {
         this.longitude = userDTO.getLongitude();
         return this;
     }
+
+    public User refresh(String refreshToken) {
+        this.refreshToken = refreshToken;
+        return this;
+    }
 }

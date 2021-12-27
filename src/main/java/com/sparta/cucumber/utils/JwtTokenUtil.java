@@ -1,14 +1,13 @@
 package com.sparta.cucumber.utils;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.sparta.cucumber.error.CustomException;
+import com.sparta.cucumber.error.ErrorCode;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.DatatypeConverter;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,12 +39,19 @@ public class JwtTokenUtil implements Serializable {
     }
 
     //for retrieving any information from token we will need the secret key
-    private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    private Claims getAllClaimsFromToken(String claimsJws) {
+        JwtParser jwtParser = Jwts.parser().setSigningKey(secret);
+        try {
+            return jwtParser.parseClaimsJws(claimsJws).getBody();
+        } catch (ExpiredJwtException e) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
+        } catch (MalformedJwtException | UnsupportedJwtException | SignatureException e) {
+            throw new CustomException(ErrorCode.MALFORMED_JWT_TOKEN);
+        }
     }
 
     //check if the token has expired
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }

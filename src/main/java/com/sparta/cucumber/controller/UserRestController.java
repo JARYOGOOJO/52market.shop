@@ -77,7 +77,7 @@ public class UserRestController {
         return ResponseEntity.ok().body(exists);
     }
 
-    @Operation(description = "유저 확인", method = "POST")
+    @Operation(description = "유저 갱신", method = "POST")
     @PostMapping("/user/validate")
     public ResponseEntity<?> whoAmI(@RequestBody JwtRequestDto jwtDTO) {
         System.out.println(jwtDTO);
