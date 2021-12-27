@@ -1,5 +1,7 @@
 package com.sparta.cucumber.security.kakao;
 
+import com.sparta.cucumber.error.CustomException;
+import com.sparta.cucumber.error.ErrorCode;
 import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -8,15 +10,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
 public class KakaoOAuth2 {
 
     public KakaoUserInfo getUserInfo(String token) {
-        return getUserInfoByToken(token);
+        try {
+            return getUserInfoByToken(token);
+        } catch (HttpClientErrorException.Unauthorized e) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_MEMBER);
+        }
     }
 
+    // 이 메소드가 하는 역할을 클라이언트에서 해주고 있습니다. :: deprecated
     private String getAccessToken(String authorizedCode) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");

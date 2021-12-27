@@ -7,6 +7,7 @@ import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.Role;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
+import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.security.kakao.KakaoUserInfo;
 import com.sparta.cucumber.utils.JwtTokenUtil;
@@ -16,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,12 +41,17 @@ public class UserService {
     public JwtResponseDto validate(JwtRequestDto requestDto) {
         String token = requestDto.getToken();
         String refresh = requestDto.getRefreshToken();
-        User user1 = userRepository.findById(requestDto.getUserId()).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-        User user2 = userRepository.findByName(jwtTokenUtil.getUsernameFromToken(token)).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
-        if (!Objects.equals(user1, user2)) {
-            throw new UsernameNotFoundException("잘못된 요청입니다.");
+        User user = userRepository.findByName(jwtTokenUtil.getUsernameFromToken(token)).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        if (!Objects.equals(user.getRefreshToken(), refresh)) {
+            throw new CustomException(INVALID_REFRESH_TOKEN);
+        } else {
+            String newRef = jwtTokenUtil.genRefreshToken();
+            user.refresh(newRef);
+            userRepository.save(user);
+            refresh = newRef;
         }
-        return new JwtResponseDto(token, refresh, user1.getId(), user1.getSubscribeId());
+        token = jwtTokenUtil.generateToken(new UserDetailsImpl(user));
+        return new JwtResponseDto(token, refresh, user.getId(), user.getSubscribeId());
     }
 
     @Transactional
