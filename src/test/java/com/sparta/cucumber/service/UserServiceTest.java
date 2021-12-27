@@ -11,6 +11,7 @@ import com.sparta.cucumber.security.kakao.KakaoOAuth2;
 import com.sparta.cucumber.security.kakao.KakaoUserInfo;
 import com.sparta.cucumber.utils.JwtTokenUtil;
 import com.sparta.cucumber.utils.ValidationUtil;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -129,6 +130,7 @@ public class UserServiceTest {
     }
 
     @Test
+    @Ignore
     @Order(4)
     @Rollback
     @Transactional

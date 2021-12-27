@@ -68,7 +68,7 @@ class NoticeServiceTest {
             System.out.println(notice);
             assertEquals(notice.getContent(), content);
             assertEquals(notice.getType(), NoticeType.MESSAGE);
-            assertEquals(notice.getChatRoom(), chatRoom);
+            assertEquals(notice.getChatRoom().getRoomSubscribeId(), chatRoom.getRoomSubscribeId());
         }
 
         @Test
@@ -134,6 +134,8 @@ class NoticeServiceTest {
         @Transactional
         @DisplayName("새로운 대화 요청 성공")
         void success() {
+            chatRequestDto.setUserId(sender.getId());
+            chatRequestDto.setTargetId(subscriber.getId());
             String content = "새로운 대화 요청";
             chatRequestDto.setContent(content);
             Notice message = noticeService.invite(chatRequestDto);
@@ -145,6 +147,8 @@ class NoticeServiceTest {
         @Transactional
         @DisplayName("새로운 대화 요청 실패")
         void fail() {
+            chatRequestDto.setUserId(sender.getId());
+            chatRequestDto.setTargetId(sender.getId());
             String content = "새로운 대화 요청";
             chatRequestDto.setContent(content);
             CustomException exception = assertThrows(CustomException.class,

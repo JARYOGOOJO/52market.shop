@@ -41,8 +41,6 @@ dependencies {
     implementation 'org.webjars:stomp-websocket:2.3.4'
     // https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.0'
-    // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
-    implementation 'org.modelmapper:modelmapper:2.4.4'
     // https://mvnrepository.com/artifact/com.querydsl/querydsl-jpa
     implementation "com.querydsl:querydsl-jpa"
     implementation "com.querydsl:querydsl-apt"
@@ -53,7 +51,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.restdocs/spring-restdocs-core
     implementation 'org.springframework.restdocs:spring-restdocs-core:2.0.5.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: "com.vaadin.external.google", module: "android-json"
+    }
 }
 
 test {

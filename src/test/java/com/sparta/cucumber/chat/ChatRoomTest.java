@@ -72,7 +72,7 @@ class ChatRoomTest {
     void exit() {
         chatRoom.exit(guest);
         assertNull(chatRoom.getGuest());
-        assertFalse(chatRoom.isActive());
+        assertTrue(chatRoom.isActive());
         System.out.println(chatRoom.toString());
     }
 }
