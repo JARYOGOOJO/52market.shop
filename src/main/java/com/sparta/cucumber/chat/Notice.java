@@ -1,19 +1,15 @@
 package com.sparta.cucumber.chat;
 
-import com.sparta.cucumber.models.Timestamped;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Entity(name = "message")
 @NoArgsConstructor
-public class Notice extends Timestamped {
+public class Notice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,17 +19,26 @@ public class Notice extends Timestamped {
     private Long senderId;
     private Long targetId;
     private Long subscriberId;
+    @Enumerated(EnumType.STRING)
     private NoticeType type;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private ChatRoom chatRoom;
     private boolean isRead;
 
     @Builder
-    public Notice(String title, String content, Long senderId, Long targetId, Long subscriberId, NoticeType type) {
+    public Notice(ChatRoom chatRoom, String title, String content, Long senderId, Long targetId, Long subscriberId, NoticeType type) {
         this.targetId = targetId;
         this.title = title;
         this.content = content;
         this.senderId = senderId;
         this.subscriberId = subscriberId;
+        this.chatRoom = chatRoom;
         this.type = type;
         this.isRead = false;
+    }
+
+    public void read() {
+        this.isRead = true;
     }
 }

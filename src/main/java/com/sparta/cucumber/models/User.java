@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
@@ -22,7 +23,7 @@ import static org.springframework.web.util.HtmlUtils.htmlEscape;
         table = "MY_SEQUENCES",
         pkColumnValue = "USER_SEQ", allocationSize = 30)
 @Entity(name = "user")
-@JsonIgnoreProperties({"socialId", "password", "phoneNumber", "latitude", "longitude", "star"})
+@JsonIgnoreProperties({"socialId", "password", "phoneNumber", "latitude", "longitude", "star", "refreshToken"})
 public class User extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "USER_GENERATOR")
@@ -31,6 +32,7 @@ public class User extends Timestamped {
     private String name;
     private Long socialId;
     @Column(nullable = false)
+    @Email
     private String email;
     private String picture;
     private String password;
@@ -41,21 +43,22 @@ public class User extends Timestamped {
     private String subscribeId;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private String refreshToken;
 
     @Builder
     public User(String name, String email,
                 String picture, String encodedPassword,
-                String phoneNumber, Double latitude, Double longitude) {
+                String phoneNumber, Long kakaoId, String refreshToken) {
         this.name = htmlEscape(name);
         this.email = email;
         this.picture = picture;
         this.password = encodedPassword;
         this.phoneNumber = phoneNumber;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.star = 0.0;
         this.role = Role.USER;
+        this.socialId = kakaoId;
         this.subscribeId = RandomStringUtils.random(16, true, true);
+        this.refreshToken = refreshToken;
     }
 
     public User(String nickname, String encodedPassword, String email, Role role, Long kakaoId) {
@@ -77,8 +80,21 @@ public class User extends Timestamped {
         return this;
     }
 
-    public User updateImage(UserRequestDto userDTO) {
+    public void updateMyPage(UserRequestDto userDTO) {
         this.picture = userDTO.getPicture();
+        this.name = userDTO.getName();
+        this.phoneNumber = userDTO.getPhoneNumber();
+        this.password = userDTO.getPassword();
+    }
+
+    public User updateLocation(UserRequestDto userDTO) {
+        this.latitude = userDTO.getLatitude();
+        this.longitude = userDTO.getLongitude();
+        return this;
+    }
+
+    public User refresh(String refreshToken) {
+        this.refreshToken = refreshToken;
         return this;
     }
 }

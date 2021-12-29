@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -25,9 +23,6 @@ public class ChatRoom extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "guest")
     private User guest;
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn
-    private List<Notice> message_list;
     private boolean isActive;
 
     @Builder
@@ -35,27 +30,24 @@ public class ChatRoom extends Timestamped {
         this.roomSubscribeId = RandomStringUtils.random(16, true, true);
         this.title = title;
         this.host = host;
-        this.message_list = new ArrayList<>();
         this.isActive = true;
     }
 
-    public ChatRoom enter(User user) {
-        this.guest = user;
+    public ChatRoom enter(User guest) {
+        if (this.host == guest) {
+            return this;
+        }
+        this.guest = guest;
         this.isActive = true;
         return this;
     }
 
     public void exit(User user) {
-        this.message_list.clear();
-        this.isActive = false;
         if (user == this.host) {
             this.host = null;
+            this.isActive = false;
         } else if (user == this.guest) {
             this.guest = null;
         }
-    }
-
-    public void talk(Notice msg) {
-        this.message_list.add(msg);
     }
 }

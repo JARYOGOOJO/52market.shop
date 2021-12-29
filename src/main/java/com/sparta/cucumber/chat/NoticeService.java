@@ -1,11 +1,13 @@
 package com.sparta.cucumber.chat;
 
+import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.sparta.cucumber.error.ErrorCode.*;
 import static org.springframework.web.util.HtmlUtils.htmlEscape;
 
 @Service
@@ -20,17 +22,17 @@ public class NoticeService {
     public Notice message(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 유저입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         ChatRoom room = chatRoomRepository
                 .findById(requestDto.getRoomSubscribeId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 대화방입니다."));
+                        () -> new CustomException(CHATROOM_NOT_FOUND));
         Notice message = Notice
                 .builder()
+                .chatRoom(room)
                 .senderId(sender.getId())
                 .content(htmlEscape(requestDto.getContent()))
                 .type(NoticeType.MESSAGE)
                 .build();
-        room.talk(message);
         return messageRepository.save(message);
     }
 
@@ -38,21 +40,28 @@ public class NoticeService {
     public Notice invite(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
-        return Notice
-                .builder()
-                .senderId(sender.getId())
-                .subscriberId(requestDto.getTargetId())
-                .content(requestDto.getContent())
-                .type(NoticeType.CALLING)
-                .build();
+                        () -> new CustomException(USER_NOT_FOUND));
+        User subscriber = userRepository
+                .findById(requestDto.getTargetId()).orElseThrow(
+                        () -> new CustomException(USER_NOT_FOUND));
+        if (sender == subscriber) {
+            throw new CustomException(INVALID_CHAT_REQUEST);
+        } else {
+            return Notice
+                    .builder()
+                    .senderId(sender.getId())
+                    .subscriberId(subscriber.getId())
+                    .content(requestDto.getContent())
+                    .type(NoticeType.CALLING)
+                    .build();
+        }
     }
 
     @Transactional
     public Notice article(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         String title = requestDto.getTitle();
         String content = requestDto.getContent();
         return Notice
@@ -68,7 +77,7 @@ public class NoticeService {
     public Notice comment(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         return Notice
                 .builder()
                 .senderId(sender.getId())
@@ -82,7 +91,7 @@ public class NoticeService {
     public Notice uncomment(ChatRequestDto requestDto) {
         User sender = userRepository
                 .findById(requestDto.getUserId()).orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         return Notice
                 .builder()
                 .senderId(sender.getId())

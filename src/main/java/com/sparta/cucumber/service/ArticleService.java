@@ -1,7 +1,9 @@
 package com.sparta.cucumber.service;
 
 import com.sparta.cucumber.dto.ArticleRequestDto;
+import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.Article;
+import com.sparta.cucumber.models.Comment;
 import com.sparta.cucumber.models.Timestamped;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ArticleRepository;
@@ -15,6 +17,9 @@ import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.sparta.cucumber.error.ErrorCode.ARTICLE_NOT_FOUND;
+import static com.sparta.cucumber.error.ErrorCode.USER_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
@@ -30,7 +35,7 @@ public class ArticleService {
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         String imageName = imagePath.substring(imagePath.lastIndexOf("/") + 1);
 
         Article article = Article.builder()
@@ -42,7 +47,6 @@ public class ArticleService {
                 .latitude(user.getLatitude())
                 .longitude(user.getLongitude())
                 .build();
-
         return articleRepository.save(article);
     }
 
@@ -93,7 +97,7 @@ public class ArticleService {
         Article article = articleRepository
                 .findById(articleId)
                 .orElseThrow(
-                        () -> new NullPointerException("게시물이 존재하지 않습니다."));
+                        () -> new CustomException(ARTICLE_NOT_FOUND));
         articleRepository.delete(article);
         return articleId;
     }
@@ -104,7 +108,7 @@ public class ArticleService {
         User user = userRepository
                 .findById(userId)
                 .orElseThrow(
-                        () -> new NullPointerException("잘못된 접근입니다."));
+                        () -> new CustomException(USER_NOT_FOUND));
         Article article = articleRepository.findById(requestDto.getId()).orElse(null);
         if (article != null) {
             if (article.getUser() == user) {

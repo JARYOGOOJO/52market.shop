@@ -4,7 +4,7 @@ import com.sparta.cucumber.dto.JwtRequestDto;
 import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
-import com.sparta.cucumber.redis.RedisSubscriber;
+import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.S3Uploader;
@@ -13,8 +13,6 @@ import com.sparta.cucumber.utils.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,14 +33,12 @@ public class UserRestController {
     private final UserDetailsServiceImpl userDetailsService;
     private final UserService userService;
     private final S3Uploader s3Uploader;
-    private final RedisMessageListenerContainer redisMessageListener;
-    private final RedisSubscriber redisSubscriber;
 
     @Operation(description = "카카오 로그인", method = "POST")
     @PostMapping(value = "/user/kakao")
     public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
-        String email = userService.kakaoLogin(socialLoginDto.getToken());
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(email);
+        String nickname = userService.kakaoLogin(socialLoginDto.getToken());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(nickname);
         final String token = jwtTokenUtil.generateToken(userDetails);
         subscribe(userDetails);
         JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
@@ -54,30 +50,24 @@ public class UserRestController {
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
         userService.signup(userDTO);
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
         subscribe(userDetails);
         JwtResponseDto jwtResponseDto = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
         return ResponseEntity.ok(jwtResponseDto);
+        return ResponseEntity.ok(new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
+
     }
 
     @Operation(description = "로그인", method = "POST")
     @PostMapping("/user/signin")
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
-        userService.signin(userDTO);
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
+        User user = userService.signIn(userDTO);
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(user.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
         subscribe(userDetails);
         JwtResponseDto jwtResponseDto = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
-        return ResponseEntity.ok(jwtResponseDto);
-    }
-
-    @Operation(description = "유저 확인", method = "POST")
-    @PostMapping("/user/validate")
-    public ResponseEntity<?> whoAmI(@RequestBody JwtRequestDto jwtDTO) {
-        System.out.println(jwtDTO);
-        JwtResponseDto jwtResponseDto = userService.validate(jwtDTO);
         return ResponseEntity.ok(jwtResponseDto);
     }
 
@@ -89,10 +79,24 @@ public class UserRestController {
         return ResponseEntity.ok().body(exists);
     }
 
+    @Operation(description = "유저 갱신", method = "POST")
+    @PostMapping("/user/validate")
+    public ResponseEntity<?> whoAmI(@RequestBody JwtRequestDto jwtDTO) {
+        System.out.println(jwtDTO);
+        JwtResponseDto jwtResponseDto = userService.validate(jwtDTO);
+        return ResponseEntity.ok(jwtResponseDto);
+    }
 
-    private Authentication authenticate(String email, String password) throws Exception {
+    @Operation(description = "유저 위치 확인", method = "POST")
+    @PostMapping("/user/location")
+    public ResponseEntity<?> whereAmI(@RequestBody UserRequestDto userRequestDto) {
+        System.out.println(userRequestDto);
+        User updatedUser = userService.updateLocation(userRequestDto);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    private Authentication authenticate(String username, String password) throws Exception {
         try {
-            String username = email.split("@")[0];
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
             throw new Exception("USER_DISABLED", e);
