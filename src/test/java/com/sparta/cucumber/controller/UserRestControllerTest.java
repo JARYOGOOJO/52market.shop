@@ -1,5 +1,6 @@
 package com.sparta.cucumber.controller;
 
+import com.sparta.cucumber.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,15 +21,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserRestControllerTest {
 
     private MockMvc mockMvc;
+    private UserRepository userRepository;
 
     @Autowired
     public void setMockMvc(MockMvc mockMvc) {
         this.mockMvc = mockMvc;
     }
 
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @BeforeAll
     void setup() {
+        userRepository.findByEmail("monica@street.dancer").ifPresent(userRepository::delete);
+    }
 
+    @AfterAll
+    void teardown() {
+        userRepository.findByEmail("monica@street.dancer").ifPresent(userRepository::delete);
     }
 
     @Test
