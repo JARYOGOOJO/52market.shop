@@ -3,7 +3,6 @@ package com.sparta.cucumber.service;
 import com.sparta.cucumber.dto.ArticleRequestDto;
 import com.sparta.cucumber.error.CustomException;
 import com.sparta.cucumber.models.Article;
-import com.sparta.cucumber.models.Comment;
 import com.sparta.cucumber.models.Timestamped;
 import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.repository.ArticleRepository;
@@ -80,9 +79,9 @@ public class ArticleService {
                 .findAll()
                 .stream()
                 .filter(article -> {
-                    double dist = location.distance(
-                            lat, lon,
-                            article.getLatitude(), article.getLongitude(),
+                    double dist = location.distance(lat, lon,
+                            article.getLatitude(),
+                            article.getLongitude(),
                             "meter");
                     return dist < 1000;
                 }).collect(Collectors.toList());

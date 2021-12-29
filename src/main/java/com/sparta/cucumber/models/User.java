@@ -80,11 +80,12 @@ public class User extends Timestamped {
         return this;
     }
 
-    public void updateMyPage(UserRequestDto userDTO) {
+    public User updateMyPage(UserRequestDto userDTO) {
         this.picture = userDTO.getPicture();
         this.name = userDTO.getName();
         this.phoneNumber = userDTO.getPhoneNumber();
         this.password = userDTO.getPassword();
+        return this;
     }
 
     public User updateLocation(UserRequestDto userDTO) {

@@ -49,6 +49,8 @@ public class ArticleRestController {
     @GetMapping("/api/articles/{lat}/{lng}")
     public ResponseEntity<List<Article>> getAroundArticle(@PathVariable("lat") Double lat,
                                                           @PathVariable("lng") Double lon) {
+        System.out.println("latitude: " + lat);
+        System.out.println("longitude: " + lon);
         List<Article> articles = articleService.getAroundArticle(lat, lon);
         return ResponseEntity.ok().body(articles);
     }

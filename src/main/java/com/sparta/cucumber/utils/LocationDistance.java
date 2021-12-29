@@ -13,13 +13,12 @@ public class LocationDistance {
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
+        dist = dist * 60 * 1.1515; // mile
         if (Objects.equals(unit, "kilometer")) {
-            dist = dist * 1.609344;
+            return dist * 1.609344; // kilometer
         } else if (Objects.equals(unit, "meter")) {
-            dist = dist * 1609.344;
-        }
-        return dist;
+            return dist * 1609.344; // meter
+        } else return dist; // mile
     }
 
     // This function converts decimal degrees to radians

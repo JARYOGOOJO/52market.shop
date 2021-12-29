@@ -46,8 +46,7 @@ public class UserService {
             throw new CustomException(INVALID_REFRESH_TOKEN);
         } else {
             String newRef = jwtTokenUtil.genRefreshToken();
-            user.refresh(newRef);
-            userRepository.save(user);
+            userRepository.save(user.refresh(newRef));
             refresh = newRef;
         }
         token = jwtTokenUtil.generateToken(new UserDetailsImpl(user));
@@ -137,8 +136,7 @@ public class UserService {
                 .orElseThrow(()
                         -> new CustomException(USER_NOT_FOUND));
         userRequestDto.setPicture(profileImage);
-        findUser.updateMyPage(userRequestDto);
-        return findUser;
+        return userRepository.save(findUser.updateMyPage(userRequestDto));
     }
 
     public User updateLocation(UserRequestDto userRequestDto) {
@@ -146,7 +144,7 @@ public class UserService {
                 .findByEmail(userRequestDto.getEmail())
                 .orElseThrow(()
                         -> new CustomException(USER_NOT_FOUND));
-        return findUser.updateLocation(userRequestDto);
+        return userRepository.save(findUser.updateLocation(userRequestDto));
     }
 
     public boolean askIfExists(UserRequestDto userRequestDto) {
