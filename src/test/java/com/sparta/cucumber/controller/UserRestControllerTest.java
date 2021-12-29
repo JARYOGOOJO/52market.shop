@@ -45,7 +45,7 @@ class UserRestControllerTest {
         result.andDo(print())
                 .andExpect(status().isUnauthorized())
                 .andExpect(handler().handlerType(UserRestController.class))
-                .andExpect(handler().methodName("createAuthenticationTokenByKakao"))
+                .andExpect(handler().methodName("signinByKakao"))
                 .andExpect(jsonPath("$.code").exists())
                 .andExpect(jsonPath("$.code", is("UNAUTHORIZED_MEMBER")))
                 .andExpect(jsonPath("$.error").exists())

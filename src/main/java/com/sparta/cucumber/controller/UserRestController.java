@@ -39,7 +39,7 @@ public class UserRestController {
 
     @Operation(description = "카카오 로그인", method = "POST")
     @PostMapping(value = "/user/kakao")
-    public ResponseEntity<JwtResponseDto> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
+    public ResponseEntity<JwtResponseDto> signinByKakao(@RequestBody SocialLoginDto socialLoginDto) {
         System.out.println("카카오 로그인: " + socialLoginDto);
         String nickname = userService.kakaoLogin(socialLoginDto.getToken());
         return ResponseEntity.ok(signInAndSubscribe(nickname));
