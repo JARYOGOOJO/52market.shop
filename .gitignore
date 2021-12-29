@@ -40,3 +40,4 @@ src/main/resources/application.yml
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+/src/test/resources/application.properties
