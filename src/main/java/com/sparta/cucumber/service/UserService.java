@@ -51,7 +51,7 @@ public class UserService {
             refresh = newRef;
         }
         token = jwtTokenUtil.generateToken(new UserDetailsImpl(user));
-        return new JwtResponseDto(token, refresh, user.getId(), user.getSubscribeId());
+        return new JwtResponseDto(token, refresh, user);
     }
 
     @Transactional

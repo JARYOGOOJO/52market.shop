@@ -5,6 +5,7 @@ import com.sparta.cucumber.dto.JwtResponseDto;
 import com.sparta.cucumber.dto.SocialLoginDto;
 import com.sparta.cucumber.dto.UserRequestDto;
 import com.sparta.cucumber.models.User;
+import com.sparta.cucumber.redis.RedisSubscriber;
 import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.UserDetailsServiceImpl;
 import com.sparta.cucumber.service.S3Uploader;
@@ -13,6 +14,8 @@ import com.sparta.cucumber.utils.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,6 +34,8 @@ public class UserRestController {
     private final JwtTokenUtil jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsServiceImpl userDetailsService;
+    private final RedisMessageListenerContainer redisMessageListener;
+    private final RedisSubscriber redisSubscriber;
     private final UserService userService;
     private final S3Uploader s3Uploader;
 
@@ -38,11 +43,7 @@ public class UserRestController {
     @PostMapping(value = "/user/kakao")
     public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
         String nickname = userService.kakaoLogin(socialLoginDto.getToken());
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(nickname);
-        final String token = jwtTokenUtil.generateToken(userDetails);
-        subscribe(userDetails);
-        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(signInAndSubscribe(nickname));
     }
 
     @Operation(description = "회원가입", method = "POST")
@@ -50,13 +51,7 @@ public class UserRestController {
     public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
         userService.signup(userDTO);
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
-        final String token = jwtTokenUtil.generateToken(userDetails);
-        subscribe(userDetails);
-        JwtResponseDto jwtResponseDto = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
-        return ResponseEntity.ok(jwtResponseDto);
-        return ResponseEntity.ok(new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
-
+        return ResponseEntity.ok(signInAndSubscribe(userDTO.getName()));
     }
 
     @Operation(description = "로그인", method = "POST")
@@ -64,11 +59,7 @@ public class UserRestController {
     public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) {
         System.out.println(userDTO);
         User user = userService.signIn(userDTO);
-        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(user.getName());
-        final String token = jwtTokenUtil.generateToken(userDetails);
-        subscribe(userDetails);
-        JwtResponseDto jwtResponseDto = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
-        return ResponseEntity.ok(jwtResponseDto);
+        return ResponseEntity.ok(signInAndSubscribe(user.getName()));
     }
 
     @Operation(description = "이름 중복 확인", method = "POST")
@@ -105,7 +96,9 @@ public class UserRestController {
         }
     }
 
-    private void subscribe(UserDetailsImpl userDetails) {
+    private JwtResponseDto signInAndSubscribe(String username) {
+        final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
+        final String token = jwtTokenUtil.generateToken(userDetails);
         System.out.println(userDetails.isEnabled());
         // redis 유저 subscribeId 로 subscribe
         ChannelTopic topic = new ChannelTopic(userDetails.getUser().getSubscribeId());
@@ -119,5 +112,7 @@ public class UserRestController {
         // redis 댓글 작성시 전체알림 구독
         ChannelTopic commentNoticeTopic = new ChannelTopic("commentNotice");
         redisMessageListener.addMessageListener(redisSubscriber, commentNoticeTopic);
+        User user = userDetails.getUser();
+        return new JwtResponseDto(token, user);
     }
 }
