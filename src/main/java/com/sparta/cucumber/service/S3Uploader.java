@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -46,6 +47,7 @@ public class S3Uploader {
         String origName = uploadFile.getOriginalFilename();
         System.out.println(origName);
         String url;
+        URL s3Url = null;
         try {
             String ext = null;
             if (origName != null) {
@@ -61,11 +63,14 @@ public class S3Uploader {
             InputStream inputStream = uploadFile.getInputStream();
             uploadOnS3Bucket(saveFileName, inputStream, objectMetadata);
             url = defaultUrl + saveFileName;
+            s3Url = amazonS3Client.getUrl(bucket,saveFileName);
             System.out.println(url);
         } catch (StringIndexOutOfBoundsException e) {
             url = null;
+            s3Url = null;
         }
-        return url;
+//        return url;
+        return s3Url.toString();
     }
 
     private void uploadOnS3Bucket(String fileName, InputStream stream, ObjectMetadata data) {
