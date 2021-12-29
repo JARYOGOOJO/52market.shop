@@ -113,4 +113,8 @@ public class UserService {
         userDTO.setPicture(profileImage);
         return user.updateImage(userDTO);
     }
+
+    public boolean askIfExists(UserRequestDto userRequestDto) {
+        return userRepository.existsByName(userRequestDto.getName());
+    }
 }

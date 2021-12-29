@@ -44,25 +44,8 @@ public class UserRestController {
         String email = userService.kakaoLogin(socialLoginDto.getToken());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(email);
         final String token = jwtTokenUtil.generateToken(userDetails);
+        subscribe(userDetails);
         JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
-        System.out.println(userDetails.isEnabled());
-
-        // redis 유저 subscribeId로 subscribe
-        ChannelTopic userTopic = new ChannelTopic(userDetails.getUser().getSubscribeId());
-        redisMessageListener.addMessageListener(redisSubscriber, userTopic);
-
-        // redis 전체메시지 보내기 구독
-        ChannelTopic messageAllTopic = new ChannelTopic("messageAll");
-        redisMessageListener.addMessageListener(redisSubscriber, messageAllTopic);
-
-        // redis 게시글 작성시 전체알림 구독
-        ChannelTopic articleNoticeTopic = new ChannelTopic("articleNotice");
-        redisMessageListener.addMessageListener(redisSubscriber, articleNoticeTopic);
-
-        // redis 댓글 작성시 전체알림 구독
-        ChannelTopic commentNoticeTopic = new ChannelTopic("commentNotice");
-        redisMessageListener.addMessageListener(redisSubscriber, commentNoticeTopic);
-
         return ResponseEntity.ok(result);
     }
 
@@ -73,7 +56,9 @@ public class UserRestController {
         userService.signup(userDTO);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
+        subscribe(userDetails);
+        JwtResponseDto jwtResponseDto = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
+        return ResponseEntity.ok(jwtResponseDto);
     }
 
     @Operation(description = "로그인", method = "POST")
@@ -83,24 +68,9 @@ public class UserRestController {
         userService.signin(userDTO);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByEmail(userDTO.getEmail());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        System.out.println(userDetails.isEnabled());
-        //        System.out.println(auth.isAuthenticated());
-        // redis 유저subscribeId로 subscribe
-        ChannelTopic topic = new ChannelTopic(userDetails.getUser().getSubscribeId());
-        redisMessageListener.addMessageListener(redisSubscriber, topic);
-
-        // redis 전체메시지 보내기 구독
-        ChannelTopic messageAllTopic = new ChannelTopic("messageAll");
-        redisMessageListener.addMessageListener(redisSubscriber, messageAllTopic);
-
-        // redis 게시글 작성시 전체알림 구독
-        ChannelTopic articleNoticeTopic = new ChannelTopic("articleNotice");
-        redisMessageListener.addMessageListener(redisSubscriber, articleNoticeTopic);
-
-        // redis 댓글 작성시 전체알림 구독
-        ChannelTopic commentNoticeTopic = new ChannelTopic("commentNotice");
-        redisMessageListener.addMessageListener(redisSubscriber, commentNoticeTopic);
-        return ResponseEntity.ok(new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
+        subscribe(userDetails);
+        JwtResponseDto jwtResponseDto = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
+        return ResponseEntity.ok(jwtResponseDto);
     }
 
     @Operation(description = "유저 확인", method = "POST")
@@ -111,6 +81,15 @@ public class UserRestController {
         return ResponseEntity.ok(jwtResponseDto);
     }
 
+    @Operation(description = "이름 중복 확인", method = "POST")
+    @PostMapping("/user/exists")
+    public ResponseEntity<?> checkIfExists(@RequestBody UserRequestDto userRequestDto) {
+        System.out.println("중복 확인: " + userRequestDto);
+        boolean exists = userService.askIfExists(userRequestDto);
+        return ResponseEntity.ok().body(exists);
+    }
+
+
     private Authentication authenticate(String email, String password) throws Exception {
         try {
             String username = email.split("@")[0];
@@ -120,5 +99,21 @@ public class UserRestController {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
+    }
+
+    private void subscribe(UserDetailsImpl userDetails) {
+        System.out.println(userDetails.isEnabled());
+        // redis 유저 subscribeId 로 subscribe
+        ChannelTopic topic = new ChannelTopic(userDetails.getUser().getSubscribeId());
+        redisMessageListener.addMessageListener(redisSubscriber, topic);
+        // redis 전체메시지 보내기 구독
+        ChannelTopic messageAllTopic = new ChannelTopic("messageAll");
+        redisMessageListener.addMessageListener(redisSubscriber, messageAllTopic);
+        // redis 게시글 작성시 전체알림 구독
+        ChannelTopic articleNoticeTopic = new ChannelTopic("articleNotice");
+        redisMessageListener.addMessageListener(redisSubscriber, articleNoticeTopic);
+        // redis 댓글 작성시 전체알림 구독
+        ChannelTopic commentNoticeTopic = new ChannelTopic("commentNotice");
+        redisMessageListener.addMessageListener(redisSubscriber, commentNoticeTopic);
     }
 }
