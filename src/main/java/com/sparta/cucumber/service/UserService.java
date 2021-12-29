@@ -152,8 +152,4 @@ public class UserService {
     public boolean askIfExists(UserRequestDto userRequestDto) {
         return userRepository.existsByName(userRequestDto.getName());
     }
-
-    public boolean askIfExists(UserRequestDto userRequestDto) {
-        return userRepository.existsByName(userRequestDto.getName());
-    }
 }
