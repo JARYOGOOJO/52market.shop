@@ -1,6 +1,5 @@
 package com.sparta.cucumber.controller;
 
-import com.sparta.cucumber.config.JwtTokenConfigure;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -22,16 +20,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserRestControllerTest {
 
     private MockMvc mockMvc;
-    private JwtTokenConfigure jwtTokenConfigure;
 
     @Autowired
     public void setMockMvc(MockMvc mockMvc) {
         this.mockMvc = mockMvc;
     }
 
-    @Autowired
-    public void setJwtTokenConfigure(JwtTokenConfigure jwtTokenConfigure) {
-        this.jwtTokenConfigure = jwtTokenConfigure;
+    @BeforeAll
+    void setup() {
+
     }
 
     @Test
@@ -159,41 +156,10 @@ class UserRestControllerTest {
 
     @Test
     @Order(5)
-    @DisplayName("유저 토큰 유효 확인 및 갱신")
-    void whoAmI() throws Exception {
-        ResultActions result = mockMvc.perform(
-                get("/user/validate")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "  \"token\":\n" +
-                                "  \"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJNT05JQ0EiLCJleHAiOjE2NDA2MTAxMDYsImlhdCI6MTY0MDU5MjEwNn0.DMaCCeu6E1xaAB__8W27QxA-Ni1LZZrqdkPpOQeYX813wxtOig5VMLRA49_ee47ixHbXWQl1lGtDj5DRVN7mUQ\", \n" +
-                                "  \"userId\": \n" +
-                                "  1532, \n" +
-                                "  \"refreshToken\": \n" +
-                                "  \"eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDA1ODQwOTIsImV4cCI6MTY0MTAxNjA5Mn0.447TKFEP9Jk9bHfcEyqQssTGSafXMo8WzR0qUEylhFEj0pLiDFE-0WBbpwI1sFo3qN_0irSr7zkB9dvCH1BxfQ\"\n" +
-                                "}")
-        );
-        result.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(handler().handlerType(UserRestController.class))
-                .andExpect(handler().methodName("whoAmI"))
-                .andExpect(jsonPath("$.token").exists())
-                .andExpect(jsonPath("$.token").isString())
-                .andExpect(jsonPath("$.refreshToken").exists())
-                .andExpect(jsonPath("$.refreshToken").isString())
-                .andExpect(jsonPath("$.userSubscribeId").exists())
-                .andExpect(jsonPath("$.userSubscribeId").isString())
-                .andExpect(jsonPath("$.userId").exists())
-                .andExpect(jsonPath("$.userId", is(1532)))
-        ;
-    }
-
-    @Test
-    @Order(6)
-    @DisplayName("유저 토큰 위치 확인 및 갱신 ")
+    @DisplayName("유저 위치 확인 및 갱신 ")
     void whereAmI() throws Exception {
         ResultActions result = mockMvc.perform(
-                get("/user/location")
+                post("/user/location")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content("{\"email\":\"monica@street.dancer\", \"latitude\":127.087, \"longitude\":37.592}")
