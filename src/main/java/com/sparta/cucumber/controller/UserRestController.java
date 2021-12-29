@@ -8,7 +8,6 @@ import com.sparta.cucumber.models.User;
 import com.sparta.cucumber.redis.RedisSubscriber;
 import com.sparta.cucumber.security.UserDetailsImpl;
 import com.sparta.cucumber.security.UserDetailsServiceImpl;
-import com.sparta.cucumber.service.S3Uploader;
 import com.sparta.cucumber.service.UserService;
 import com.sparta.cucumber.utils.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,51 +36,49 @@ public class UserRestController {
     private final RedisMessageListenerContainer redisMessageListener;
     private final RedisSubscriber redisSubscriber;
     private final UserService userService;
-    private final S3Uploader s3Uploader;
 
     @Operation(description = "카카오 로그인", method = "POST")
     @PostMapping(value = "/user/kakao")
-    public ResponseEntity<?> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
+    public ResponseEntity<JwtResponseDto> createAuthenticationTokenByKakao(@RequestBody SocialLoginDto socialLoginDto) {
+        System.out.println("카카오 로그인: " + socialLoginDto);
         String nickname = userService.kakaoLogin(socialLoginDto.getToken());
         return ResponseEntity.ok(signInAndSubscribe(nickname));
     }
 
-    @Operation(description = "회원가입", method = "POST")
+    @Operation(description = "회원 가입", method = "POST")
     @PostMapping("/user/signup")
-    public ResponseEntity<?> signup(@RequestBody UserRequestDto userDTO) {
-        System.out.println(userDTO);
-        userService.signup(userDTO);
-        return ResponseEntity.ok(signInAndSubscribe(userDTO.getName()));
+    public ResponseEntity<JwtResponseDto> signup(@RequestBody UserRequestDto userRequestDto) {
+        System.out.println("회원 가입: " + userRequestDto);
+        userService.signup(userRequestDto);
+        return ResponseEntity.ok(signInAndSubscribe(userRequestDto.getName()));
     }
 
     @Operation(description = "로그인", method = "POST")
     @PostMapping("/user/signin")
-    public ResponseEntity<?> signin(@RequestBody UserRequestDto userDTO) {
-        System.out.println(userDTO);
-        User user = userService.signIn(userDTO);
+    public ResponseEntity<JwtResponseDto> signin(@RequestBody UserRequestDto userRequestDto) {
+        System.out.println("중복 확인: " + userRequestDto);
+        User user = userService.signIn(userRequestDto);
         return ResponseEntity.ok(signInAndSubscribe(user.getName()));
     }
 
-    @Operation(description = "이름 중복 확인", method = "POST")
+    @Operation(description = "중복 확인", method = "POST")
     @PostMapping("/user/exists")
-    public ResponseEntity<?> checkIfExists(@RequestBody UserRequestDto userRequestDto) {
+    public ResponseEntity<Boolean> checkIfExists(@RequestBody UserRequestDto userRequestDto) {
         System.out.println("중복 확인: " + userRequestDto);
-        boolean exists = userService.askIfExists(userRequestDto);
-        return ResponseEntity.ok().body(exists);
+        return ResponseEntity.ok().body(userService.askIfExists(userRequestDto));
     }
 
-    @Operation(description = "유저 갱신", method = "POST")
+    @Operation(description = "토큰 갱신", method = "POST")
     @PostMapping("/user/validate")
-    public ResponseEntity<?> whoAmI(@RequestBody JwtRequestDto jwtDTO) {
-        System.out.println(jwtDTO);
-        JwtResponseDto jwtResponseDto = userService.validate(jwtDTO);
-        return ResponseEntity.ok(jwtResponseDto);
+    public ResponseEntity<JwtResponseDto> whoAmI(@RequestBody JwtRequestDto jwtRequestDto) {
+        System.out.println("토큰 갱신: " + jwtRequestDto);
+        return ResponseEntity.ok(userService.validate(jwtRequestDto));
     }
 
     @Operation(description = "유저 위치 확인", method = "POST")
     @PostMapping("/user/location")
     public ResponseEntity<?> whereAmI(@RequestBody UserRequestDto userRequestDto) {
-        System.out.println(userRequestDto);
+        System.out.println("위치 확인: " + userRequestDto);
         User updatedUser = userService.updateLocation(userRequestDto);
         return ResponseEntity.ok(updatedUser);
     }
