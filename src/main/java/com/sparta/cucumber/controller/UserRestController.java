@@ -40,9 +40,8 @@ public class UserRestController {
         String nickname = userService.kakaoLogin(socialLoginDto.getToken());
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(nickname);
         final String token = jwtTokenUtil.generateToken(userDetails);
-        final String refresh = userDetails.getUser().getRefreshToken();
-        JwtResponseDto result = new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
-        System.out.println(userDetails.isEnabled());
+        subscribe(userDetails);
+        JwtResponseDto result = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
         return ResponseEntity.ok(result);
     }
 
@@ -53,8 +52,11 @@ public class UserRestController {
         userService.signup(userDTO);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(userDTO.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        final String refresh = userDetails.getUser().getRefreshToken();
+        subscribe(userDetails);
+        JwtResponseDto jwtResponseDto = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
+        return ResponseEntity.ok(jwtResponseDto);
         return ResponseEntity.ok(new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
+
     }
 
     @Operation(description = "로그인", method = "POST")
@@ -64,9 +66,9 @@ public class UserRestController {
         User user = userService.signIn(userDTO);
         final UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(user.getName());
         final String token = jwtTokenUtil.generateToken(userDetails);
-        final String refresh = userDetails.getUser().getRefreshToken();
-        System.out.println(userDetails.isEnabled());
-        return ResponseEntity.ok(new JwtResponseDto(token, refresh, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId()));
+        subscribe(userDetails);
+        JwtResponseDto jwtResponseDto = new JwtResponseDto(token, userDetails.getUser().getId(), userDetails.getUser().getSubscribeId());
+        return ResponseEntity.ok(jwtResponseDto);
     }
 
     @Operation(description = "이름 중복 확인", method = "POST")
@@ -101,5 +103,21 @@ public class UserRestController {
         } catch (BadCredentialsException e) {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
+    }
+
+    private void subscribe(UserDetailsImpl userDetails) {
+        System.out.println(userDetails.isEnabled());
+        // redis 유저 subscribeId 로 subscribe
+        ChannelTopic topic = new ChannelTopic(userDetails.getUser().getSubscribeId());
+        redisMessageListener.addMessageListener(redisSubscriber, topic);
+        // redis 전체메시지 보내기 구독
+        ChannelTopic messageAllTopic = new ChannelTopic("messageAll");
+        redisMessageListener.addMessageListener(redisSubscriber, messageAllTopic);
+        // redis 게시글 작성시 전체알림 구독
+        ChannelTopic articleNoticeTopic = new ChannelTopic("articleNotice");
+        redisMessageListener.addMessageListener(redisSubscriber, articleNoticeTopic);
+        // redis 댓글 작성시 전체알림 구독
+        ChannelTopic commentNoticeTopic = new ChannelTopic("commentNotice");
+        redisMessageListener.addMessageListener(redisSubscriber, commentNoticeTopic);
     }
 }
