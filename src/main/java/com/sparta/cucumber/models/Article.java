@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +50,16 @@ public class Article extends Timestamped {
         this.imageName = imageName;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+
+    public Double Lati() {
+        if (latitude == null) return 37.50674150125956;
+        return latitude;
+    }
+
+    public Double Long() {
+        if (longitude == null) return 127.06090549760738;
+        return longitude;
     }
 
     public void addComment(Comment comment) {

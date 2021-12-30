@@ -10,4 +10,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findAllByTitleContainsOrderByCreatedAtDesc(String query);
 
     List<Article> findAllByUser_IdOrderByCreatedAtDesc(Long userId);
+
+    Article findByTitleAndContent(String title, String content);
 }

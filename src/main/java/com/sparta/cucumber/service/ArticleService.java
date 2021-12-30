@@ -79,9 +79,11 @@ public class ArticleService {
                 .findAll()
                 .stream()
                 .filter(article -> {
+                    Double latitude = article.Lati();
+                    Double longitude = article.Long();
                     double dist = location.distance(lat, lon,
-                            article.getLatitude(),
-                            article.getLongitude(),
+                            latitude,
+                            longitude,
                             "meter");
                     return dist < 1000;
                 }).collect(Collectors.toList());
