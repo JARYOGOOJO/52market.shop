@@ -1,0 +1,5 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/api/articles/37.501086/127.0365988' -i -X GET \
+    -H 'Accept: application/json'
+----

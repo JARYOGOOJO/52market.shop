@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"createdAt":"2021-12-30 19:09:03","modifiedAt":"2021-12-30 19:09:04","id":1052,"name":"MONICA","email":"monica@street.dancer","picture":null,"subscribeId":"M60EnIbSTYtTx35j","role":"USER"}
+----

@@ -1,0 +1,16 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 401 Unauthorized
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Content-Length: 171
+
+{"timestamp":"2021-12-30T19:09:03.464","status":401,"error":"UNAUTHORIZED","code":"UNAUTHORIZED_MEMBER","message":"현재 내 계정 정보가 존재하지 않습니다."}
+----

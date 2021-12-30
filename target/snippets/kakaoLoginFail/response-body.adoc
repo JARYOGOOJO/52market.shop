@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"timestamp":"2021-12-30T19:09:03.464","status":401,"error":"UNAUTHORIZED","code":"UNAUTHORIZED_MEMBER","message":"현재 내 계정 정보가 존재하지 않습니다."}
+----

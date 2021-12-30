@@ -7,6 +7,7 @@ import com.sparta.cucumber.repository.UserRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -27,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@AutoConfigureRestDocs(outputDir = "target/snippets")
 class ArticleRestControllerTest {
 
     private MockMvc mockMvc;
@@ -102,6 +105,7 @@ class ArticleRestControllerTest {
                 .andExpect(jsonPath("$.commentList").isArray())
                 .andExpect(jsonPath("$.user").exists())
                 .andExpect(jsonPath("$.user").isMap())
+                .andDo(document("articleWrite"))
         ;
     }
 
@@ -133,6 +137,7 @@ class ArticleRestControllerTest {
                 .andExpect(jsonPath("$[0].commentList").isArray())
                 .andExpect(jsonPath("$[0].user").exists())
                 .andExpect(jsonPath("$[0].user").isMap())
+                .andDo(document("articleGetAllList"))
         ;
     }
 
@@ -163,6 +168,7 @@ class ArticleRestControllerTest {
                 .andExpect(jsonPath("$.commentList").isArray())
                 .andExpect(jsonPath("$.user").exists())
                 .andExpect(jsonPath("$.user").isMap())
+                .andDo(document("articleDetail"))
         ;
     }
 
@@ -193,6 +199,7 @@ class ArticleRestControllerTest {
                 .andExpect(jsonPath("$[0].commentList").isArray())
                 .andExpect(jsonPath("$[0].user").exists())
                 .andExpect(jsonPath("$[0].user").isMap())
+                .andDo(document("nearArticle"))
         ;
     }
 
@@ -224,6 +231,7 @@ class ArticleRestControllerTest {
                 .andExpect(jsonPath("$.commentList").isArray())
                 .andExpect(jsonPath("$.user").exists())
                 .andExpect(jsonPath("$.user").isMap())
+                .andDo(document("articleUpdate"))
         ;
     }
 
@@ -240,6 +248,9 @@ class ArticleRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(handler().handlerType(ArticleRestController.class))
                 .andExpect(handler().methodName("removeArticle"))
-                .andExpect(jsonPath("$").isNumber());
+                .andExpect(jsonPath("$").isNumber())
+                .andDo(document("articleDelete"))
+        ;
+
     }
 }

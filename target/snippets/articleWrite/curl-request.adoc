@@ -1,0 +1,10 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/api/articles' -i -X POST \
+    -H 'Content-Type: multipart/form-data;charset=UTF-8' \
+    -H 'Accept: application/json' \
+    -F 'file=@cat_kkori.jpg;type=multipart/form-data' \
+    -F 'title=꼬리짱' \
+    -F 'content=개귀엽쥬' \
+    -F 'userId=1082'
+----

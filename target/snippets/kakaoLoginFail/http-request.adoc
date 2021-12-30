@@ -1,0 +1,10 @@
+[source,http,options="nowrap"]
+----
+POST /user/kakao HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: application/json
+Content-Length: 66
+Host: localhost:8080
+
+{"token":"zSP3D2KTZD0M_xcX5mgj1S1G2D_tcHg-IdQufQo9c00AAAF9-eIv4A"}
+----

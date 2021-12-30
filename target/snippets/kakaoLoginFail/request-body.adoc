@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"token":"zSP3D2KTZD0M_xcX5mgj1S1G2D_tcHg-IdQufQo9c00AAAF9-eIv4A"}
+----

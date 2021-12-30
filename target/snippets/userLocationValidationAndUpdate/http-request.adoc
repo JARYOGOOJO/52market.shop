@@ -1,0 +1,10 @@
+[source,http,options="nowrap"]
+----
+POST /user/location HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+Accept: application/json
+Content-Length: 72
+Host: localhost:8080
+
+{"email":"monica@street.dancer", "latitude":127.087, "longitude":37.592}
+----
