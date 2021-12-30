@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.io.File;
 import java.io.FileInputStream;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -88,7 +89,7 @@ class ArticleRestControllerTest {
                 .andExpect(handler().handlerType(ArticleRestController.class))
                 .andExpect(handler().methodName("writeArticle"))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.id", is(Math.toIntExact(articleId))))
                 .andExpect(jsonPath("$.title").exists())
                 .andExpect(jsonPath("$.title").isString())
                 .andExpect(jsonPath("$.content").exists())
@@ -149,7 +150,7 @@ class ArticleRestControllerTest {
                 .andExpect(handler().handlerType(ArticleRestController.class))
                 .andExpect(handler().methodName("seeDetailOfArticle"))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.id", is(Math.toIntExact(articleId))))
                 .andExpect(jsonPath("$.title").exists())
                 .andExpect(jsonPath("$.title").isString())
                 .andExpect(jsonPath("$.content").exists())
@@ -210,7 +211,7 @@ class ArticleRestControllerTest {
                 .andExpect(handler().handlerType(ArticleRestController.class))
                 .andExpect(handler().methodName("editArticle"))
                 .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.id").isNumber())
+                .andExpect(jsonPath("$.id", is(Math.toIntExact(articleId))))
                 .andExpect(jsonPath("$.title").exists())
                 .andExpect(jsonPath("$.title").isString())
                 .andExpect(jsonPath("$.content").exists())
