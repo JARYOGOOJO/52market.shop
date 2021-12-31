@@ -4,7 +4,7 @@
 
 ### 🔗 라이브
 
-https://52market.shop
+https://52market.club
 
 ### 🏠 소개
 
