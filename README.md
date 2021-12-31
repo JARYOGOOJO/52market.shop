@@ -14,33 +14,31 @@ https://52market.club
 
 2021년 11월 19일 금요일 ~ 2021년 12월 10일 금요일
 
-### 🧙 맴버구성
+### 🧙 맴버 구성 및 맡은 역할
 
-* 송주현
-* 명지혜
-* 유동민
+* 송주현 - 웹소켓+레디스 채팅기능 구현, API 문서화 (swagger+restdoc)
+* 명지혜 - 데이터 관계 테이블 설계/S3 이미지 업로드 기능
+* 유동민 - 팀장/깃허브관리/프론트/배포 스크립트/EtoE 테스트코드
 
-### 📌 기술 선택 이유! - <a href="https://github.com/AndrewDongminYoo/52market.shop/wiki" >상세보기 - WIKI 이동</a>
+### 📌 기술 선택 이유!
+- <a href="https://github.com/AndrewDongminYoo/52market.shop/wiki" >상세보기 - WIKI 이동</a>
 
-### 📌 주요 기능 - <a href="https://quark-tax-4c7.notion.site/0f2473ecfce04c998992c0b337a40142?v=c586b127964a4dcfa224281e565bba9b" >상세보기 - WIKI 이동</a>
+### 📌 주요 기능
+- <a href="https://github.com/JARYOGOOJO/52market.shop/wiki/002.-Technical-requirements" >상세보기 - WIKI 이동</a>
 
 1. 카카오톡 소셜 로그인
-
-* 로그인/로그아웃/회원가입
-* 기가입자 이메일 일치시 갱신  
-
+  * 로그인/로그아웃/회원가입
+  * 기가입자 이메일 일치시 갱신  
 2.게시글 뉴스피드
-
-* 다양한 게시글을 보여줌
-* 무한스크롤 구현  
-* SPA 페이지 구현  
-* 내 주변 이웃들(1km 이내) 글만 보기
-* 게시글 업로드 시 다른 사용자에게 알람 기능
-
+  * 다양한 게시글을 보여줌
+  * 무한스크롤 구현  
+  * SPA 페이지 구현  
+  * 내 주변 이웃들(1km 이내) 글만 보기
+  * 게시글 업로드 시 다른 사용자에게 알람 기능
 3.댓글 기능
+  * 게시글에 댓글 작성 가능
+  * 댓글의 버튼을 통해 웹소켓 실시간 채팅 기능
+  * 웹소켓 이용해 댓글 추가 및 삭제 시 즉시 반영
 
-* 게시글에 댓글 작성 가능
-* 댓글의 버튼을 통해 웹소켓 실시간 채팅 기능
-* 웹소켓 이용해 댓글 추가 및 삭제 시 즉시 반영
-
-### 📌 문제를 이렇게 해결했어요! - <a href="https://github.com/AndrewDongminYoo/52market.shop/issues" >상세보기 - ISSUE 이동</a>
+### 📌 문제를 이렇게 해결했어요!
+- <a href="https://github.com/JARYOGOOJO/52market.shop/wiki/%23-%F0%9F%9A%80%EC%B5%9C%EC%A2%85-%EB%B0%9C%ED%91%9C-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85%F0%9F%9A%80" >상세보기 - ISSUE 이동</a>
