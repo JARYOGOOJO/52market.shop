@@ -1,0 +1,6 @@
+[source,bash]
+----
+$ echo '{"email":"monica@street.dancer", "latitude":127.087, "longitude":37.592}' | http POST 'http://localhost:8080/user/location' \
+    'Content-Type:application/json;charset=UTF-8' \
+    'Accept:application/json'
+----

@@ -1,0 +1,9 @@
+[source,bash]
+----
+$ http --form POST 'http://localhost:8080/api/articles' \
+    'file'@'cat_kkori.jpg' \
+    'Accept:application/json' \
+    'title=꼬리짱' \
+    'content=개귀엽쥬' \
+    'userId=1082'
+----

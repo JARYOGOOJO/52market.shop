@@ -1,0 +1,6 @@
+[source,bash]
+----
+$ echo '{"userId": 1082, "id": 692, "content": "세상에서 제일 이쁘다. GJYQ"}' | http PUT 'http://localhost:8080/api/article' \
+    'Content-Type:application/json;charset=UTF-8' \
+    'Accept:application/json'
+----

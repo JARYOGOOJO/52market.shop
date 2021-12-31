@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJNT05JQ0EiLCJleHAiOjE2NDA4NzY5NDQsImlhdCI6MTY0MDg1ODk0NH0.dxWxa3U-NN2bi2ujCmepuYNObYVanJrSahEAexG5wJWhOX7oNlOjbln6-3sbCnUPL-j_VbeADc0DTqnqXT0BCQ","refreshToken":"eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2NDA4NTg5NDMsImV4cCI6MTY0MTI5MDk0M30.yqJo89wvxU0bC7iuLMUTcLoOCwHVIPqg04PClhHgHzvTVsqsd3h1cp1cHO8AJ3YaX725Suhb0u9e130Q9slwYQ","userId":1052,"userSubscribeId":"M60EnIbSTYtTx35j","email":"monica@street.dancer"}
+----

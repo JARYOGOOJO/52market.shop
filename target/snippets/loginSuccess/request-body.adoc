@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"email":"monica@street.dancer","password":"rew12345678"}
+----

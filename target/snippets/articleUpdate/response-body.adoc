@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"createdAt":"2021-12-30 19:17:23","modifiedAt":"2021-12-30 19:17:25","id":692,"user":{"createdAt":"2021-12-30 19:17:22","modifiedAt":"2021-12-30 19:17:22","id":1082,"name":"MONICA","email":"monica@street.dancer","picture":null,"subscribeId":"K7FiEfEX0ybakXvR","role":"USER"},"title":"꼬리짱","content":"세상에서 제일 이쁘다. GJYQ","imagePath":"https://52market-test.s3.ap-northeast-2.amazonaws.com/828c3583c4c545e48c47430265fc82fb.jpg","imageName":"828c3583c4c545e48c47430265fc82fb.jpg","latitude":37.49718785602991,"longitude":127.03832333222415,"commentList":[]}
+----

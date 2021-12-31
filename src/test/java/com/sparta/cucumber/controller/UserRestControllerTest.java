@@ -3,13 +3,16 @@ package com.sparta.cucumber.controller;
 import com.sparta.cucumber.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.is;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -18,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@AutoConfigureRestDocs(outputDir = "target/snippets")
 class UserRestControllerTest {
 
     private MockMvc mockMvc;
@@ -68,6 +72,7 @@ class UserRestControllerTest {
                 .andExpect(jsonPath("$.status").isNumber())
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andDo(document("kakaoLoginFail"))
         ;
     }
 
@@ -96,6 +101,7 @@ class UserRestControllerTest {
                 .andExpect(jsonPath("$.status").isNumber())
                 .andExpect(jsonPath("$.timestamp").exists())
                 .andExpect(jsonPath("$.timestamp").isNotEmpty())
+                .andDo(document("loginFail"))
         ;
     }
 
@@ -121,6 +127,7 @@ class UserRestControllerTest {
                 .andExpect(jsonPath("$.userSubscribeId").isString())
                 .andExpect(jsonPath("$.userId").exists())
                 .andExpect(jsonPath("$.userId").isNumber())
+                .andDo(document("signupSuccess"))
         ;
     }
 
@@ -146,6 +153,7 @@ class UserRestControllerTest {
                 .andExpect(jsonPath("$.userSubscribeId").isString())
                 .andExpect(jsonPath("$.userId").exists())
                 .andExpect(jsonPath("$.userId").isNumber())
+                .andDo(document("loginSuccess"))
         ;
     }
 
@@ -163,6 +171,7 @@ class UserRestControllerTest {
                 .andExpect(handler().handlerType(UserRestController.class))
                 .andExpect(handler().methodName("checkIfExists"))
                 .andExpect(jsonPath("$").isBoolean())
+                .andDo(document("equalUserVaildation"))
         ;
     }
 
@@ -192,6 +201,7 @@ class UserRestControllerTest {
                 .andExpect(jsonPath("$.subscribeId").isString())
                 .andExpect(jsonPath("$.role").exists())
                 .andExpect(jsonPath("$.role").isString())
+                .andDo(document("userLocationValidationAndUpdate"))
         ;
     }
 }

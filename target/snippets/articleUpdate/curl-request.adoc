@@ -1,0 +1,7 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/api/article' -i -X PUT \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -H 'Accept: application/json' \
+    -d '{"userId": 1082, "id": 692, "content": "세상에서 제일 이쁘다. GJYQ"}'
+----

@@ -1,0 +1,6 @@
+[source,bash]
+----
+$ echo '{"email":"ace@never.die","password":"rew748596"}' | http POST 'http://localhost:8080/user/signin' \
+    'Content-Type:application/json;charset=UTF-8' \
+    'Accept:application/json'
+----

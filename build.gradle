@@ -2,11 +2,18 @@ plugins {
     id 'org.springframework.boot' version '2.6.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id "org.asciidoctor.convert" version "1.5.9.2"
 }
 
 group = 'com.sparta'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+
+asciidoctor {
+    sourceDir 'src/main/asciidoc'
+    attributes \
+		'snippets': file('target/snippets')
+}
 
 configurations {
     compileOnly {
@@ -54,6 +61,7 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: "com.vaadin.external.google", module: "android-json"
     }
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
 test {

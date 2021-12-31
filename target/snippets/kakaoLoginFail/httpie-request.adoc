@@ -1,0 +1,6 @@
+[source,bash]
+----
+$ echo '{"token":"zSP3D2KTZD0M_xcX5mgj1S1G2D_tcHg-IdQufQo9c00AAAF9-eIv4A"}' | http POST 'http://localhost:8080/user/kakao' \
+    'Content-Type:application/json;charset=UTF-8' \
+    'Accept:application/json'
+----

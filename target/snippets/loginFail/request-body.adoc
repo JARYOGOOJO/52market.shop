@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"email":"ace@never.die","password":"rew748596"}
+----

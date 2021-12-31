@@ -1,0 +1,16 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+Content-Length: 189
+
+{"createdAt":"2021-12-30 19:09:03","modifiedAt":"2021-12-30 19:09:04","id":1052,"name":"MONICA","email":"monica@street.dancer","picture":null,"subscribeId":"M60EnIbSTYtTx35j","role":"USER"}
+----

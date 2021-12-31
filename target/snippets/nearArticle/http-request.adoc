@@ -1,0 +1,7 @@
+[source,http,options="nowrap"]
+----
+GET /api/articles/37.501086/127.0365988 HTTP/1.1
+Accept: application/json
+Host: localhost:8080
+
+----

@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"email":"monica@street.dancer", "latitude":127.087, "longitude":37.592}
+----

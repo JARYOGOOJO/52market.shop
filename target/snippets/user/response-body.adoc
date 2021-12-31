@@ -1,0 +1,4 @@
+[source,options="nowrap"]
+----
+{"timestamp":"2021-12-30T19:05:26.438","status":404,"error":"NOT_FOUND","code":"USER_NOT_FOUND","message":"해당 유저 정보를 찾을 수 없습니다."}
+----

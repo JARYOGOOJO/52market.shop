@@ -17,6 +17,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.junit.Assert.assertThrows;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 
 @SpringBootTest
 class ChatRoomServiceTest {

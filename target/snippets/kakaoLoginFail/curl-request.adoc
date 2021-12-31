@@ -1,0 +1,7 @@
+[source,bash]
+----
+$ curl 'http://localhost:8080/user/kakao' -i -X POST \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -H 'Accept: application/json' \
+    -d '{"token":"zSP3D2KTZD0M_xcX5mgj1S1G2D_tcHg-IdQufQo9c00AAAF9-eIv4A"}'
+----
