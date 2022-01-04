@@ -21,7 +21,7 @@ https://www.52market.club
 * 유동민 - 팀장/깃허브관리/프론트/배포 스크립트/EtoE 테스트코드
 
 ### 📌 기술 선택 이유!
-- <a href="https://github.com/AndrewDongminYoo/52market.shop/wiki" >상세보기 - WIKI 이동</a>  
+- <a href="https://github.com/JARYOGOOJO/52market.shop/wiki" >상세보기 - WIKI 이동</a>  
 
 ### 📌 주요 기능
 - <a href="https://github.com/JARYOGOOJO/52market.shop/wiki/002.-Technical-requirements" >상세보기 - WIKI 이동</a>  
@@ -46,4 +46,5 @@ https://www.52market.club
 * 웹소켓 이용해 댓글 추가 및 삭제 시 즉시 반영
 
 ### 📌 문제를 이렇게 해결했어요!
-- <a href="https://github.com/JARYOGOOJO/52market.shop/wiki/%23-%F0%9F%9A%80%EC%B5%9C%EC%A2%85-%EB%B0%9C%ED%91%9C-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85%F0%9F%9A%80" >상세보기 - ISSUE 이동</a>  
+- <a href="https://github.com/JARYOGOOJO/52market.shop/wiki/%23-%F0%9F%9A%80%EC%B5%9C%EC%A2%85-%EB%B0%9C%ED%91%9C-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85%F0%9F%9A%80" >트러블 슈팅 (2차 발표)</a>  
+- <a href="https://github.com/JARYOGOOJO/52market.shop/wiki/003.-Trouble-shooting">트러블 슈팅 (1차 발표)</a>
